@@ -503,8 +503,20 @@ function basket(P, sel, janela, modo, fimJanela) {
   sel.forEach(p => {
     const s = serie(P, p.ticker, 'brl');
     if (!s || !s.c.length) { fora.push(p); return; }
-    const i0 = idxAte(s.d, limite, inclusive);
-    const base = i0 >= 0 ? s.c[i0] : null;
+    /* ⚠️ `Math.max(0, ...)`, e não `>= 0`, é o que faz a janela "Máximo" funcionar.
+     *
+     * Para `max`, `inicioJanela` devolve o limite '0000-01-01' — anterior a tudo —, então
+     * `idxAte` responde -1 para TODOS os papéis, que é a resposta correta à pergunta
+     * "havia preço antes do início?". Uma versão anterior tratava -1 como "fica de fora"
+     * e mandava a cesta inteira para `fora`: o gráfico do basket ficava vazio só nessa
+     * janela, enquanto o KPI continuava certo, porque vinha do mesmo cálculo antes de
+     * quebrar. Aqui -1 significa "começa no primeiro preço que tiver", que é o mesmo
+     * tratamento do `rebase()`.
+     *
+     * Papel que estreia no meio da janela não precisa mais ser excluído: o encadeamento
+     * abaixo cuida da entrada dele sem criar degrau. */
+    const i0 = Math.max(0, idxAte(s.d, limite, inclusive));
+    const base = s.c[i0];
     if (!base) { fora.push(p); return; }
     // corta a série no fim da janela antes de entrar na cesta
     const i1 = idxFim(s.d, fimJanela);
@@ -519,19 +531,77 @@ function basket(P, sel, janela, modo, fimJanela) {
   comp.forEach(({ p, base }) => { const q = acoesDe(p); w[p.ticker] = q ? q * base : 1; });
 
   const xs = [...new Set(comp.flatMap(x => x.s.d.slice(x.i0)))].sort();
-  const mapas = comp.map(({ p, s, base }) => ({
-    tk: p.ticker, m: new Map(s.d.map((d, i) => [d, s.c[i] == null ? null : s.c[i] / base])),
-  }));
-  let ultimo = null;
+
+  /* ⚠️ CARREGA O ÚLTIMO PREÇO em dia sem cotação — não deixa o papel sair da cesta.
+   *
+   * Este é o conserto dos "vales" que apareciam no gráfico: quedas de até 22% num único
+   * pregão, com recuperação integral no dia seguinte. Nenhum preço tinha se mexido.
+   *
+   * A causa é a AFYA, que negocia na Nasdaq. Em feriado americano com pregão na B3 ela
+   * fica sem preço; a versão anterior a excluía do dia e renormalizava a média sobre os
+   * outros seis. Como a razão dela contra a base era diferente da média dos demais, o
+   * índice saltava — e voltava no dia seguinte, quando ela reaparecia. Conferido: TODOS
+   * os saltos acima de 12% coincidem com a contagem de papéis mudando de 7 para 6.
+   *
+   * Índice de verdade não se rebalanceia porque a bolsa de um componente fechou. A regra
+   * correta é a que os provedores usam: repete o último preço conhecido.
+   *
+   * ⚠️ A repetição só vale DEPOIS da primeira cotação do papel na janela. Antes disso ele
+   * genuinamente não existe na cesta — a VTRU3 só passou a ser negociada na B3 em
+   * 11/06/2024 —, e aí a exclusão com renormalização é o tratamento certo. Confundir as
+   * duas coisas criaria o degrau artificial que a exclusão existe para evitar. */
+  const mapas = comp.map(({ p, s, base }) => {
+    const bruto = new Map(s.d.map((d, i) => [d, s.c[i] == null ? null : s.c[i] / base]));
+    const m = new Map();
+    let ult = null;
+    for (const d of xs) {
+      const v = bruto.get(d);
+      if (v != null) ult = v;
+      // `ult` nulo = ainda não estreou na janela; fica de fora e a cesta renormaliza
+      m.set(d, ult);
+    }
+    return { tk: p.ticker, m };
+  });
+
+  /* ÍNDICE ENCADEADO: o valor de hoje é o de ontem vezes o retorno do dia, e o retorno do
+   * dia é calculado SÓ sobre os papéis que tinham preço nos DOIS dias.
+   *
+   * ⚠️ Isto substitui a média rebaseada, que tinha um defeito estrutural: o valor saía de
+   * `Σ w·(p/base) / Σ w` sobre os papéis presentes NAQUELE dia, então qualquer mudança na
+   * composição mexia no denominador e o índice pulava sem que preço nenhum tivesse
+   * mudado. Dois casos reais no gráfico:
+   *
+   *   - feriado americano: a AFYA sumia por um dia e a cesta caía 22%, recuperando tudo
+   *     no dia seguinte — os "vales" que o usuário viu;
+   *   - estreia da VTRU3 na B3 em 11/06/2024: o papel entrava com razão 1,0 no meio de
+   *     uma média que estava em 0,7, e a cesta dava um degrau para cima.
+   *
+   * O encadeamento resolve os dois porque nunca compara conjuntos diferentes: no dia em
+   * que um papel entra, ele simplesmente não participa do retorno daquele dia, e passa a
+   * participar do seguinte. É o que qualquer provedor de índice faz.
+   *
+   * `w[tk]` é `ações × preço-base` e `m` guarda `preço/base`, então `w·m` é `ações ×
+   * preço` — o valor de mercado do dia. A razão entre a soma de hoje e a de ontem é o
+   * retorno ponderado por valor de mercado. */
+  let idx = 100, ultimo = null, ant = null;
   const y = xs.map(d => {
-    let acc = 0, tot = 0;
+    const hoje = {};
     for (const { tk, m } of mapas) {
       const v = m.get(d);
-      if (v == null) continue;
-      acc += w[tk] * v; tot += w[tk];
+      if (v != null) hoje[tk] = v;
     }
-    if (!tot) return null;
-    ultimo = +(100 * acc / tot).toFixed(2);
+    if (!Object.keys(hoje).length) { ant = ant || null; return null; }
+    if (ant) {
+      let num = 0, den = 0;
+      for (const tk of Object.keys(hoje)) {
+        if (ant[tk] == null) continue;      // entrou hoje: fora do retorno de hoje
+        num += w[tk] * hoje[tk];
+        den += w[tk] * ant[tk];
+      }
+      if (den) idx *= num / den;
+    }
+    ant = hoje;
+    ultimo = +idx.toFixed(2);
     return ultimo;
   });
   return { retorno: ultimo == null ? null : ultimo - 100, serie: { x: xs, y },

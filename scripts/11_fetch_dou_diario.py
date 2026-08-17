@@ -259,6 +259,63 @@ def resumo_util(ementa):
     return e.strip()
 
 
+def _chave_nome(s):
+    """Nome normalizado para casar mantenedora do DOU com a nossa base.
+
+    Tira acento, caixa e as formas societárias (LTDA, S/A, ME, EIRELI…), que aparecem
+    numa fonte e não na outra — "Fasipe Centro Educacional Ltda" no DOU contra "FASIPE
+    CENTRO EDUCACIONAL" no e-MEC.
+    """
+    s = "".join(c for c in unicodedata.normalize("NFD", str(s or ""))
+                if unicodedata.category(c) != "Mn").upper()
+    s = re.sub(r"\b(LTDA|S/?A|ME|EIRELI|EPP|SOCIEDADE SIMPLES|SS)\b", " ", s)
+    s = re.sub(r"[^A-Z0-9 ]", " ", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def indice_nomes():
+    """{nome normalizado: (nome da IES, grupo)} a partir do de-para do e-MEC.
+
+    Indexa por mantenedora E por nome de IES, porque o DOU cita ora um, ora outro: as
+    súmulas do CNE trazem a MANTENEDORA ("Interessado: Fasipe Centro Educacional Ltda"),
+    enquanto as portarias da SERES trazem a IES ("a IES Universidade de Passo Fundo").
+    """
+    cam = os.path.join(ROOT, "data_processed", "emec_ies.csv")
+    if not os.path.exists(cam):
+        return {}
+    import csv
+    idx = {}
+    with open(cam, encoding="utf-8") as f:
+        for r in csv.DictReader(f, delimiter=";"):
+            for campo in ("mantenedora", "ies_censo", "ies_emec"):
+                k = _chave_nome(r.get(campo))
+                if len(k) > 8:
+                    idx.setdefault(k, (r.get("ies_censo") or "", r.get("grupo") or ""))
+    return idx
+
+
+def casa_nome(nome, idx):
+    """(nome da IES na nossa base, grupo) ou (None, None).
+
+    ⚠️ Exato primeiro; prefixo de 22 caracteres só como segunda tentativa. O prefixo é
+    o que resolve "Organização Mogiana de Educação e Cultura Sociedade Simples Ltda" →
+    "ORGANIZACAO MOGIANA DE EDUCACAO E CULTURA", mas é também por onde entraria falso
+    positivo, então precisa dos dois lados começando igual e de tamanho mínimo.
+    """
+    k = _chave_nome(nome)
+    if len(k) < 10:
+        return None, None
+    if k in idx:
+        return idx[k]
+    for kk, v in idx.items():
+        if len(kk) >= 22 and (kk.startswith(k[:22]) or k.startswith(kk[:22])):
+            return v
+    return None, None
+
+
+IDX_NOMES = {}
+
+
 def instituicao_citada(ementa, emec_por_codigo):
     """(nome da IES citada, código e-MEC, grupo) — o que o ato está tratando.
 
@@ -275,11 +332,26 @@ def instituicao_citada(ementa, emec_por_codigo):
     mc = re.search(r"[Cc][óo]d\.?\s*e-MEC[:\s]*(\d{1,6})", e)
     if mc:
         cod = mc.group(1)
+
+    # duas formas de o DOU nomear quem o ato trata, e as duas aparecem:
+    #   portaria da SERES  -> "a IES Universidade de Passo Fundo - UPF (Cód. e-MEC 20)"
+    #   súmula do CNE      -> "Interessado: Fasipe Centro Educacional Ltda. - Sinop/MT"
     nome = None
     mn = re.search(r"IES\s+([A-ZÁÂÃÉÊÍÓÔÕÚÇ][^(.;]{6,70})", e)
     if mn:
         nome = mn.group(1).strip(" -")
+    else:
+        mi = re.search(r"Interessad[oa]s?:\s*(.{6,120}?)"
+                       r"(?:\.\s|;|\s*Assunto:|\s*Relator:|$)", e, re.S)
+        if mi:
+            nome = re.sub(r"\s+", " ", mi.group(1)).strip(" .-")
+
+    # o código é identificador e ganha do nome; o nome é a segunda tentativa
     grupo = emec_por_codigo.get(cod) if cod else None
+    if not grupo and nome:
+        achado, g = casa_nome(nome, IDX_NOMES)
+        if achado:
+            nome, grupo = achado, (g or None)
     return nome, cod, grupo
 
 
@@ -416,10 +488,12 @@ def normaliza(item, marcas, emec):
     nome_ies, cod_ies, grupo_cod = instituicao_citada(item.get("ementa", ""), emec)
     # o codigo e-MEC e identificador: se ele aponta um grupo, o ato fala daquele grupo,
     # e isso vale mais do que a coincidencia de token de marca
-    if grupo_cod and grupo_cod not in grupos:
+    # ⚠️ "Independentes" e bucket residual de IES nao mapeada, nao e player: identificar a
+    # instituicao e util para o leitor, mas nao torna o ato relevante para uma tese.
+    if grupo_cod and grupo_cod != "Independentes" and grupo_cod not in grupos:
         grupos = sorted(set(grupos) | {grupo_cod})
         if rel != "alta":
-            rel, motivo = "alta", f"cita {grupo_cod} (Cód. e-MEC {cod_ies})"
+            rel, motivo = "alta", f"cita {grupo_cod}"
     return {
         "data": data_iso, "titulo": item["titulo"], "url": url,
         "orgao": orgao, "suborgao": sub, "edicao": edicao, "pagina": pagina,
@@ -444,7 +518,10 @@ def main():
 
     marcas = carrega_marcas()
     emec = carrega_emec()
-    print(f"{len(marcas)} tokens de marca · {len(emec)} códigos e-MEC no de-para")
+    global IDX_NOMES
+    IDX_NOMES = indice_nomes()
+    print(f"{len(marcas)} tokens de marca · {len(emec)} códigos e-MEC · "
+          f"{len(IDX_NOMES)} nomes indexados")
 
     # só dias úteis: o DOU da Seção 1 não sai em fim de semana (edição extra é exceção)
     dias, d = [], date.today()

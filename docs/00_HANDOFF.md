@@ -542,6 +542,34 @@ célula aparece vazia e a nota explica. Antes isso ficava escondido atrás do re
 - **SMLL não existe no Yahoo**; o proxy é o **SMAL11**, o ETF que replica o índice.
 - **Afya negocia em USD.** O padrão converte tudo para BRL pelo câmbio do dia, senão a comparação
   com IBOV mistura retorno de ativo com retorno de câmbio.
+⚠️ **O basket é um índice ENCADEADO, e isso conserta dois artefatos reais** (17/08/2026).
+
+A versão anterior calculava `Σ w·(p/base) / Σ w` sobre os papéis presentes **naquele dia**.
+Qualquer mudança de composição mexia no denominador e o índice pulava sem que preço nenhum
+tivesse mudado:
+
+- **feriado americano**: a AFYA negocia na Nasdaq; em dia sem pregão lá e com pregão na B3
+  ela saía da média e a cesta caía **até 22%**, recuperando tudo no dia seguinte. Eram os
+  "vales" que o usuário viu no gráfico. Conferido: **todos** os saltos acima de 12%
+  coincidiam com a contagem de papéis mudando de 7 para 6;
+- **estreia da VTRU3** na B3 em 11/06/2024: entrava com razão 1,0 numa média que estava em
+  0,7 e criava um degrau para cima.
+
+Hoje o valor de hoje é o de ontem vezes o retorno do dia, e **o retorno é calculado só
+sobre os papéis com preço nos dois dias**. Nunca se comparam conjuntos diferentes. Depois
+da correção o maior salto diário caiu de 21,7% para 8,8%, e o dia 28/11/2024 passou de
+−21,7% para −4,4%, que é movimento real das brasileiras.
+
+Junto vai um **carrega-último-preço** para dia sem cotação, depois da primeira aparição do
+papel — é o que os provedores de índice fazem, e evita que feriado vire evento de preço.
+
+⚠️ **`Math.max(0, idxAte(...))`, e não `>= 0`, na base de cada papel.** Para a janela
+`max`, `inicioJanela` devolve limite `'0000-01-01'` e o `idxAte` responde −1 para todos —
+resposta correta a "havia preço antes do início?". Uma versão tratava −1 como "fica de
+fora" e mandava a cesta inteira embora: **o gráfico do basket ficava vazio só na janela
+Máximo**, enquanto o KPI continuava certo, porque vinha do mesmo cálculo antes de quebrar.
+Sintoma sutil, fácil de não notar.
+
 - O **basket é ponderado por valor de mercado**: soma de `ações × preço`, rebaseada em 100 — um
   índice de verdade, com peso flutuando junto com o preço. Peso igual fica como alternativa. As
   ações vêm do endpoint `/v7/finance/quote`, que **exige cookie + crumb** (401 sem isso); a
