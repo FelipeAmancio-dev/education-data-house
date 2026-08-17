@@ -17,6 +17,7 @@ let selPapeis = null;           // Set de tickers selecionados
 let periodo = 'ytd';
 let ate = '';                   // data final; vazio = até o último pregão coletado
 let peso = 'mcap';
+let timerAuto = null;
 
 const COR_POS = '#1B7A4B', COR_NEG = '#C4322B';
 const CORES_IDX = { IBOV: '#4A4A4A', SMAL11: '#8C8C8C' };
@@ -437,6 +438,36 @@ export async function precos() {
       o.BASKET = ib >= 0 ? bsk.serie.y[ib] : null;
       return o;
     }));
+
+  autoAtualizar();
+}
+
+/* Reconsulta o arquivo de preços e redesenha quando o carimbo muda.
+ *
+ * ⚠️ Isto foi REMOVIDO e depois RESTAURADO, e a ida e volta tem razão. Saiu quando o bloco
+ * virou de fechamento diário: repintar de 5 em 5 minutos não fazia sentido para um dado
+ * que muda uma vez por dia. Voltou quando o `precos.yml` passou a coletar de 5 em 5
+ * minutos no pregão pelo GitHub Actions — sem este laço, o arquivo ficaria fresco no
+ * servidor e a tela aberta continuaria mostrando o preço de quando foi carregada, o que
+ * anularia a coleta.
+ *
+ * O intervalo acompanha o do coletor. Só redesenha se o carimbo mudou: sem essa guarda,
+ * a tela repintaria sozinha a cada 5 minutos e perderia a ordenação e o scroll do usuário.
+ * No arquivo único e no artifact o fetch falha e fica o snapshot embutido — que é o
+ * comportamento certo, porque ali não há servidor para consultar. */
+function autoAtualizar() {
+  if (timerAuto) return;
+  timerAuto = setInterval(async () => {
+    if (!document.querySelector('#v-precos')?.classList.contains('on')) return;
+    try {
+      const r = await fetch('data/precos.json?t=' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) return;
+      const novo = await r.json();
+      if (!novo?.atualizado_em || novo.atualizado_em === D.precos?.atualizado_em) return;
+      D.precos = novo;
+      await precos();
+    } catch (e) { /* offline ou sem servidor: mantém o snapshot */ }
+  }, 5 * 60 * 1000);
 }
 
 /* Formata retorno com sinal explícito — sem o "+" o investidor precisa procurar a cor. */

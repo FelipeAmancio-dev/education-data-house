@@ -19,8 +19,8 @@ Quem resolve é o GitHub: **Actions** coleta, **Pages** serve.
 
 ## Por que isso funciona sem mudar código
 
-`js/precos.js` já reconsulta `data/precos.json` em intervalo e redesenha quando o carimbo
-muda. Então basta alguém atualizar aquele arquivo no servidor: a página servida pega
+`js/precos.js` reconsulta `data/precos.json` a cada 5 minutos e redesenha quando o carimbo
+muda — o laço foi restaurado justamente para acompanhar este workflow. Então basta alguém atualizar aquele arquivo no servidor: a página servida pega
 sozinha. É por isso que o `publicar.yml` serve a pasta `dashboard/` **como ela é**, e não o
 `dashboard_standalone.html` — o arquivo único embute os dados e precisaria de rebuild a
 cada coleta.
@@ -31,8 +31,18 @@ cada coleta.
 
 | Arquivo | O que faz | Quando roda |
 |---|---|---|
-| `.github/workflows/precos.yml` | roda `06_fetch_precos.py` e commita `precos.json` | de 15 em 15 min, 13h–21h UTC, dias úteis |
-| `.github/workflows/publicar.yml` | publica a pasta `dashboard/` no Pages | a cada push que mexa em `dashboard/` |
+| `.github/workflows/precos.yml` | roda `06_fetch_precos.py` e commita `precos.json` | **de 5 em 5 min**, 13h–21h UTC (pregão), dias úteis |
+| `.github/workflows/dou_diario.yml` | roda `11_fetch_dou_diario.py` e commita o feed | **10h UTC = 7h BRT**, dias úteis |
+| `.github/workflows/publicar.yml` | publica a pasta `dashboard/` no Pages | após qualquer um dos dois acima, e a cada push em `dashboard/` |
+
+⚠️ **A corrente entre eles depende de um detalhe que quebra em silêncio.** Push feito com
+o `GITHUB_TOKEN` **não dispara outros workflows** — é proteção do GitHub contra laço
+infinito. Sem tratamento, os dois coletores atualizariam os dados e a página publicada
+nunca seria reconstruída: o site congelado enquanto o repositório avança, que é o pior
+caso, porque parece que está funcionando. Por isso o `publicar.yml` escuta `workflow_run`,
+que reage à **conclusão** do workflow e não ao push que ele fez — e faz `checkout` com
+`ref: main`, porque `workflow_run` roda no commit ANTERIOR por padrão e publicaria os
+dados de antes da coleta.
 
 O `06_fetch_precos.py` usa **só biblioteca padrão** do Python — não há `pip install`, e a
 rodada leva ~30 s.
@@ -64,25 +74,12 @@ qualquer servidor de arquivos, então o mesmo resultado sai num host do banco. O
 
 ## Passo a passo
 
-O projeto ainda não é um repositório git.
+O repositório **já foi inicializado e commitado** em 17/08/2026 — 161 arquivos, 17,7 MB.
+Falta criar o repositório no GitHub e conectar.
 
-```bash
-cd C:\education
-git init -b main
-git add .
-git commit -m "Dashboard do setor de ensino superior"
-```
-
-⚠️ **Confira o `.gitignore` antes do `git add`.** `data_raw/` tem **1,1 GB** de zips do
-Censo; sem a exclusão, o push estoura o limite do GitHub e o que passar fica no histórico
-para sempre. Com o `.gitignore` do projeto, entram **17,7 MB** e nenhum arquivo passa de
-1 MB. Para conferir antes de commitar:
-
-```bash
-git count-objects -vH
-```
-
-Depois, crie o repositório no GitHub e conecte:
+⚠️ O `.gitignore` deixou `data_raw/` de fora — são **1,1 GB** de zips do Censo que
+estourariam o limite do GitHub e ficariam no histórico para sempre. Confirmado no commit:
+zero arquivos de `data_raw`.
 
 ```bash
 git remote add origin https://github.com/<usuario>/<repo>.git
@@ -104,9 +101,14 @@ Por fim, no site do GitHub:
 Repositório **público** tem minutos ilimitados. **Privado** no plano free tem 2.000
 min/mês.
 
-De 15 em 15 minutos no pregão dá ~670 rodadas/mês. A ~1–2 min cada, são **700 a 1.300
-minutos** — cabe, mas sem folga grande. Se apertar, troque o cron para `*/30`, que corta
-pela metade.
+De 5 em 5 minutos no pregão dá ~96 execuções/dia, ~2.000/mês. Isso **estoura os 2.000
+minutos gratuitos de um repositório privado** — e é por isso que o cron de 5 minutos só faz
+sentido em repositório **público**, onde os minutos são ilimitados.
+
+O feed do DOU é uma execução por dia útil (~21/mês), mas cada uma instala o Chrome e leva
+uns 4 minutos. Irrelevante no público; some ~85 min/mês no privado.
+
+⚠️ **5 minutos é o mínimo que o GitHub aceita** — cron mais curto é recusado.
 
 Vale saber que o cron do GitHub **não é pontual**: em horário de pico ele atrasa, às vezes
 bastante. Para preço de fechamento isso é irrelevante; para intraday, o carimbo na tela
