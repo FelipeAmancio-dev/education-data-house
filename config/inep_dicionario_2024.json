@@ -1,0 +1,3166 @@
+{
+ "cadastro_ies": [
+  {
+   "n": null,
+   "secao": null,
+   "variavel": "Alteração de nomenclatura",
+   "descricao": "",
+   "tipo": "",
+   "tamanho": "",
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": null,
+   "secao": null,
+   "variavel": "Variável nova",
+   "descricao": "",
+   "tipo": "",
+   "tamanho": "",
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": null,
+   "secao": null,
+   "variavel": "Descontinuidade",
+   "descricao": "",
+   "tipo": "",
+   "tamanho": "",
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 1,
+   "secao": null,
+   "variavel": "NU_ANO_CENSO",
+   "descricao": "Ano de referência do Censo da Educação Superior",
+   "tipo": "Num",
+   "tamanho": 4,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 2,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "NO_REGIAO_IES",
+   "descricao": "Nome da região geográfica da sede administrativa ou reitoria da IES",
+   "tipo": "Char",
+   "tamanho": 20,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 3,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "CO_REGIAO_IES",
+   "descricao": "Código da região geográfica da sede administrativa ou reitoria da IES",
+   "tipo": "Num",
+   "tamanho": 2,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 4,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "NO_UF_IES",
+   "descricao": "Nome da Unidade da Federação da sede administrativa ou reitoria da IES",
+   "tipo": "Char",
+   "tamanho": 50,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 5,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "SG_UF_IES",
+   "descricao": "Sigla da Unidade da Federação da sede administrativa ou reitoria da IES",
+   "tipo": "Char",
+   "tamanho": 2,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 6,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "CO_UF_IES",
+   "descricao": "Código da Unidade da Federação da sede administrativa ou reitoria da IES",
+   "tipo": "Num",
+   "tamanho": 2,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 7,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "NO_MUNICIPIO_IES",
+   "descricao": "Nome do Município da sede administrativa ou reitoria da IES",
+   "tipo": "Char",
+   "tamanho": 150,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 8,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "CO_MUNICIPIO_IES",
+   "descricao": "Código do Município da sede administrativa ou reitoria da IES",
+   "tipo": "Num",
+   "tamanho": 7,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 9,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "IN_CAPITAL_IES",
+   "descricao": "Informa se a sede administrativa ou reitoria da IES está localizada na capital da Unidade da Federação",
+   "tipo": "Num",
+   "tamanho": 2,
+   "categorias": "0. Não\n1. Sim",
+   "observacao": ""
+  },
+  {
+   "n": 10,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "NO_MESORREGIAO_IES",
+   "descricao": "Nome da Mesorregião da sede administrativa ou reitoria da IES",
+   "tipo": "Char",
+   "tamanho": 100,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 11,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "CO_MESORREGIAO_IES",
+   "descricao": "Código da Mesorregião da sede administrativa ou reitoria da IES",
+   "tipo": "Num",
+   "tamanho": 4,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 12,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "NO_MICRORREGIAO_IES",
+   "descricao": "Nome da Microrregião da sede administrativa ou reitoria da IES",
+   "tipo": "Char",
+   "tamanho": 100,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 13,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "CO_MICRORREGIAO_IES",
+   "descricao": "Código da Microrregião da sede administrativa ou reitoria da IES",
+   "tipo": "Num",
+   "tamanho": 5,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 14,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "TP_ORGANIZACAO_ACADEMICA",
+   "descricao": "Tipo de Organização Acadêmica da IES",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "1. Universidade\n2. Centro Universitário\n3. Faculdade\n4. Instituto Federal de Educação, Ciência e Tecnologia                                \n5. Centro Federal de Educação Tecnológica",
+   "observacao": ""
+  },
+  {
+   "n": 15,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "TP_REDE",
+   "descricao": "Rede de Ensino",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "1. Pública\n2. Privada",
+   "observacao": ""
+  },
+  {
+   "n": 16,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "TP_CATEGORIA_ADMINISTRATIVA",
+   "descricao": "Tipo de Categoria Administrativa da IES",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "1. Pública Federal\n2. Pública Estadual\n3. Pública Municipal\n4. Privada com fins lucrativos\n5. Privada sem fins lucrativos\n6. Privada - Particular em sentido estrito\n7. Especial\n8. Privada comunitária\n9. Privada confessional",
+   "observacao": ""
+  },
+  {
+   "n": 17,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "IN_COMUNITARIA",
+   "descricao": "Informa se a instituição privada é comunitária",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "Informa se a instituição privada é comunitária",
+   "observacao": ""
+  },
+  {
+   "n": 18,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "IN_CONFESSIONAL",
+   "descricao": "Informa se a instituição privada é confessional",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "Informa se a instituição privada é confessional",
+   "observacao": ""
+  },
+  {
+   "n": 19,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "NO_MANTENEDORA",
+   "descricao": "Nome da mantenedora da IES",
+   "tipo": "Char",
+   "tamanho": 100,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 20,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "CO_MANTENEDORA",
+   "descricao": "Código único de identificação da mantenedora da IES",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 21,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "CO_IES",
+   "descricao": "Código único de identificação da IES",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 22,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "NO_IES",
+   "descricao": "Nome da IES",
+   "tipo": "Char",
+   "tamanho": 200,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 23,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "SG_IES",
+   "descricao": "Sigla da IES",
+   "tipo": "Char",
+   "tamanho": 20,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 24,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "DS_ENDERECO_IES",
+   "descricao": "Endereço da sede administrativa/reitoria da IES",
+   "tipo": "Char",
+   "tamanho": 255,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 25,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "DS_NUMERO_ENDERECO_IES",
+   "descricao": "Número do endereço",
+   "tipo": "Char",
+   "tamanho": 10,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 26,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "DS_COMPLEMENTO_ENDERECO_IES",
+   "descricao": "Complemento do endereço",
+   "tipo": "Char",
+   "tamanho": 20,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 27,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "NO_BAIRRO_IES",
+   "descricao": "Bairro",
+   "tipo": "Char",
+   "tamanho": 50,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 28,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "NU_CEP_IES",
+   "descricao": "CEP",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 29,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_TOTAL",
+   "descricao": "Quantidade de funcionários técnico-administrativos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 30,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_FUNDAMENTAL_INCOMP_FEM",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo feminino com ensino fundamental incompleto",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 31,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_FUNDAMENTAL_INCOMP_MASC",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo masculino com ensino fundamental incompleto",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 32,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_FUNDAMENTAL_COMP_FEM",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo feminino com ensino fundamental completo",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 33,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_FUNDAMENTAL_COMP_MASC",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo masculino com ensino fundamental completo",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 34,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_MEDIO_FEM",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo feminino com ensino médio",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 35,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_MEDIO_MASC",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo masculino com ensino médio",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 36,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_SUPERIOR_FEM",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo feminino com nível superior",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 37,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_SUPERIOR_MASC",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo masculino com nível superior",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 38,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_ESPECIALIZACAO_FEM",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo feminino com especialização",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 39,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_ESPECIALIZACAO_MASC",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo masculino com especialização",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 40,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_MESTRADO_FEM",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo feminino com mestrado",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 41,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_MESTRADO_MASC",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo masculino com mestrado",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 42,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_DOUTORADO_FEM",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo feminino com doutorado",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 43,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_TEC_DOUTORADO_MASC",
+   "descricao": "Quantidade de funcionários técnico-administrativos do sexo masculino com doutorado",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 44,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "IN_ACESSO_PORTAL_CAPES",
+   "descricao": "Informa se as bibliotecas da IES têm acesso ao portal Capes de periódicos",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "0. Não\n1. Sim",
+   "observacao": ""
+  },
+  {
+   "n": 45,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "IN_ACESSO_OUTRAS_BASES",
+   "descricao": "Informa se as bibliotecas da IES têm acesso a outras bases de dados licenciadas ou compradas",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "0. Não\n1. Sim",
+   "observacao": ""
+  },
+  {
+   "n": 46,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "IN_ASSINA_OUTRA_BASE",
+   "descricao": "Informa se as bibliotecas da IES assinam outras bases de dados licenciadas ou compradas",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "0. Não\n1. Sim",
+   "observacao": ""
+  },
+  {
+   "n": 47,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "IN_REPOSITORIO_INSTITUCIONAL",
+   "descricao": "Informa se a IES possui base de dados online que reúne de maneira organizada a produção científica da instituição",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "0. Não\n1. Sim",
+   "observacao": ""
+  },
+  {
+   "n": 48,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "IN_BUSCA_INTEGRADA",
+   "descricao": "Informa se a IES oferece ferramenta eletrônica que possibilita pesquisar simultaneamente diversas fontes de informação e obter resultado em uma única interface",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "0. Não\n1. Sim",
+   "observacao": ""
+  },
+  {
+   "n": 49,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "IN_SERVICO_INTERNET",
+   "descricao": "Informa se as bibliotecas da IES oferecem serviços pela internet",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "0. Não\n1. Sim",
+   "observacao": ""
+  },
+  {
+   "n": 50,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "IN_PARTICIPA_REDE_SOCIAL",
+   "descricao": "Informa se as bibliotecas participam de Redes Sociais",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "0. Não\n1. Sim",
+   "observacao": ""
+  },
+  {
+   "n": 51,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "IN_CATALOGO_ONLINE",
+   "descricao": "Informa se a IES possui ferramenta de recuperação de informação que permite ao usuário consultar, de forma local ou remota, a existência e disponibilidade de itens do acervo das bibliotecas",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "0. Não\n1. Sim",
+   "observacao": ""
+  },
+  {
+   "n": 52,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_PERIODICO_ELETRONICO",
+   "descricao": "Quantidade de títulos de periódicos eletrônicos adquiridos pelas bibliotecas por meio de compra, doação ou permuta",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 53,
+   "secao": "DADOS DA INSTITUIÇÃO DE ENSINO SUPERIOR (IES) - SEDE ADMINISTRATIVA/REITORIA",
+   "variavel": "QT_LIVRO_ELETRONICO",
+   "descricao": "Quantidade de títulos de livros eletrônicos disponibilizados pelas bibliotecas convertidos ao formato digital ou originalmente produzidos nesse formato para serem lidos em computador ou outros dispositivos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 54,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_TOTAL",
+   "descricao": "Quantidade total de docentes (em exercício e afastados)",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 55,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EXE",
+   "descricao": "Quantidade total de docentes em exercício",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 56,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_FEMI",
+   "descricao": "Quantidade de docentes em exercício do sexo feminino",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 57,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_MASC",
+   "descricao": "Quantidade de docentes em exercício do sexo masculino",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 58,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_SEM_GRAD",
+   "descricao": "Quantidade de docentes em exercício sem curso de graduação",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 59,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_GRAD",
+   "descricao": "Quantidade de docentes em exercício com curso de graduação",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 60,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_ESP",
+   "descricao": "Quantidade de docentes em exercício com especialização",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 61,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_MEST",
+   "descricao": "Quantidade de docentes em exercício com mestrado",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 62,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_DOUT",
+   "descricao": "Quantidade de docentes em exercício com doutorado",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 63,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_INT",
+   "descricao": "Quantidade de docentes em exercício em tempo integral",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 64,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_INT_DE",
+   "descricao": "Quantidade de docentes em exercício em tempo integral com dedicação exclusiva",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 65,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_INT_SEM_DE",
+   "descricao": "Quantidade de docentes em exercício em tempo integral sem dedicação exclusiva",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 66,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_PARC",
+   "descricao": "Quantidade de docentes em exercício em tempo parcial",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 67,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_HOR",
+   "descricao": "Quantidade de docentes em exercício horista",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 68,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_0_29",
+   "descricao": "Quantidade de docentes em exercício - até 29 anos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 69,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_30_34",
+   "descricao": "Quantidade de docentes em exercício - de 30 a 34 anos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 70,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_35_39",
+   "descricao": "Quantidade de docentes em exercício - de 35 a 39 anos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 71,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_40_44",
+   "descricao": "Quantidade de docentes em exercício - de 40 a 44 anos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 72,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_45_49",
+   "descricao": "Quantidade de docentes em exercício - de 45 a 49 anos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 73,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_50_54",
+   "descricao": "Quantidade de docentes em exercício - de 50 a 54 anos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 74,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_55_59",
+   "descricao": "Quantidade de docentes em exercício - de 55 a 59 anos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 75,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_60_MAIS",
+   "descricao": "Quantidade de docentes em exercício - de 60 anos ou mais",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 76,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_BRANCA",
+   "descricao": "Quantidade de docentes em exercício - Cor/Raça branca",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 77,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_PRETA",
+   "descricao": "Quantidade de docentes em exercício - Cor/Raça preta",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 78,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_PARDA",
+   "descricao": "Quantidade de docentes em exercício - Cor/Raça parda",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 79,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_AMARELA",
+   "descricao": "Quantidade de docentes em exercício - Cor/Raça amarela",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 80,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_INDIGENA",
+   "descricao": "Quantidade de docentes em exercício - Cor/Raça indígena",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 81,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_COR_ND",
+   "descricao": "Quantidade de docentes em exercício - Cor/Raça não dispõe da informação ou não declarada",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 82,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_BRA",
+   "descricao": "Quantidade de docentes em exercício - nacionalidade brasileira ou brasileira - nascido no exterior ou naturalizado",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 83,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_EST",
+   "descricao": "Quantidade de docentes em exercício - nacionalidade estrangeira",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 84,
+   "secao": "DADOS DE DOCENTES DA IES",
+   "variavel": "QT_DOC_EX_COM_DEFICIENCIA",
+   "descricao": "Quantidade de docentes em exercício - com deficiência",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  }
+ ],
+ "cadastro_cursos": [
+  {
+   "n": null,
+   "secao": null,
+   "variavel": "Alteração de nomenclatura",
+   "descricao": "",
+   "tipo": "",
+   "tamanho": "",
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": null,
+   "secao": null,
+   "variavel": "Variável nova",
+   "descricao": "",
+   "tipo": "",
+   "tamanho": "",
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": null,
+   "secao": null,
+   "variavel": "Descontinuidade",
+   "descricao": "",
+   "tipo": "",
+   "tamanho": "",
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 1,
+   "secao": null,
+   "variavel": "NU_ANO_CENSO",
+   "descricao": "Ano de referência do Censo da Educação Superior",
+   "tipo": "Num",
+   "tamanho": 4,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 2,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "NO_REGIAO",
+   "descricao": "Nome da região geográfica do local de oferta do curso",
+   "tipo": "Char",
+   "tamanho": 20,
+   "categorias": "(.) Dados de Cursos a distância não calculados para esta dimensão geográfica e/ou Cursos a distância oferecidos por instituição de ensino brasileira no exterior",
+   "observacao": ""
+  },
+  {
+   "n": 3,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "CO_REGIAO",
+   "descricao": "Código da região geográfica do local de oferta do curso",
+   "tipo": "Num",
+   "tamanho": 2,
+   "categorias": "(.) Dados de Cursos a distância não calculados para esta dimensão geográfica e/ou Cursos a distância oferecidos por instituição de ensino brasileira no exterior",
+   "observacao": ""
+  },
+  {
+   "n": 4,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "NO_UF",
+   "descricao": "Nome da Unidade da Federação do local de oferta do curso",
+   "tipo": "Char",
+   "tamanho": 50,
+   "categorias": "(.) Dados de Cursos a distância não calculados para esta dimensão geográfica e/ou Cursos a distância oferecidos por instituição de ensino brasileira no exterior",
+   "observacao": ""
+  },
+  {
+   "n": 5,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "SG_UF",
+   "descricao": "Sigla da Unidade da Federação do local de oferta do curso",
+   "tipo": "Char",
+   "tamanho": 2,
+   "categorias": "(.) Dados de Cursos a distância não calculados para esta dimensão geográfica e/ou Cursos a distância oferecidos por instituição de ensino brasileira no exterior",
+   "observacao": ""
+  },
+  {
+   "n": 6,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "CO_UF",
+   "descricao": "Código do IBGE da Unidade da Federação do local de oferta do curso",
+   "tipo": "Num",
+   "tamanho": 2,
+   "categorias": "(.) Dados de Cursos a distância não calculados para esta dimensão geográfica e/ou Cursos a distância oferecidos por instituição de ensino brasileira no exterior",
+   "observacao": ""
+  },
+  {
+   "n": 7,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "NO_MUNICIPIO",
+   "descricao": "Nome do Município do local de oferta do curso",
+   "tipo": "Char",
+   "tamanho": 150,
+   "categorias": "(.) Dados de Cursos a distância não calculados para esta dimensão geográfica e/ou Cursos a distância oferecidos por instituição de ensino brasileira no exterior",
+   "observacao": ""
+  },
+  {
+   "n": 8,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "CO_MUNICIPIO",
+   "descricao": "Código do IBGE do Município do local de oferta do curso",
+   "tipo": "Num",
+   "tamanho": 7,
+   "categorias": "(.) Dados de Cursos a distância não calculados para esta dimensão geográfica e/ou Cursos a distância oferecidos por instituição de ensino brasileira no exterior",
+   "observacao": ""
+  },
+  {
+   "n": 9,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "IN_CAPITAL",
+   "descricao": "Informa se o local de oferta do curso está localizado na capital da Unidade da Federação",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "0. Não\n1. Sim\n(.) Não aplicável (Curso a distância)",
+   "observacao": ""
+  },
+  {
+   "n": 10,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "TP_DIMENSAO",
+   "descricao": "Tipo de dimensão geográfica dos cursos presenciais e a distância ofertados no Brasil e também por instituições brasileiras no exterior",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "1. Cursos presenciais ofertados no Brasil\n2. Cursos a distância ofertados no Brasil\n3. Cursos a distância com dimensão de dados somente a nível Brasil\n4. Cursos a distância ofertados por instituições brasileiras no exterior",
+   "observacao": "Em virtude da estrutura da base da Educação Superior, para os cursos a distância não é possível quantificar o número de cursos, vagas e inscritos por Regiões Geográficas, Unidades da Federação e Municípios."
+  },
+  {
+   "n": 11,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "TP_ORGANIZACAO_ACADEMICA",
+   "descricao": "Tipo de Organização Acadêmica da IES",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "1. Universidade\n2. Centro Universitário\n3. Faculdade\n4. Instituto Federal de Educação, Ciência e Tecnologia                                \n5. Centro Federal de Educação Tecnológica",
+   "observacao": ""
+  },
+  {
+   "n": 12,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "TP_REDE",
+   "descricao": "Rede de Ensino",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "1. Pública\n2. Privada",
+   "observacao": ""
+  },
+  {
+   "n": 13,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "TP_CATEGORIA_ADMINISTRATIVA",
+   "descricao": "Tipo de Categoria Administrativa da IES",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "1. Pública Federal\n2. Pública Estadual\n3. Pública Municipal\n4. Privada com fins lucrativos\n5. Privada sem fins lucrativos\n6. Privada - Particular em sentido estrito\n7. Especial\n8. Privada comunitária\n9. Privada confessional",
+   "observacao": ""
+  },
+  {
+   "n": 14,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "IN_COMUNITARIA",
+   "descricao": "Informa se a instituição privada é comunitária",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "Informa se a instituição privada é comunitária",
+   "observacao": ""
+  },
+  {
+   "n": 15,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "IN_CONFESSIONAL",
+   "descricao": "Informa se a instituição privada é confessional",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "Informa se a instituição privada é confessional",
+   "observacao": ""
+  },
+  {
+   "n": 16,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "CO_IES",
+   "descricao": "Código da Instituição",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 17,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "NO_CURSO",
+   "descricao": "Nome do Curso",
+   "tipo": "Char",
+   "tamanho": 200,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 18,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "CO_CURSO",
+   "descricao": "Código do Curso",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 19,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "NO_CINE_ROTULO",
+   "descricao": "Nome do curso, conforme adaptação da Classificação Internacional Normalizada da Educação Cine/Unesco",
+   "tipo": "Char",
+   "tamanho": 120,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 20,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "CO_CINE_ROTULO",
+   "descricao": "Código de identificação do curso, conforme adaptação da Classificação Internacional Normalizada da Educação Cine/Unesco",
+   "tipo": "Char",
+   "tamanho": 7,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 21,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "CO_CINE_AREA_GERAL",
+   "descricao": "Código de identificação da área geral, conforme adaptação da Classificação Internacional Normalizada da Educação Cine/Unesco",
+   "tipo": "Char",
+   "tamanho": 2,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 22,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "NO_CINE_AREA_GERAL",
+   "descricao": "Nome da área geral, conforme adaptação da Classificação Internacional Normalizada da Educação Cine/Unesco",
+   "tipo": "Char",
+   "tamanho": 120,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 23,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "CO_CINE_AREA_ESPECIFICA",
+   "descricao": "Código de identificação da área específica, conforme adaptação da Classificação Internacional Normalizada da Educação Cine/Unesco",
+   "tipo": "Char",
+   "tamanho": 3,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 24,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "NO_CINE_AREA_ESPECIFICA",
+   "descricao": "Nome da área específica, conforme adaptação da Classificação Internacional Normalizada da Educação Cine/Unesco",
+   "tipo": "Char",
+   "tamanho": 120,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 25,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "CO_CINE_AREA_DETALHADA",
+   "descricao": "Código de identificação da área detalhada, conforme adaptação da Classificação Internacional Normalizada da Educação Cine/Unesco",
+   "tipo": "Char",
+   "tamanho": 4,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 26,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "NO_CINE_AREA_DETALHADA",
+   "descricao": "Nome da área detalhada, conforme adaptação da Classificação Internacional Normalizada da Educação Cine/Unesco",
+   "tipo": "Char",
+   "tamanho": 120,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 27,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "TP_GRAU_ACADEMICO",
+   "descricao": "Tipo do grau acadêmico conferido ao aluno pela conclusão dos requisitos exigidos pelo curso",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "1. Bacharelado\n2. Licenciatura\n3. Tecnológico\n4. Bacharelado e Licenciatura\n(.) Não aplicável (cursos com nível acadêmico igual a sequencial de formação específica ou cursos de área básica de Ingresso)",
+   "observacao": ""
+  },
+  {
+   "n": 28,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "IN_GRATUITO",
+   "descricao": "Informa se o curso é gratuito",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "0. Não\n1. Sim",
+   "observacao": ""
+  },
+  {
+   "n": 29,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "TP_MODALIDADE_ENSINO",
+   "descricao": "Tipo de modalidade de ensino do curso",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "1. Presencial\n2. Curso a distância",
+   "observacao": ""
+  },
+  {
+   "n": 30,
+   "secao": "DADOS DO CURSO E IES",
+   "variavel": "TP_NIVEL_ACADEMICO",
+   "descricao": "Tipo de nível acadêmico do curso",
+   "tipo": "Num",
+   "tamanho": 1,
+   "categorias": "1. Graduação\n2. Sequencial de Formação Específica",
+   "observacao": ""
+  },
+  {
+   "n": 31,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CURSO",
+   "descricao": "Número de cursos",
+   "tipo": "Num",
+   "tamanho": 4,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 32,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_VG_TOTAL",
+   "descricao": "Quantidade total de vagas oferecidas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 33,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_VG_TOTAL_DIURNO",
+   "descricao": "Quantidade total de vagas oferecidas no turno diurno",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "(.) Não aplicável (Curso a distância)",
+   "observacao": ""
+  },
+  {
+   "n": 34,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_VG_TOTAL_NOTURNO",
+   "descricao": "Quantidade total de vagas oferecidas no turno noturno",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "(.) Não aplicável (Curso a distância)",
+   "observacao": ""
+  },
+  {
+   "n": 35,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_VG_TOTAL_EAD",
+   "descricao": "Quantidade total de vagas oferecidas no curso a distância",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 36,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_VG_NOVA",
+   "descricao": "Quantidade de vagas novas oferecidas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 37,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_VG_PROC_SELETIVO",
+   "descricao": "Quantidade de vagas nos processos seletivos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 38,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_VG_REMANESC",
+   "descricao": "Quantidade de vagas remanescentes",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 39,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_VG_PROG_ESPECIAL",
+   "descricao": "Quantidade de vagas oferecidas para programas especiais",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 40,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_INSCRITO_TOTAL",
+   "descricao": "Quantidade total de inscritos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 41,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_INSCRITO_TOTAL_DIURNO",
+   "descricao": "Quantidade total de inscritos no turno diurno",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "(.) Não aplicável (Curso a distância)",
+   "observacao": ""
+  },
+  {
+   "n": 42,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_INSCRITO_TOTAL_NOTURNO",
+   "descricao": "Quantidade total de inscritos no turno noturno",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "(.) Não aplicável (Curso a distância)",
+   "observacao": ""
+  },
+  {
+   "n": 43,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_INSCRITO_TOTAL_EAD",
+   "descricao": "Quantidade total de inscritos no curso a distância",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 44,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_INSC_VG_NOVA",
+   "descricao": "Quantidade de inscritos no processo seletivo de vagas novas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 45,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_INSC_PROC_SELETIVO",
+   "descricao": "Quantidade de inscritos nos processos seletivos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 46,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_INSC_VG_REMANESC",
+   "descricao": "Quantidade de inscritos no processo seletivo de vagas remanescentes",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 47,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_INSC_VG_PROG_ESPECIAL",
+   "descricao": "Quantidade de inscritos no processo seletivo de vagas oferecidas para programas especiais",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 48,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING",
+   "descricao": "Quantidade de ingressantes",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "Cálculo de ingressantes: soma do número de alunos com data de ingresso de 01 de janeiro e 01 de julho do ano de referência do censo",
+   "observacao": ""
+  },
+  {
+   "n": 49,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_FEM",
+   "descricao": "Quantidade de ingressantes do sexo feminino",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 50,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_MASC",
+   "descricao": "Quantidade de ingressantes do sexo masculino",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 51,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_DIURNO",
+   "descricao": "Quantidade de ingressantes no turno diurno",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "(.) Não aplicável (Curso a distância)",
+   "observacao": ""
+  },
+  {
+   "n": 52,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_NOTURNO",
+   "descricao": "Quantidade de ingressantes no turno noturno",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "(.) Não aplicável (Curso a distância)",
+   "observacao": ""
+  },
+  {
+   "n": 53,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_VG_NOVA",
+   "descricao": "Quantidade de ingressantes em vagas novas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 54,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_VESTIBULAR",
+   "descricao": "Quantidade de ingressantes por vestibular",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 55,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_ENEM",
+   "descricao": "Quantidade de ingressantes pelo ENEM",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 56,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_AVALIACAO_SERIADA",
+   "descricao": "Quantidade de ingressantes por meio da avaliação seriada",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 57,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_SELECAO_SIMPLIFICA",
+   "descricao": "Quantidade de ingressantes por meio de seleção simplificada",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 58,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_EGR",
+   "descricao": "Quantidade de alunos que se formaram em um curso de Bacharelado Interdisciplinar ou Licenciatura Interdisciplinar e que ingressaram em um curso de terminalidade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 59,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_OUTRO_TIPO_SELECAO",
+   "descricao": "Quantidade de ingressantes em outro tipo de seleção",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 60,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_PROC_SELETIVO",
+   "descricao": "Quantidade de ingressantes nos processos seletivos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 61,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_VG_REMANESC",
+   "descricao": "Quantidade de ingressantes por meio de vagas remanescentes",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 62,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_VG_PROG_ESPECIAL",
+   "descricao": "Quantidade de ingressantes por meio de vagas para programas especiais",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 63,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_OUTRA_FORMA",
+   "descricao": "Quantidade de ingressantes por outras formas de ingresso",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 64,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_0_17",
+   "descricao": "Quantidade de ingressantes - Até 17 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 65,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_18_24",
+   "descricao": "Quantidade de ingressantes - De 18 a 24 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 66,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_25_29",
+   "descricao": "Quantidade de ingressantes - De 25 a 29 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 67,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_30_34",
+   "descricao": "Quantidade de ingressantes - De 30 a 34 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 68,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_35_39",
+   "descricao": "Quantidade de ingressantes - De 35 a 39 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 69,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_40_49",
+   "descricao": "Quantidade de ingressantes - De 40 a 49 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 70,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_50_59",
+   "descricao": "Quantidade de ingressantes - De 50 a 59 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 71,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_60_MAIS",
+   "descricao": "Quantidade de ingressantes - De 60 ou mais anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 72,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_BRANCA",
+   "descricao": "Quantidade de ingressantes - Cor/Raça Branca",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 73,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_PRETA",
+   "descricao": "Quantidade de ingressantes - Cor/Raça Preta",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 74,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_PARDA",
+   "descricao": "Quantidade de ingressantes - Cor/Raça Parda",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 75,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_AMARELA",
+   "descricao": "Quantidade de ingressantes - Cor/Raça Amarela",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 76,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_INDIGENA",
+   "descricao": "Quantidade de ingressantes - Cor/Raça Indígena",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 77,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_CORND",
+   "descricao": "Quantidade de ingressantes - Cor/Raça não dispõe da informação ou não declarada",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 78,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT",
+   "descricao": "Quantidade de matrículas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "Cálculo de matrículas: soma do número de alunos com situação de vínculo ao curso igual a: Cursando e/ou Formado",
+   "observacao": ""
+  },
+  {
+   "n": 79,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_FEM",
+   "descricao": "Quantidade de matrículas do sexo feminino",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 80,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_MASC",
+   "descricao": "Quantidade de matrículas do sexo masculino",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 81,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_DIURNO",
+   "descricao": "Quantidade de matrículas - turno diurno",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "(.) Não aplicável (Curso a distância)",
+   "observacao": ""
+  },
+  {
+   "n": 82,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_NOTURNO",
+   "descricao": "Quantidade de matrículas - turno noturno",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "(.) Não aplicável (Curso a distância)",
+   "observacao": ""
+  },
+  {
+   "n": 83,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_0_17",
+   "descricao": "Quantidade de matrículas - Até 17 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 84,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_18_24",
+   "descricao": "Quantidade de matrículas - De 18 a 24 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 85,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_25_29",
+   "descricao": "Quantidade de matrículas - De 25 a 29 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 86,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_30_34",
+   "descricao": "Quantidade de matrículas - De 30 a 34 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 87,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_35_39",
+   "descricao": "Quantidade de matrículas - De 35 a 39 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 88,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_40_49",
+   "descricao": "Quantidade de matrículas - De 40 a 49 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 89,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_50_59",
+   "descricao": "Quantidade de matrículas - De 50 a 59 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 90,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_60_MAIS",
+   "descricao": "Quantidade de matrículas - De 60 ou mais anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 91,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_BRANCA",
+   "descricao": "Quantidade de matrículas - Cor/Raça Branca",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 92,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_PRETA",
+   "descricao": "Quantidade de matrículas - Cor/Raça Preta",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 93,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_PARDA",
+   "descricao": "Quantidade de matrículas - Cor/Raça Parda",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 94,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_AMARELA",
+   "descricao": "Quantidade de matrículas - Cor/Raça Amarela",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 95,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_INDIGENA",
+   "descricao": "Quantidade de matrículas - Cor/Raça Indígena",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 96,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_CORND",
+   "descricao": "Quantidade de matrículas - Cor/Raça não dispõe da informação ou não declarada",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 97,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC",
+   "descricao": "Quantidade de concluintes",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 98,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_FEM",
+   "descricao": "Quantidade de concluintes do sexo feminino",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 99,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_MASC",
+   "descricao": "Quantidade de concluintes do sexo masculino",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 100,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_DIURNO",
+   "descricao": "Quantidade de concluintes - turno diurno",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "(.) Não aplicável (Curso a distância)",
+   "observacao": ""
+  },
+  {
+   "n": 101,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_NOTURNO",
+   "descricao": "Quantidade de concluintes - turno noturno",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "(.) Não aplicável (Curso a distância)",
+   "observacao": ""
+  },
+  {
+   "n": 102,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_0_17",
+   "descricao": "Quantidade de concluintes - Até 17 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 103,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_18_24",
+   "descricao": "Quantidade de concluintes - De 18 a 24 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 104,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_25_29",
+   "descricao": "Quantidade de concluintes - De 25 a 29 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 105,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_30_34",
+   "descricao": "Quantidade de concluintes - De 30 a 34 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 106,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_35_39",
+   "descricao": "Quantidade de concluintes - De 35 a 39 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 107,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_40_49",
+   "descricao": "Quantidade de concluintes - De 40 a 49 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 108,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_50_59",
+   "descricao": "Quantidade de concluintes - De 50 a 59 anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 109,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_60_MAIS",
+   "descricao": "Quantidade de concluintes - De 60 ou mais anos de idade",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 110,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_BRANCA",
+   "descricao": "Quantidade de concluintes - Cor/Raça Branca",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 111,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_PRETA",
+   "descricao": "Quantidade de concluintes - Cor/Raça Preta",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 112,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_PARDA",
+   "descricao": "Quantidade de concluintes - Cor/Raça Parda",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 113,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_AMARELA",
+   "descricao": "Quantidade de concluintes - Cor/Raça Amarela",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 114,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_INDIGENA",
+   "descricao": "Quantidade de concluintes - Cor/Raça Indígena",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 115,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_CORND",
+   "descricao": "Quantidade de concluintes - Cor/Raça não dispõe da informação ou não declarada",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 116,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_NACBRAS",
+   "descricao": "Quantidade de ingressantes - nacionalidade brasileira ou brasileira - nascido no exterior ou naturalizado",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 117,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_NACESTRANG",
+   "descricao": "Quantidade de ingressantes - nacionalidade estrangeira",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 118,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_NACBRAS",
+   "descricao": "Quantidade de matrículas - nacionalidade brasileira ou brasileira - nascido no exterior ou naturalizado",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 119,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_NACESTRANG",
+   "descricao": "Quantidade de matrículas - nacionalidade estrangeira",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 120,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_NACBRAS",
+   "descricao": "Quantidade de concluintes - nacionalidade brasileira ou brasileira - nascido no exterior ou naturalizado",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 121,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_NACESTRANG",
+   "descricao": "Quantidade de concluintes - nacionalidade estrangeira",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 122,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ALUNO_DEFICIENTE",
+   "descricao": "Quantidade de alunos com deficiência, transtorno global do desenvolvimento ou altas habilidades/superdotação",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 123,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_DEFICIENTE",
+   "descricao": "Quantidade de ingressantes - alunos com deficiência, transtorno global do desenvolvimento ou altas habilidades/superdotação",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 124,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_DEFICIENTE",
+   "descricao": "Quantidade de matrículas - alunos com deficiência, transtorno global do desenvolvimento ou altas habilidades/superdotação",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 125,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_DEFICIENTE",
+   "descricao": "Quantidade de concluintes - alunos com deficiência, transtorno global do desenvolvimento ou altas habilidades/superdotação",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 126,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_FINANC",
+   "descricao": "Quantidade de ingressantes - alunos que utilizam financiamento estudantil",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 127,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_FINANC_REEMB",
+   "descricao": "Quantidade de ingressantes - alunos que utilizam financiamento estudantil reembolsável",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 128,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_FIES",
+   "descricao": "Quantidade de ingressantes - alunos que utilizam financiamento estudantil reembolsável  - FIES",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 129,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RPFIES",
+   "descricao": "Quantidade de ingressantes - alunos que utilizam financiamento estudantil reembolsável - administrado pela instituição",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 130,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_FINANC_REEMB_OUTROS",
+   "descricao": "Quantidade de ingressantes - alunos que utilizam financiamento estudantil reembolsável - pelo governo estadual, municipal, entidades externas à IES e outras entidades",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 131,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_FINANC_NREEMB",
+   "descricao": "Quantidade de ingressantes - alunos que utilizam financiamento estudantil não reembolsável",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 132,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_PROUNII",
+   "descricao": "Quantidade de ingressantes - alunos que utilizam financiamento estudantil não reembolsável  - PROUNI Integral",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 133,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_PROUNIP",
+   "descricao": "Quantidade de ingressantes - alunos que utilizam financiamento estudantil não reembolsável  - PROUNI Parcial",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 134,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_NRPFIES",
+   "descricao": "Quantidade de ingressantes - alunos que utilizam financiamento estudantil não reembolsável - administrado pela instituição",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 135,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_FINANC_NREEMB_OUTROS",
+   "descricao": "Quantidade de ingressantes - alunos que utilizam financiamento estudantil não reembolsável - pelo governo estadual, municipal, entidades externas à IES e outras entidades",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 136,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_FINANC",
+   "descricao": "Quantidade de matrículas - alunos que utilizam financiamento estudantil",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 137,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_FINANC_REEMB",
+   "descricao": "Quantidade de matrículas - alunos que utilizam financiamento estudantil  reembolsável",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 138,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_FIES",
+   "descricao": "Quantidade de matrículas - alunos que utilizam financiamento estudantil reembolsável  - FIES",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 139,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RPFIES",
+   "descricao": "Quantidade de matrículas - alunos que utilizam financiamento estudantil reembolsável - administrado pela instituição",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 140,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_FINANC_REEMB_OUTROS",
+   "descricao": "Quantidade de matrículas - alunos que utilizam financiamento estudantil reembolsável - pelo governo estadual, municipal, entidades externas à IES e outras entidades",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 141,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_FINANC_NREEMB",
+   "descricao": "Quantidade de matrículas - alunos que utilizam financiamento estudantil não reembolsável",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 142,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_PROUNII",
+   "descricao": "Quantidade de matrículas - alunos que utilizam financiamento estudantil não reembolsável  - PROUNI Integral",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 143,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_PROUNIP",
+   "descricao": "Quantidade de matrículas - alunos que utilizam financiamento estudantil não reembolsável  - PROUNI Parcial",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 144,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_NRPFIES",
+   "descricao": "Quantidade de matrículas - alunos que utilizam financiamento estudantil não reembolsável - administrado pela instituição",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 145,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_FINANC_NREEMB_OUTROS",
+   "descricao": "Quantidade de matrículas - alunos que utilizam financiamento estudantil não reembolsável - pelo governo estadual, municipal, entidades externas à IES e outras entidades",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 146,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_FINANC",
+   "descricao": "Quantidade de concluintes - alunos que utilizam financiamento estudantil",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 147,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_FINANC_REEMB",
+   "descricao": "Quantidade de concluintes - alunos que utilizam financiamento estudantil reembolsável",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 148,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_FIES",
+   "descricao": "Quantidade de concluintes - alunos que utilizam financiamento estudantil reembolsável  - FIES",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 149,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RPFIES",
+   "descricao": "Quantidade de concluintes - alunos que utilizam financiamento estudantil reembolsável - administrado pela instituição",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 150,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_FINANC_REEMB_OUTROS",
+   "descricao": "Quantidade de concluintes - alunos que utilizam financiamento estudantil reembolsável - pelo governo estadual, municipal, entidades externas à IES e outras entidades",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 151,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_FINANC_NREEMB",
+   "descricao": "Quantidade de concluintes - alunos que utilizam financiamento estudantil não reembolsável",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 152,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_PROUNII",
+   "descricao": "Quantidade de concluintes - alunos que utilizam financiamento estudantil não reembolsável  - PROUNI Integral",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 153,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_PROUNIP",
+   "descricao": "Quantidade de concluintes - alunos que utilizam financiamento estudantil não reembolsável  - PROUNI Parcial",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 154,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_NRPFIES",
+   "descricao": "Quantidade de concluintes - alunos que utilizam financiamento estudantil não reembolsável - administrado pela instituição",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 155,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_FINANC_NREEMB_OUTROS",
+   "descricao": "Quantidade de concluintes - alunos que utilizam financiamento estudantil não reembolsável - pelo governo estadual, municipal, entidades externas à IES e outras entidades",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 156,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RESERVA_VAGA",
+   "descricao": "Quantidade de ingressantes - alunos que ingressaram por meio de política de ação afirmativa ou por programa diferenciado de destinação de vagas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 157,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RVREDEPUBLICA",
+   "descricao": "Quantidade de ingressantes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - escola pública",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 158,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RVETNICO",
+   "descricao": "Quantidade de ingressantes - alunos que participam do programa de reserva de vagas - cunho étnico",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 159,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RVPPI",
+   "descricao": "Quantidade de ingressantes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - pretos, pardos ou indígenas",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 160,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RVQUILO",
+   "descricao": "Quantidade de ingressantes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - quilombolas",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 161,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RVREFU",
+   "descricao": "Quantidade de ingressantes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - refugiados, apátridas ou portadores de visto humanitário",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 162,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RVPOVT",
+   "descricao": "Quantidade de ingressantes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - povos e a comunidades tradicionais",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 163,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RVPDEF",
+   "descricao": "Quantidade de ingressantes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - pessoas com deficiência",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 164,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RVSOCIAL_RF",
+   "descricao": "Quantidade de ingressantes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - cunho social/renda familiar",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 165,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RVIDOSO",
+   "descricao": "Quantidade de ingressantes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas -idoso",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 166,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RVINTERN",
+   "descricao": "Quantidade de ingressantes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas -internacional",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 167,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RVMEDAL",
+   "descricao": "Quantidade de ingressantes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas -medalhista em olimpíadas científicas e competições de conhecimento",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 168,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RVTRANS",
+   "descricao": "Quantidade de ingressantes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas -transgênero e/ou travesti",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 169,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_RVOUTROS",
+   "descricao": "Quantidade de ingressantes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - outros tipos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 170,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RESERVA_VAGA",
+   "descricao": "Quantidade de matrículas - alunos que ingressaram por meio de política de ação afirmativa ou por programa diferenciado de destinação de vagas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 171,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RVREDEPUBLICA",
+   "descricao": "Quantidade de matrículas - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - escola pública",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 172,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RVETNICO",
+   "descricao": "Quantidade de matrículas - alunos que participam do programa de reserva de vagas - cunho étnico",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 173,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RVPPI",
+   "descricao": "Quantidade de Matrículas - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - pretos, pardos ou indígenas",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 174,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RVQUILO",
+   "descricao": "Quantidade de Matrículas - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - quilombolas",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 175,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RVREFU",
+   "descricao": "Quantidade de Matrículas - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - refugiados, apátridas ou portadores de visto humanitário",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 176,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RVPOVT",
+   "descricao": "Quantidade de Matrículas - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - povos e a comunidades tradicionais",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 177,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RVPDEF",
+   "descricao": "Quantidade de matrículas - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - pessoas com deficiência",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 178,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RVSOCIAL_RF",
+   "descricao": "Quantidade de matrículas - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - cunho social/renda familiar",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 179,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RVIDOSO",
+   "descricao": "Quantidade de Matrículas - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas -idoso",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 180,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RVINTERN",
+   "descricao": "Quantidade de Matrículas - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas -internacional",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 181,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RVMEDAL",
+   "descricao": "Quantidade de Matrículas - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas -medalhista em olimpíadas científicas e competições de conhecimento",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 182,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RVTRANS",
+   "descricao": "Quantidade de Matrículas - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas -transgênero e/ou travesti",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 183,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_RVOUTROS",
+   "descricao": "Quantidade de matrículas - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - outros tipos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 184,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RESERVA_VAGA",
+   "descricao": "Quantidade de concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 185,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RVREDEPUBLICA",
+   "descricao": "Quantidade de concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - escola pública",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 186,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RVETNICO",
+   "descricao": "Quantidade de concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - cunho étnico",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 187,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RVPPI",
+   "descricao": "Quantidade de Concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - pretos, pardos ou indígenas",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 188,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RVQUILO",
+   "descricao": "Quantidade de Concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - quilombolas",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 189,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RVREFU",
+   "descricao": "Quantidade de Concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - refugiados, apátridas ou portadores de visto humanitário",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 190,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RVPOVT",
+   "descricao": "Quantidade de Concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - povos e a comunidades tradicionais",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 191,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RVPDEF",
+   "descricao": "Quantidade de concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - pessoas com deficiência",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 192,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RVSOCIAL_RF",
+   "descricao": "Quantidade de concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - cunho social/renda familiar",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 193,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RVIDOSO",
+   "descricao": "Quantidade de Concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas -idoso",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 194,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RVINTERN",
+   "descricao": "Quantidade de Concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas -internacional",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 195,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RVMEDAL",
+   "descricao": "Quantidade de Concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas -medalhista em olimpíadas científicas e competições de conhecimento",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 196,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RVTRANS",
+   "descricao": "Quantidade de Concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas -transgênero e/ou travesti",
+   "tipo": "num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 197,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_RVOUTROS",
+   "descricao": "Quantidade de concluintes - alunos que participam do programa de reserva de vagas ou programa diferenciado de destinação de vagas - outros tipos",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 198,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_SIT_TRANCADA",
+   "descricao": "Quantidade de alunos com situação de vínculo no curso - matrícula trancada",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 199,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_SIT_DESVINCULADO",
+   "descricao": "Quantidade de alunos com situação de vínculo no curso - aluno desvinculado do curso",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 200,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_SIT_TRANSFERIDO",
+   "descricao": "Quantidade de alunos com situação de vínculo no curso - aluno transferido para outro curso da mesma IES",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 201,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_SIT_FALECIDO",
+   "descricao": "Quantidade de alunos com situação de vínculo no curso - aluno falecido",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 202,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_PROCESCPUBLICA",
+   "descricao": "Quantidade de ingressantes que terminaram o ensino médio em escolas públicas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 203,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_PROCESCPRIVADA",
+   "descricao": "Quantidade de ingressantes que terminaram o ensino médio em escolas privadas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 204,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_PROCNAOINFORMADA",
+   "descricao": "Quantidade de ingressantes que não informaram o tipo de escola que terminaram o ensino médio",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 205,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_PROCESCPUBLICA",
+   "descricao": "Quantidade de matrículas de alunos que terminaram o ensino médio em escolas públicas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 206,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_PROCESCPRIVADA",
+   "descricao": "Quantidade de matrículas de alunos que terminaram o ensino médio em escolas privadas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 207,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_PROCNAOINFORMADA",
+   "descricao": "Quantidade de matrículas de alunos que não informaram o tipo de escola que terminaram o ensino médio",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 208,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_PROCESCPUBLICA",
+   "descricao": "Quantidade de concluintes que terminaram o ensino médio em escolas públicas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 209,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_PROCESCPRIVADA",
+   "descricao": "Quantidade de concluintes que terminaram o ensino médio em escolas privadas",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 210,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_PROCNAOINFORMADA",
+   "descricao": "Quantidade de concluintes que não informaram o tipo de escola que terminaram o ensino médio",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 211,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_PARFOR",
+   "descricao": "Quantidade de alunos que participam do programa especial para a formação de professores em exercício na rede pública de educação básica (PARFOR)",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 212,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_PARFOR",
+   "descricao": "Quantidade de ingressantes que participam do programa especial para a formação de professores em exercício na rede pública de educação básica (PARFOR)",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 213,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_PARFOR",
+   "descricao": "Quantidade de matrículas de alunos que participam do programa especial para a formação de professores em exercício na rede pública de educação básica (PARFOR)",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 214,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_PARFOR",
+   "descricao": "Quantidade de concluintes que participam do programa especial para a formação de professores em exercício na rede pública de educação básica (PARFOR)",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 215,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_APOIO_SOCIAL",
+   "descricao": "Quantidade de alunos que recebem algum tipo de apoio social",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 216,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_APOIO_SOCIAL",
+   "descricao": "Quantidade de ingressantes que recebem algum tipo de apoio social",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 217,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_APOIO_SOCIAL",
+   "descricao": "Quantidade de matrículas de alunos que recebem algum tipo de apoio social",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 218,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_APOIO_SOCIAL",
+   "descricao": "Quantidade de concluintes que recebem algum tipo de apoio social",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 219,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ATIV_EXTRACURRICULAR",
+   "descricao": "Quantidade de alunos que participam de algum tipo de atividade extracurricular",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 220,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_ATIV_EXTRACURRICULAR",
+   "descricao": "Quantidade de ingressantes que participam de algum tipo de atividade extracurricular",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 221,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_ATIV_EXTRACURRICULAR",
+   "descricao": "Quantidade de matrículas de alunos que participam de algum tipo de atividade extracurricular",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 222,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_ATIV_EXTRACURRICULAR",
+   "descricao": "Quantidade de concluintes que participam de algum tipo de atividade extracurricular",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 223,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MOB_ACADEMICA",
+   "descricao": "Quantidade de alunos que se vincularam temporariamente a outra instituição, sendo ela nacional ou internacional",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 224,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_ING_MOB_ACADEMICA",
+   "descricao": "Quantidade de ingressantes que se vincularam temporariamente a outra instituição, sendo ela nacional ou internacional",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 225,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_MAT_MOB_ACADEMICA",
+   "descricao": "Quantidade de alunos regularmente matriculados que se vincularam temporariamente a outra instituição, sendo ela nacional ou internacional",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  },
+  {
+   "n": 226,
+   "secao": "ESTATÍSTICAS DO CURSO",
+   "variavel": "QT_CONC_MOB_ACADEMICA",
+   "descricao": "Quantidade de concluintes que se vincularam temporariamente a outra instituição, sendo ela nacional ou internacional",
+   "tipo": "Num",
+   "tamanho": 8,
+   "categorias": "",
+   "observacao": ""
+  }
+ ]
+}

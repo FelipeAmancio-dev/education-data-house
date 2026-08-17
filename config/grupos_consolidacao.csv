@@ -1,0 +1,13 @@
+GRUPO_ORIGEM;GRUPO_DESTINO;ATIVO;ANO_EFETIVO;OBS
+# Fusoes e aquisicoes entre grupos.
+#
+# Enquanto ATIVO=nao, os dois grupos aparecem SEPARADOS no dashboard.
+# Ao mudar para ATIVO=sim, o pipeline passa a somar GRUPO_ORIGEM dentro de GRUPO_DESTINO
+# na coluna GRUPO_CONSOLIDADO, mantendo a coluna GRUPO com a visao standalone.
+# Assim as duas leituras convivem: "FMU sozinha" e "Anima ja com a FMU".
+#
+# ANO_EFETIVO e opcional e so importa para a visao as-reported. Como a decisao do projeto
+# foi PRO-FORMA (perimetro atual aplicado a toda a serie historica), deixar vazio faz a
+# consolidacao valer para todos os anos - que e o comportamento desejado para ler market share.
+#
+FMU;Ânima;nao;;Aquisicao da FMU (FMU + FIAM-FAAM) pela Anima. Mudar ATIVO para 'sim' quando for consolidar.

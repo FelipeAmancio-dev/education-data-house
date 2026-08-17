@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Education Data House — Ensino Superior Brasil</title>
+<link rel="stylesheet" href="css/app.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='14'>🎓</text></svg>">
+</head>
+<body>
+
+<div id="carregando"><div class="mk"></div><div>Carregando dados do Censo…</div></div>
+
+<!-- ═════════════════════════════════════════════════════════════════ TOPO -->
+<header class="hd">
+  <a class="hd-brand" href="#/">
+    <span class="hd-logo">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 12 L16 6.5 L28 12 L16 17.5 Z" fill="#fff"/>
+        <path d="M9 14.6 V21 c0 2.2 3.1 3.9 7 3.9 s7-1.7 7-3.9 v-6.4" stroke="#fff"
+              stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M27 12.5 V19" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <span class="hd-txt">
+      <strong>Education <span>Data House</span></strong>
+      <small>Agregado de dados do setor de ensino superior</small>
+    </span>
+  </a>
+
+  <span class="hd-spacer"></span>
+
+  <div class="lang" id="lang" role="group" aria-label="Idioma / Language">
+    <button data-l="pt" class="on">PT</button><button data-l="en">EN</button>
+  </div>
+
+  <div class="team">
+    <div class="member">
+      <span class="name">Vinicius Figueiredo</span>
+      <a href="mailto:vinicius.figueiredo@itaubba.com" title="vinicius.figueiredo@itaubba.com"
+         aria-label="E-mail de Vinicius Figueiredo"><svg><use href="#ico-mail"></use></svg></a>
+    </div>
+    <div class="member">
+      <span class="name">Lucca Marquezini</span>
+      <a href="mailto:lucca.marquezini@itaubba.com" title="lucca.marquezini@itaubba.com"
+         aria-label="E-mail de Lucca Marquezini"><svg><use href="#ico-mail"></use></svg></a>
+    </div>
+    <div class="member">
+      <span class="name">Felipe Amancio</span>
+      <a href="mailto:felipe.amancio@itaubba.com" title="felipe.amancio@itaubba.com"
+         aria-label="E-mail de Felipe Amancio"><svg><use href="#ico-mail"></use></svg></a>
+    </div>
+  </div>
+</header>
+
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="ico-mail" viewBox="0 0 24 24">
+    <rect x="2.5" y="4.5" width="19" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M3.5 7 L12 13 L20.5 7" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+</svg>
+
+<!-- ═══════════════════════════════════════════════ navegação dos dashboards -->
+<nav id="nav" hidden>
+  <a class="volta" href="#/">← Dashboards</a>
+  <button data-v="overview">Overview</button>
+  <button data-v="grupos">Key Players</button>
+  <button data-v="cursos">Cursos</button>
+  <button data-v="geografia">Geografia</button>
+  <button data-v="mensalidades">Mensalidades</button>
+  <button data-v="regulatorio">Regulatório</button>
+  <button data-v="precos">Price Action</button>
+  <button data-v="glossario">Glossário</button>
+</nav>
+
+<div class="filtros" id="filtros" hidden>
+  <div class="f-item" data-f="ano"><label for="f-ano">Ano</label><select id="f-ano"></select></div>
+  <div class="f-item" data-f="uf"><label for="f-uf">UF</label><select id="f-uf"></select></div>
+  <div class="f-item" data-f="mod"><label for="f-mod">Modalidade</label>
+    <select id="f-mod">
+      <option value="">Todas</option><option value="1">Presencial</option><option value="2">EAD</option>
+    </select></div>
+  <div class="f-item" data-f="rede"><label for="f-rede">Rede</label>
+    <select id="f-rede">
+      <option value="">Todas</option><option value="1">Pública</option><option value="2">Privada</option>
+    </select></div>
+  <button class="btn" id="f-reset">Limpar filtros</button>
+</div>
+
+<main>
+
+  <!-- ================================================================ HOME -->
+  <section class="view on" id="v-home">
+    <div class="card-grid">
+
+      <a class="bloco" href="#/overview">
+        <div class="ilus">
+          <svg viewBox="0 0 160 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="4" y1="62" x2="156" y2="62" stroke="#E8E8E8" stroke-width="1"/>
+            <rect x="10" y="44" width="18" height="18" rx="2" fill="#8FB4D9"/>
+            <rect x="36" y="36" width="18" height="26" rx="2" fill="#8FB4D9"/>
+            <rect x="62" y="28" width="18" height="34" rx="2" fill="#4A7FB5"/>
+            <rect x="88" y="20" width="18" height="42" rx="2" fill="#003C7D"/>
+            <rect x="114" y="10" width="18" height="52" rx="2" fill="#003C7D"/>
+            <path d="M14 52 L45 44 L71 33 L97 22 L123 12" stroke="#EC7000" stroke-width="2.4"
+                  fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="123" cy="12" r="4" fill="#EC7000"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <span class="cat">Setor</span>
+          <h3>Overview</h3>
+          <p>Qual o tamanho do mercado e para onde ele vai? Matrículas, ingressantes e
+             concluintes na série 2015–2024, a virada do EAD, mix por área, por curso e por UF.</p>
+        </div>
+      </a>
+
+      <a class="bloco" href="#/grupos">
+        <div class="ilus">
+          <svg viewBox="0 0 160 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="4" y1="62" x2="156" y2="62" stroke="#E8E8E8" stroke-width="1"/>
+            <rect x="10" y="18" width="13" height="44" rx="2" fill="#EC7000"/>
+            <rect x="25" y="30" width="13" height="32" rx="2" fill="#F2A25C"/>
+            <rect x="48" y="26" width="13" height="36" rx="2" fill="#EC7000"/>
+            <rect x="63" y="40" width="13" height="22" rx="2" fill="#F2A25C"/>
+            <rect x="86" y="34" width="13" height="28" rx="2" fill="#003C7D"/>
+            <rect x="101" y="44" width="13" height="18" rx="2" fill="#8FB4D9"/>
+            <rect x="124" y="42" width="13" height="20" rx="2" fill="#003C7D"/>
+            <rect x="139" y="52" width="13" height="10" rx="2" fill="#8FB4D9"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <span class="cat">Competição</span>
+          <h3>Key Players</h3>
+          <p>Escolha quem entra no confronto e compare escala, share, ritmo e mix. Depois, as
+             7 companhias abertas lado a lado — inclusive a distribuição regional e por curso
+             da base de cada uma.</p>
+        </div>
+      </a>
+
+      <a class="bloco" href="#/cursos">
+        <div class="ilus">
+          <svg viewBox="0 0 160 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="16" width="60" height="9" rx="2" fill="#003C7D"/>
+            <rect x="10" y="30" width="46" height="9" rx="2" fill="#4A7FB5"/>
+            <rect x="10" y="44" width="32" height="9" rx="2" fill="#8FB4D9"/>
+            <circle cx="118" cy="35" r="25" fill="#FEF4EC"/>
+            <path d="M118 10 A25 25 0 0 1 141 45 L118 35 Z" fill="#EC7000"/>
+            <path d="M141 45 A25 25 0 0 1 100 51 L118 35 Z" fill="#F2A25C"/>
+            <circle cx="118" cy="35" r="10" fill="#fff"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <span class="cat">Portfólio</span>
+          <h3>Cursos</h3>
+          <p>Onde está a demanda e quem domina cada curso? Ranking por rótulo CINE,
+             concentração e quantos alunos cada companhia aberta tem em Pedagogia, Direito,
+             Enfermagem e nos demais cursos.</p>
+        </div>
+      </a>
+
+      <a class="bloco" href="#/geografia">
+        <div class="ilus">
+          <svg viewBox="0 0 160 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M62,6 L74,4 L86,8 L94,18 L98,30 L95,40 L99,50 L92,60 L80,66 L68,64 L58,56
+                     L52,44 L54,32 L50,20 Z" fill="#FEF4EC" stroke="#EC7000" stroke-width="2"
+                  stroke-linejoin="round"/>
+            <circle cx="72" cy="26" r="6" fill="#EC7000"/>
+            <circle cx="86" cy="46" r="8" fill="#003C7D"/>
+            <circle cx="64" cy="50" r="4.5" fill="#4A7FB5"/>
+            <circle cx="24" cy="22" r="5" fill="#EC7000"/><rect x="34" y="19" width="16" height="6" rx="3" fill="#F2A25C"/>
+            <circle cx="24" cy="40" r="5" fill="#003C7D"/><rect x="34" y="37" width="12" height="6" rx="3" fill="#8FB4D9"/>
+            <circle cx="24" cy="56" r="5" fill="#4A7FB5"/><rect x="34" y="53" width="9" height="6" rx="3" fill="#8FB4D9"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <span class="cat">Praças</span>
+          <h3>Geografia</h3>
+          <p>Quem é o player mais forte em cada praça, em número de alunos? Mapa do líder por
+             UF, matriz de força player × estado e o ranking dos maiores municípios com quem
+             manda em cada um.</p>
+        </div>
+      </a>
+
+      <a class="bloco" href="#/mensalidades">
+        <div class="ilus">
+          <svg viewBox="0 0 160 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="4" y1="62" x2="156" y2="62" stroke="#E8E8E8" stroke-width="1"/>
+            <!-- faixas min-max com o ponto da mensalidade publicada em cima -->
+            <rect x="16" y="14" width="86" height="7" rx="3.5" fill="#FCE3CC"/>
+            <circle cx="78" cy="17.5" r="5" fill="#EC7000"/>
+            <rect x="16" y="30" width="58" height="7" rx="3.5" fill="#FCE3CC"/>
+            <circle cx="52" cy="33.5" r="5" fill="#EC7000"/>
+            <rect x="16" y="46" width="112" height="7" rx="3.5" fill="#CFE0F0"/>
+            <circle cx="96" cy="49.5" r="5" fill="#003C7D"/>
+            <path d="M138 54 L138 12" stroke="#D2D4D8" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M133 18 L138 11 L143 18" stroke="#003C7D" stroke-width="2"
+                  fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <span class="cat">Preço</span>
+          <h3>Mensalidades</h3>
+          <p>Quanto cada player consegue cobrar? Mensalidade de tabela dos cursos mais
+             procurados, por modalidade e por instituição, e o quanto o preço varia de uma
+             praça para outra dentro da mesma faculdade.</p>
+        </div>
+      </a>
+
+      <a class="bloco" href="#/regulatorio">
+        <div class="ilus">
+          <svg viewBox="0 0 160 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- documento oficial + linha do tempo de marcos -->
+            <rect x="12" y="8" width="46" height="54" rx="4" fill="#fff" stroke="#003C7D" stroke-width="2"/>
+            <line x1="20" y1="20" x2="50" y2="20" stroke="#003C7D" stroke-width="2.4" stroke-linecap="round"/>
+            <line x1="20" y1="29" x2="44" y2="29" stroke="#8FB4D9" stroke-width="2" stroke-linecap="round"/>
+            <line x1="20" y1="38" x2="48" y2="38" stroke="#8FB4D9" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="50" cy="52" r="8" fill="#FEF4EC" stroke="#EC7000" stroke-width="2"/>
+            <path d="M46.5 52 L49 54.5 L54 49" stroke="#EC7000" stroke-width="2"
+                  fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="76" y1="35" x2="150" y2="35" stroke="#E8E8E8" stroke-width="2"/>
+            <circle cx="84" cy="35" r="5" fill="#8FB4D9"/>
+            <circle cx="110" cy="35" r="6.5" fill="#EC7000"/>
+            <circle cx="136" cy="35" r="5" fill="#003C7D"/>
+            <rect x="104" y="14" width="13" height="6" rx="3" fill="#FCE3CC"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <span class="cat">Regulação</span>
+          <h3>Ambiente Regulatório</h3>
+          <p>O que está valendo, o que mudou e o que vem pela frente em EaD &amp; Polos, Medicina
+             e Fies — mais o feed das últimas decisões do MEC, com resumo, relevância e link
+             para o documento oficial.</p>
+        </div>
+      </a>
+
+      <a class="bloco" href="#/precos">
+        <div class="ilus">
+          <svg viewBox="0 0 160 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="4" y1="62" x2="156" y2="62" stroke="#E8E8E8" stroke-width="1"/>
+            <path d="M8 50 L28 44 L46 52 L64 30 L82 36 L100 20 L120 26 L152 8" stroke="#EC7000"
+                  stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 58 L28 54 L46 56 L64 48 L82 50 L100 44 L120 46 L152 38" stroke="#8FB4D9"
+                  stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-dasharray="4 3"/>
+            <circle cx="152" cy="8" r="4.5" fill="#EC7000"/>
+            <rect x="112" y="52" width="7" height="10" rx="1.5" fill="#003C7D"/>
+            <rect x="124" y="46" width="7" height="16" rx="1.5" fill="#003C7D"/>
+            <rect x="136" y="40" width="7" height="22" rx="1.5" fill="#003C7D"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <span class="cat">Mercado</span>
+          <h3>Price Action</h3>
+          <p>Como o setor está performando agora? Retorno intraday, WTD, MTD, YTD ou desde a data
+             que você escolher, comparação entre as companhias e um basket de Education contra
+             IBOV e SMLL.</p>
+        </div>
+      </a>
+
+      <a class="bloco" href="#/glossario">
+        <div class="ilus">
+          <svg viewBox="0 0 160 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 12 h48 a8 8 0 0 1 8 8 v42 a8 8 0 0 0 -8 -8 h-48 Z" fill="#FEF4EC"
+                  stroke="#EC7000" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M138 12 h-48 a8 8 0 0 0 -8 8 v42 a8 8 0 0 1 8 -8 h48 Z" fill="#fff"
+                  stroke="#003C7D" stroke-width="2" stroke-linejoin="round"/>
+            <line x1="32" y1="26" x2="66" y2="26" stroke="#EC7000" stroke-width="2" stroke-linecap="round"/>
+            <line x1="32" y1="35" x2="60" y2="35" stroke="#F2A25C" stroke-width="2" stroke-linecap="round"/>
+            <line x1="94" y1="26" x2="128" y2="26" stroke="#003C7D" stroke-width="2" stroke-linecap="round"/>
+            <line x1="94" y1="35" x2="120" y2="35" stroke="#8FB4D9" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <span class="cat">Referência</span>
+          <h3>Glossário</h3>
+          <p>O que exatamente cada número quer dizer? Definição de cada termo, o que entra e o
+             que não entra em cada métrica, e por que o dado do Censo pode divergir do que a
+             companhia divulga.</p>
+        </div>
+      </a>
+
+
+    </div>
+  </section>
+
+  <!-- ========================================================= PRICE ACTION -->
+  <section class="view" id="v-precos">
+    <div class="bloco-topo">
+      <h2>Price Action</h2>
+      <div class="acoes"></div>
+    </div>
+
+    <div class="filtros embutido">
+      <div class="chips" id="pa-periodo" role="group" aria-label="Período">
+        <button class="chip" data-p="wtd">WTD</button>
+        <button class="chip" data-p="mtd">MTD</button>
+        <button class="chip on" data-p="ytd">YTD</button>
+        <button class="chip" data-p="12m">12 meses</button>
+        <button class="chip" data-p="max">Máximo</button>
+      </div>
+      <div class="f-item"><label for="pa-desde">Desde</label><input type="date" id="pa-desde"></div>
+      <div class="f-item"><label for="pa-ate">Até</label><input type="date" id="pa-ate"></div>
+      <div class="f-item"><label for="pa-moeda">Moeda</label>
+        <select id="pa-moeda">
+          <option value="brl">Tudo em BRL</option>
+          <option value="local">Moeda local</option>
+        </select></div>
+      <span class="spacer"></span>
+      <span class="carimbo" id="pa-carimbo" data-din></span>
+    </div>
+
+    <div id="pa-aviso"></div>
+    <div class="grid g4" id="pa-kpis"></div>
+
+    <div class="secao-tit">Quem entra na comparação</div>
+    <div class="card destaque">
+      <div class="eyebrow">Seleção</div>
+      <h3>Papéis comparados</h3>
+      <p class="hint">Começa com as 7 companhias abertas do setor. Clique para incluir ou remover —
+        o gráfico, as barras, a tabela e o basket reagem na hora.</p>
+      <div id="pa-chips"></div>
+    </div>
+
+    <div class="secao-tit">Retorno no período</div>
+    <div class="card">
+      <div class="eyebrow">Performance</div>
+      <h3 id="pa-linha-tit" data-din>Retorno acumulado</h3>
+      <p class="hint">Todos os papéis rebaseados em 100 no início do período — a leitura é de
+        retorno relativo, não de preço</p>
+      <div class="chart alto" id="pa-linha"></div>
+      <div class="nota" id="pa-linha-nota"></div>
+    </div>
+
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card">
+        <div class="eyebrow">Comparação</div>
+        <h3 id="pa-barras-tit" data-din>Retorno por papel no período</h3>
+        <p class="hint">Ordenado do melhor para o pior desempenho</p>
+        <div class="chart" id="pa-barras"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Basket</div>
+        <h3>Basket de Education × IBOV × SMLL</h3>
+        <p class="hint">Cesta das companhias selecionadas contra os índices, no mesmo período</p>
+        <div class="chips" id="pa-peso" style="margin-bottom:10px">
+          <button class="chip on" data-w="mcap">Ponderado por valor de mercado</button>
+          <button class="chip" data-w="igual">Peso igual</button>
+        </div>
+        <div class="chart" id="pa-basket"></div>
+        <div class="nota" id="pa-basket-nota"></div>
+      </div>
+    </div>
+
+    <div class="secao-tit">Fechamento por dia</div>
+    <div class="card">
+      <div class="eyebrow">Preços</div>
+      <h3 id="pa-fech-tit" data-din>Preço de fechamento, dia a dia</h3>
+      <p class="hint">Uma linha por pregão, do mais recente para o mais antigo, com o
+        fechamento ajustado de cada papel selecionado. A série inteira sai no Excel.</p>
+      <div id="pa-fech"></div>
+      <div class="nota" id="pa-fech-nota"></div>
+    </div>
+
+    <div class="secao-tit">Tabela</div>
+    <div class="card">
+      <div class="eyebrow">Retornos</div>
+      <h3>Retorno por janela</h3>
+      <p class="hint">Mesma leitura em todas as janelas usuais, mais o período escolhido acima</p>
+      <div id="pa-tab"></div>
+      <div class="nota" id="pa-tab-nota"></div>
+    </div>
+  </section>
+
+  <!-- ================================================== AMBIENTE REGULATÓRIO -->
+  <section class="view" id="v-regulatorio">
+    <div class="bloco-topo">
+      <h2>Ambiente Regulatório</h2>
+      <div class="acoes"></div>
+    </div>
+
+    <div class="chips rg-abas" id="rg-abas" role="group" aria-label="Tema"></div>
+
+    <div class="filtros embutido" id="rg-controles">
+      <div class="f-item"><label for="rg-periodo">Período</label><select id="rg-periodo"></select></div>
+      <div class="f-item"><label for="rg-relev">Relevância</label><select id="rg-relev"></select></div>
+      <div class="f-item rg-busca-item">
+        <label for="rg-busca">Buscar</label>
+        <input type="search" id="rg-busca" placeholder="Buscar no ambiente regulatório">
+      </div>
+      <button class="btn" id="rg-limpar" type="button">Limpar</button>
+      <span class="spacer"></span>
+      <span class="carimbo" id="rg-carimbo" data-din></span>
+    </div>
+
+    <div id="rg-aviso"></div>
+
+    <!-- ============ aba "Últimas publicações": o DOU do dia, cru e triado ============
+         É a aba de entrada. Vive separada do resto do módulo porque a natureza do dado é
+         outra: aqui é o que o MEC publicou, sem curadoria; abaixo, nas abas de tema, é o
+         que alguém conferiu e escreveu. Misturar as duas apagaria essa diferença. -->
+    <div id="rg-diario" hidden>
+      <div class="card destaque">
+        <div class="eyebrow">Como ler</div>
+        <h3>O que saiu no Diário Oficial, triado por relevância</h3>
+        <p class="hint" data-i18n-bloco="rg-diario-metodo">Tudo o que o Ministério da
+          Educação publicou na Seção 1, do mais recente para o mais antigo. A relevância é
+          atribuída por <strong>regra determinística</strong>, pensando em quem investe em
+          equities: ato de universidade ou instituto federal, nomeação e concurso são
+          <em>baixa</em>; norma sobre EaD, Medicina, Fies ou ProUni e medida que suspende
+          ingresso ou contrato são <em>alta</em>. Cada linha mostra <strong>por que</strong>
+          foi classificada assim — e nada aqui foi conferido à mão, diferente das abas de
+          tema.</p>
+      </div>
+
+      <div class="filtros embutido" style="margin-top:16px">
+        <div class="chips" id="rg-dia-relev" role="group" aria-label="Relevância">
+          <button class="chip on" data-r="">Todas</button>
+          <button class="chip" data-r="alta">Alta</button>
+          <button class="chip" data-r="media">Média</button>
+          <button class="chip" data-r="baixa">Baixa</button>
+        </div>
+        <span class="spacer"></span>
+        <span class="carimbo" id="rg-dia-carimbo" data-din></span>
+      </div>
+
+      <div id="rg-dia-lista"></div>
+      <div class="nota" id="rg-dia-nota"></div>
+    </div>
+
+    <!-- as seções abaixo são das abas de tema; a aba do diário as esconde -->
+    <div id="rg-curado">
+    <div class="secao-tit">Onde estamos neste tema</div>
+    <div id="rg-temas"></div>
+
+    <div class="secao-tit">Últimas decisões do MEC</div>
+    <div class="card">
+      <div class="eyebrow">Publicações</div>
+      <h3>Feed cronológico</h3>
+      <p class="hint" data-i18n-bloco="rg-feed-hint">Portarias, decretos, resoluções e editais
+        relevantes para o ensino superior privado, do mais recente para o mais antigo. Clique em
+        <em>Detalhes</em> para abrir o painel sem sair da página, ou vá direto ao documento
+        oficial.</p>
+      <div class="rg-contagem" id="rg-contagem"></div>
+      <div id="rg-feed"></div>
+    </div>
+
+    <div class="secao-tit">Fontes</div>
+    <div class="card">
+      <div class="eyebrow">Onde isto é apurado</div>
+      <h3>Fontes oficiais</h3>
+      <p class="hint">Toda publicação tem link para o documento original. Notícia não entra como
+        fonte primária quando o ato oficial existe.</p>
+      <div class="rg-fontes" id="rg-fontes"></div>
+    </div>
+    </div><!-- /#rg-curado -->
+  </section>
+
+  <!-- ======================================================== MENSALIDADES -->
+  <section class="view" id="v-mensalidades">
+    <div class="bloco-topo">
+      <h2>Mensalidades</h2>
+      <div class="acoes"></div>
+    </div>
+
+    <div class="filtros embutido">
+      <div class="chips" id="me-mod" role="group" aria-label="Modalidade">
+        <button class="chip on" data-m="presencial">Presencial</button>
+        <button class="chip" data-m="semipresencial">Semipresencial</button>
+        <button class="chip" data-m="ead">EAD</button>
+      </div>
+      <span class="spacer"></span>
+      <span class="carimbo" id="me-carimbo" data-din></span>
+    </div>
+
+    <div id="me-aviso"></div>
+    <!-- preenchido por notaEAD(): quem ficou fora da comparacao de EAD por cobertura de
+         polos. Omitir sem dizer o nome faria o leitor concluir que a IES nao oferta EAD. -->
+    <div id="me-ead-nota"></div>
+
+    <div class="card destaque">
+      <div class="eyebrow">Como ler</div>
+      <h3>Preço de tabela, não ticket líquido</h3>
+      <!-- só o parágrafo leva data-i18n-bloco: marcar o card inteiro faz o inglês
+           substituir também o eyebrow e o título, que somem da tela -->
+      <p class="hint" data-i18n-bloco="mensalidades-metodo">O valor é o que a instituição publica no próprio site para quem entra
+        hoje. A companhia reporta receita <em>depois</em> de bolsa, desconto de captação,
+        FIES/ProUni e inadimplência — então <strong>este número não reconcilia com o release
+        e não deve ser usado para isso</strong>. Ele serve para comparar posicionamento entre
+        players e acompanhar o movimento da tabela ao longo do tempo. A mensalidade publicada
+        aqui é a <strong>média simples do menor preço de cada unidade ou polo</strong>; quando
+        há promoção do tipo "de R$ 100 por R$ 79", vale o menor. O recorte de EAD é amostrado
+        nas capitais, então tende a ficar acima do "a partir de" nacional, que costuma vir de
+        polos do interior.</p>
+    </div>
+
+    <div class="secao-tit">Quem cobra mais</div>
+    <div class="card">
+      <div class="eyebrow">Posicionamento</div>
+      <h3>Mensalidade mediana por instituição</h3>
+      <p class="hint">Mediana dos cursos acompanhados em cada instituição, na modalidade
+        selecionada — a mediana evita que Odontologia e Medicina Veterinária dominem a leitura</p>
+      <div class="chart" id="me-inst"></div>
+    </div>
+
+    <div class="secao-tit">Curso a curso</div>
+    <div class="card">
+      <div class="eyebrow">Comparação</div>
+      <h3>Mensalidade por curso e instituição</h3>
+      <p class="hint" data-i18n-bloco="mensalidades-spread">A coluna <em>Spread</em> mostra
+        quanto o mais caro cobra a mais que o mais barato naquele curso: é onde se vê prêmio
+        de marca e onde o preço já convergiu</p>
+      <div id="me-matriz"></div>
+      <div class="nota" id="me-matriz-nota"></div>
+    </div>
+
+    <div class="secao-tit">Dispersão dentro da mesma instituição</div>
+    <div class="card">
+      <div class="eyebrow">Praça</div>
+      <h3>Da unidade mais barata à mais cara</h3>
+      <p class="hint">Uma mensalidade única por instituição esconde a diferença entre praças.
+        Escolha o curso para ver a faixa efetivamente praticada.</p>
+      <div class="filtros embutido">
+        <div class="f-item"><label for="me-curso">Curso</label><select id="me-curso"></select></div>
+      </div>
+      <div class="chart alto" id="me-disp"></div>
+      <div class="nota" id="me-disp-nota"></div>
+    </div>
+
+    <div class="secao-tit" id="me-serie-tit">Evolução</div>
+    <div class="card" id="me-serie-card" hidden>
+      <div class="eyebrow">Série</div>
+      <h3>Mensalidade mediana ao longo do tempo</h3>
+      <p class="hint">Cada ponto é uma coleta. A série começa a existir a partir da segunda
+        rodada — antes disso não há movimento a mostrar.</p>
+      <div class="chart" id="me-serie"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================ OVERVIEW -->
+  <section class="view" id="v-overview">
+    <div class="bloco-topo">
+      <h2>Overview</h2>
+      <div class="acoes"></div>
+    </div>
+
+    <div class="secao-tit">Panorama do setor</div>
+    <div class="grid g4" id="ov-kpis"></div>
+    <div class="grid g4" id="ov-kpis2" style="margin-top:14px"></div>
+
+    <div class="secao-tit">Evolução</div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="eyebrow">Evolução</div>
+        <h3 id="ov-evol-tit" data-din>Matrículas por modalidade</h3>
+        <p class="hint">O presencial encolhe em termos absolutos; todo o crescimento do setor é EAD</p>
+        <div class="chart" id="ov-evol"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Modalidade</div>
+        <h3 id="ov-ead-tit" data-din>Participação do EAD</h3>
+        <p class="hint">O EAD ultrapassou o presencial em 2024, pela primeira vez</p>
+        <div class="chart" id="ov-ead"></div>
+      </div>
+    </div>
+
+    <div class="secao-tit">Onde estão os alunos</div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="eyebrow">Geografia</div>
+        <h3>Matrículas por UF</h3>
+        <p class="hint">15 maiores estados, com o peso de cada modalidade</p>
+        <div class="chart alto" id="ov-uf"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Demanda</div>
+        <h3 id="ov-curso-tit" data-din>Maiores cursos</h3>
+        <p class="hint">15 maiores rótulos CINE do país</p>
+        <div class="chart alto" id="ov-curso"></div>
+        <div class="nota" id="ov-curso-nota"></div>
+      </div>
+    </div>
+
+    <div class="secao-tit">Composição</div>
+    <div class="grid g21">
+      <div class="card">
+        <div class="eyebrow">Competição</div>
+        <h3>Maiores grupos</h3>
+        <p class="hint">Quem são os principais players e qual a exposição de cada um ao EAD</p>
+        <div id="ov-grupos"></div>
+        <div class="nota" id="ov-grupos-nota"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Portfólio</div>
+        <h3 id="ov-area-tit" data-din>Mix por área do conhecimento</h3>
+        <p class="hint">Onde estão as matrículas — classificação CINE/UNESCO</p>
+        <div class="chart alto" id="ov-area"></div>
+        <div class="nota" id="ov-area-nota"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================= KEY PLAYERS -->
+  <section class="view" id="v-grupos">
+    <div class="bloco-topo">
+      <h2>Key Players</h2>
+      <div class="acoes"></div>
+    </div>
+
+    <div class="secao-tit">Escolha quem comparar</div>
+    <div class="card destaque">
+      <div class="eyebrow">Comparação</div>
+      <h3>Quem entra no confronto</h3>
+      <p class="hint">Começa com todas as companhias abertas. Clique para incluir ou remover
+        qualquer grupo — os gráficos e a tabela reagem na hora.</p>
+      <div id="cp-chips"></div>
+    </div>
+
+    <div class="secao-tit">Comparativo estrutural</div>
+    <div class="card">
+      <div class="eyebrow">Escala e eficiência</div>
+      <h3 id="cp-tab-tit" data-din>Comparativo</h3>
+      <p class="hint">Tamanho, ritmo, mix e produtividade por unidade — lado a lado</p>
+      <div id="cp-tab"></div>
+      <div class="nota" id="cp-tab-nota"></div>
+    </div>
+
+    <div class="secao-tit">Trajetória</div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="eyebrow">Market share</div>
+        <h3>Participação de mercado ao longo do tempo</h3>
+        <p class="hint">Quem ganhou e quem cedeu terreno na década</p>
+        <div class="chart" id="cp-share"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Volume</div>
+        <h3>Matrículas em nível</h3>
+        <p class="hint">O tamanho absoluto por trás do share</p>
+        <div class="chart" id="cp-mat"></div>
+      </div>
+    </div>
+
+    <div class="secao-tit">Posicionamento</div>
+    <div class="card">
+      <div class="eyebrow">Escala × crescimento</div>
+      <h3>Onde cada player está no mapa competitivo</h3>
+      <p class="hint">Eixo horizontal: share atual. Vertical: CAGR da década.
+        Tamanho da bolha: matrículas. O quadrante superior direito é escala com crescimento.</p>
+      <div class="chart alto" id="cp-disp"></div>
+    </div>
+
+    <div class="secao-tit" id="ab-secao-tit" data-din>Composição da base</div>
+    <div id="cp-parcial"></div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card">
+        <div class="eyebrow">Geografia</div>
+        <h3>Distribuição regional da base</h3>
+        <p class="hint">Onde cada companhia está exposta — pelo município de oferta, não pela sede</p>
+        <div class="chart alto" id="ab-geo"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Portfólio</div>
+        <h3>Distribuição por curso da base</h3>
+        <p class="hint">Quanto da base de cada companhia está em cada curso. Os 10 maiores rótulos
+          CINE cobrem cerca de metade da base — por isso a visão por área do conhecimento, que é
+          exaustiva como as regiões, fica ao lado.</p>
+        <div class="chips" id="ab-curso-modo" style="margin-bottom:10px">
+          <button class="chip on" data-m="curso">Rótulo CINE</button>
+          <button class="chip" data-m="area">Área do conhecimento</button>
+        </div>
+        <div class="chart alto" id="ab-curso"></div>
+        <div class="nota" id="ab-curso-nota"></div>
+      </div>
+    </div>
+
+    <div class="secao-tit">Exposição à modalidade</div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="eyebrow">Volume</div>
+        <h3>Mix presencial × EAD — em alunos</h3>
+        <p class="hint">Quanto de cada modalidade cada player carrega, em número de matrículas —
+          é o tamanho da operação</p>
+        <div class="chart" id="gr-mix"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Composição</div>
+        <h3>Mix presencial × EAD — em %</h3>
+        <p class="hint">A mesma leitura normalizada: aqui o grande e o pequeno ficam
+          comparáveis, e o que aparece é a estratégia, não a escala</p>
+        <div class="chart" id="gr-mix-pct"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== CURSOS -->
+  <section class="view" id="v-cursos">
+    <div class="bloco-topo">
+      <h2>Cursos</h2>
+      <div class="acoes"></div>
+    </div>
+
+    <div class="secao-tit">Mercado por curso</div>
+    <div class="card">
+      <div class="eyebrow">Mercado por curso</div>
+      <h3>Cursos por matrícula</h3>
+      <p class="hint">Rótulo CINE padronizado — o nome livre da IES não é comparável entre instituições</p>
+      <div id="cu-tab"></div>
+      <div class="nota" id="cu-nota"></div>
+    </div>
+
+    <div class="secao-tit">Concorrência dentro de um curso</div>
+    <div id="cu-parcial"></div>
+    <div class="filtros embutido">
+      <div class="f-item"><label for="cu-curso">Curso</label><select id="cu-curso"></select></div>
+    </div>
+    <!-- seleção de grupos deste bloco; começa nas companhias abertas -->
+    <div class="card destaque" style="margin-top:12px">
+      <div class="eyebrow">Comparação</div>
+      <h3>Quem entra na comparação</h3>
+      <p class="hint">Começa com as companhias abertas. Clique para incluir ou remover qualquer
+        grupo — o gráfico de alunos e a pizza de share reagem na hora.</p>
+      <div id="cu-chips"></div>
+    </div>
+
+    <div class="grid g21" style="margin-top:16px">
+      <div class="card">
+        <div class="eyebrow">Volume</div>
+        <h3 id="cu-cias-tit" data-din>Alunos por grupo no curso</h3>
+        <p class="hint">Número de alunos, não share — quem tem a maior base neste curso específico</p>
+        <div class="chart" id="cu-cias"></div>
+        <div class="nota" id="cu-cias-nota"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Concentração</div>
+        <h3 id="cu-pizza-tit" data-din>Market share no curso</h3>
+        <p class="hint">Fatia de cada player dentro do curso selecionado</p>
+        <div class="chart alto" id="cu-pizza"></div>
+        <div class="nota" id="cu-pizza-nota"></div>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card">
+        <div class="eyebrow">Competição</div>
+        <h3>Ranking de grupos no curso</h3>
+        <p class="hint">Quem domina esse mercado específico, incluindo grupos fechados</p>
+        <div id="cu-grupos"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Instituições</div>
+        <h3>Ranking de IES no curso</h3>
+        <p class="hint">Instituições individuais, sem consolidar por grupo</p>
+        <div id="cu-ies"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================== GEOGRAFIA -->
+  <section class="view" id="v-geografia">
+    <div class="bloco-topo">
+      <h2>Geografia</h2>
+      <div class="acoes"></div>
+    </div>
+
+    <div class="secao-tit">Distribuição geográfica</div>
+    <div class="grid g4" id="ge-kpis"></div>
+    <div id="ge-parcial"></div>
+
+    <div class="secao-tit">Capilaridade — onde cada player realmente está</div>
+    <div class="card destaque">
+      <div class="eyebrow">Comparação</div>
+      <h3>Quem entra no mapa</h3>
+      <!-- texto com <em> no meio vai em data-i18n-bloco: senão o inglês recebe fragmentos
+           soltos e o <em> quebra a frase em três chaves inúteis -->
+      <p class="hint" data-i18n-bloco="geo-capilaridade">Começa com as companhias abertas.
+        Cada bolha é um município onde o grupo tem aluno; o tamanho é o número de alunos.
+        A malha vem do município de <em>oferta</em> do Censo — não do endereço da sede.</p>
+      <div id="ge-chips"></div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="eyebrow">Alcance</div>
+      <h3 id="ge-cap-tit" data-din>Capilaridade</h3>
+      <p class="hint">Escolha o grupo para ver a forma do alcance dele no país. A escala das
+        bolhas é comum a todos os grupos, então trocar de grupo mantém a comparação honesta.</p>
+      <div class="filtros embutido">
+        <div class="f-item"><label for="ge-cap-grupo">Grupo</label>
+          <select id="ge-cap-grupo"></select></div>
+        <div class="f-item"><label for="ge-cap-mod">Modalidade</label>
+          <select id="ge-cap-mod">
+            <option value="mat">Todas</option>
+            <option value="pres">Só presencial</option>
+            <option value="ead">Só EAD</option>
+          </select></div>
+        <span class="spacer"></span>
+        <span class="carimbo" id="ge-cap-resumo" data-din></span>
+      </div>
+      <div class="grid g21">
+        <div class="chart mapa" id="ge-cap"></div>
+        <div>
+          <div class="eyebrow">Alcance comparado</div>
+          <p class="hint">Municípios com aluno, por grupo — o grupo no mapa fica destacado</p>
+          <div id="ge-cap-rank"></div>
+        </div>
+      </div>
+      <div class="nota" id="ge-cap-nota"></div>
+    </div>
+
+    <div class="secao-tit">Pegada física × pegada digital</div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="eyebrow">Presencial</div>
+        <h3 id="ge-fis-tit" data-din>Estrutura instalada</h3>
+        <p class="hint">Onde há campus de verdade — é o que custa caro e não se move</p>
+        <div class="chart mapa" id="ge-fis"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">EAD</div>
+        <h3 id="ge-dig-tit" data-din>Alcance digital</h3>
+        <p class="hint">Onde o aluno de EAD está, pelo município de oferta</p>
+        <div class="chart mapa" id="ge-dig"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="eyebrow">Leitura</div>
+      <h3>Quantos municípios cada modalidade alcança</h3>
+      <p class="hint">A razão entre as duas colunas é quanto do alcance vem de operação leve</p>
+      <div id="ge-fisdig"></div>
+      <div class="nota" id="ge-fisdig-nota"></div>
+    </div>
+
+    <div class="secao-tit">Sobreposição competitiva</div>
+    <div class="grid g21">
+      <div class="card">
+        <div class="eyebrow">Disputa</div>
+        <h3 id="ge-sob-tit" data-din>Onde os selecionados se cruzam</h3>
+        <p class="hint">Cor por quantos dos grupos escolhidos estão presentes no município</p>
+        <div class="chart mapa" id="ge-sob"></div>
+        <div class="nota" id="ge-sob-nota"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Exclusividade</div>
+        <h3>Praça exclusiva × disputada</h3>
+        <p class="hint">Quantos municípios cada grupo tem só para si</p>
+        <div id="ge-excl"></div>
+      </div>
+    </div>
+
+    <div class="secao-tit">Qualidade e situação regulatória</div>
+    <div id="ge-emec-aviso"></div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="eyebrow">e-MEC</div>
+        <h3>IGC médio por grupo</h3>
+        <p class="hint">Índice Geral de Cursos, de 1 a 5. Só entram IES com nota publicada</p>
+        <div class="chart" id="ge-igc"></div>
+        <div class="nota" id="ge-igc-nota"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Restrições vigentes</div>
+        <h3>IES com sinalização no e-MEC</h3>
+        <p class="hint">Suspensão de ingresso, de FIES ou de ProUni, e procedimentos de supervisão</p>
+        <div id="ge-sinal"></div>
+        <div class="nota" id="ge-sinal-nota"></div>
+      </div>
+    </div>
+
+    <div class="secao-tit">Quem lidera cada estado</div>
+    <div id="ge-parcial"></div>
+    <div class="grid g12">
+      <div class="card">
+        <div class="eyebrow">Mapa</div>
+        <h3>Player líder por UF</h3>
+        <p class="hint">Cada estado pintado com a cor do grupo com mais alunos na praça</p>
+        <div class="chart alto" id="ge-mapa"></div>
+        <div id="ge-mapa-leg"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Estados</div>
+        <h3>Líder, vice e concentração em cada UF</h3>
+        <p class="hint">Ordenável — clique no cabeçalho para achar as praças mais concentradas</p>
+        <div id="ge-lider-uf"></div>
+      </div>
+    </div>
+
+    <div class="secao-tit">Abrir uma praça</div>
+    <div class="filtros embutido">
+      <div class="f-item"><label for="ge-uf-sel">Estado</label><select id="ge-uf-sel"></select></div>
+      <div class="f-item"><label for="ge-mun-sel">Município</label><select id="ge-mun-sel"></select></div>
+    </div>
+
+    <div class="card destaque" style="margin-bottom:16px">
+      <div class="eyebrow">Overlap na praça</div>
+      <h3 id="ge-praca-tit" data-din>Quem está neste município</h3>
+      <p class="hint">Cada grupo selecionado nos chips lá em cima, com o que ele tem nesta
+        cidade — presencial e EAD separados. Barra vazia significa que o grupo não está aqui.</p>
+      <div class="grid g21">
+        <div>
+          <div class="chart" id="ge-praca"></div>
+        </div>
+        <div>
+          <div id="ge-praca-kpis"></div>
+          <div id="ge-praca-tab"></div>
+        </div>
+      </div>
+      <div class="nota" id="ge-praca-nota"></div>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="eyebrow">Competição local</div>
+        <h3 id="ge-uf-tit" data-din>Ranking de players no estado</h3>
+        <p class="hint">Alunos e share dentro da UF selecionada</p>
+        <div id="ge-uf-players"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Municípios</div>
+        <h3 id="ge-uf-mun-tit" data-din>Maiores municípios do estado</h3>
+        <p class="hint">Com o player líder em cada um</p>
+        <div id="ge-uf-mun"></div>
+      </div>
+    </div>
+
+    <div class="secao-tit">Maiores praças do país</div>
+    <div class="card">
+      <div class="eyebrow">Municípios</div>
+      <h3>40 maiores municípios e quem lidera cada um</h3>
+      <p class="hint">Concentração da base e o grupo com mais alunos na cidade</p>
+      <div id="ge-mun-lider"></div>
+      <div class="nota" id="ge-nota"></div>
+    </div>
+
+    <div class="secao-tit">Composição regional</div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="eyebrow">Regiões</div>
+        <h3>Presencial × EAD por região</h3>
+        <p class="hint">O peso do EAD muda bastante entre regiões</p>
+        <div class="chart" id="ge-reg"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Estados</div>
+        <h3>Ranking de UFs</h3>
+        <p class="hint">Onde está a base de alunos e o peso do EAD em cada estado</p>
+        <div id="ge-uf"></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================================== GLOSSÁRIO -->
+  <section class="view" id="v-glossario">
+    <div class="bloco-topo">
+      <h2>Glossário</h2>
+      <div class="acoes"></div>
+    </div>
+
+    <div class="secao-tit">O que estamos somando em cada player</div>
+    <div class="card destaque">
+      <div class="eyebrow">Composição</div>
+      <h3 id="gl-comp-tit" data-din>IES consideradas no grupo</h3>
+      <p class="hint">A lista completa de instituições atribuídas ao grupo, com o número de alunos
+        de cada uma. É esta lista que explica qualquer diferença contra o release da companhia.</p>
+      <div class="filtros embutido">
+        <div class="f-item"><label for="gl-grupo">Grupo</label><select id="gl-grupo"></select></div>
+      </div>
+      <!-- aviso de concentração: preenchido por glossario() quando a base do grupo está
+           empilhada em poucas IES por conta do registro de EAD na sede -->
+      <div id="gl-comp-ead"></div>
+      <div id="gl-comp"></div>
+      <div class="nota" id="gl-comp-nota"></div>
+    </div>
+
+    <div class="secao-tit">Definições</div>
+    <div class="card destaque">
+      <div class="eyebrow">Antes de tudo</div>
+      <h3>De onde vêm os dados e por que eles podem divergir do release da companhia</h3>
+      <p class="hint">Leia esta parte antes de confrontar qualquer número com o que a empresa divulga.</p>
+      <div class="glossario-fonte" data-i18n-bloco="fonte">
+        <p><strong>Fonte.</strong> Todos os números de alunos, cursos, instituições e geografia
+          vêm dos <strong>Microdados do Censo da Educação Superior</strong>, publicados pelo
+          <strong>INEP</strong>, série 2015–2024. É a mesma base que sustenta as estatísticas
+          oficiais do MEC. Nada aqui é estimativa própria: o que existe é agregação e
+          consolidação por grupo econômico.</p>
+        <p><strong>O Censo cobre apenas graduação.</strong> Pós-graduação, cursos técnicos,
+          educação continuada, cursos livres e preparatórios <em>não entram</em>. Quando uma
+          companhia divulga "base de alunos", esse número frequentemente inclui esses produtos —
+          e aí os dois números não são comparáveis.</p>
+        <p><strong>Divergência esperada contra o release.</strong> Além do escopo, há três causas
+          estruturais: (i) a matrícula do Censo exclui aluno com vínculo trancado, que a empresa
+          costuma manter na base; (ii) a data-base é o ano censitário, não o trimestre do release;
+          (iii) algumas companhias excluem alunos por critério próprio — a Vitru, por exemplo,
+          deixa de fora alunos "unengaged" desde 1T24. <strong>Divergir não significa erro em
+          nenhum dos dois lados</strong>: significa definição diferente.</p>
+        <p><strong>Preços.</strong> O bloco de Price Action usa cotações de fechamento ajustado
+          do Yahoo Finance, capturadas na data indicada no carimbo daquele bloco. São um
+          instantâneo, não uma cotação em tempo real.</p>
+      </div>
+    </div>
+
+    <div class="secao-tit">Métricas de aluno</div>
+    <div class="card"><dl class="glossario-dl" data-i18n-bloco="gl-metricas">
+      <div><dt>Matrícula (QT_MAT)</dt><dd>número de alunos com vínculo ativo no curso na data do
+        Censo — situação "cursando" ou "formado" no ano. <strong>Exclui matrícula trancada.</strong>
+        É a métrica primária de todo o dashboard, porque é a definição oficial do INEP, aplicada
+        igual às 2.561 instituições do país.</dd></div>
+      <div><dt>Trancados</dt><dd>vínculos com matrícula trancada na data do Censo. Ficam fora de
+        QT_MAT. A taxa varia enormemente entre grupos — de 0,7% a 87,6% da base — e por isso não
+        pode ser tratada como ruído.</dd></div>
+      <div><dt>Base de alunos</dt><dd>matrículas + trancados. Aparece porque é próxima do conceito
+        que várias companhias usam ao divulgar base, mas não é a métrica primária aqui.</dd></div>
+      <div><dt>Ingressantes</dt><dd>alunos que entraram no curso no ano de referência, por qualquer
+        forma de ingresso.</dd></div>
+      <div><dt>Concluintes</dt><dd>alunos que concluíram o curso no ano de referência.</dd></div>
+      <div><dt>Ingr./base</dt><dd>ingressantes divididos por matrículas. Proxy da velocidade de
+        renovação da carteira: quanto maior, mais o grupo depende de captação nova para sustentar
+        a base.</dd></div>
+    </dl></div>
+
+    <div class="secao-tit">Modalidade, rede e organização</div>
+    <div class="card"><dl class="glossario-dl" data-i18n-bloco="gl-modalidade">
+      <div><dt>Presencial</dt><dd>curso ofertado na modalidade presencial. Nos gráficos é sempre
+        azul — é a estrutura física instalada.</dd></div>
+      <div><dt>EAD</dt><dd>educação a distância. Nos gráficos é sempre laranja — é o que cresce.
+        Em 2024 o EAD passou o presencial pela primeira vez.</dd></div>
+      <div><dt>Rede pública / privada</dt><dd>classificação da instituição mantenedora. O
+        dashboard cobre as duas, mas a análise competitiva é essencialmente da rede privada.</dd></div>
+      <div><dt>IES</dt><dd>Instituição de Ensino Superior, a unidade de registro do Censo. Um
+        grupo econômico é a soma de várias IES.</dd></div>
+      <div><dt>Organização acadêmica</dt><dd>universidade, centro universitário, faculdade,
+        instituto federal ou CEFET — categoria regulatória da IES, que define autonomia para
+        abrir cursos.</dd></div>
+      <div><dt>Unidades</dt><dd>proxy de campus: pares distintos de IES × município com oferta
+        presencial. O Censo não traz identificador de campus, então dois campi na mesma cidade
+        contam como um só.</dd></div>
+    </dl></div>
+
+    <div class="secao-tit">Grupos e competição</div>
+    <div class="card"><dl class="glossario-dl" data-i18n-bloco="gl-grupos">
+      <div><dt>Grupo econômico</dt><dd>conjunto de IES sob o mesmo controlador. Mapeado
+        instituição por instituição, com 43 grupos cobrindo 60,5% do mercado e 75,7% da rede
+        privada.</dd></div>
+      <div><dt>Perímetro pro-forma</dt><dd>o grupo tem hoje a mesma composição em toda a série:
+        uma IES adquirida em 2022 conta no comprador desde 2015. Isso permite ler evolução de
+        share sem degraus artificiais de M&amp;A — mas <strong>não reproduz o que a empresa
+        reportava à época</strong>.</dd></div>
+      <div><dt>Independentes</dt><dd>bucket residual do que não está mapeado em nenhum grupo.
+        Não é um player: fica fora de Top N, de HHI e da disputa de liderança por praça, mas o
+        quanto ele representa é sempre declarado.</dd></div>
+      <div><dt>Market share</dt><dd>participação nas matrículas. Toda tela declara o denominador
+        usado; quando há filtro de modalidade, rede ou UF, o denominador acompanha.</dd></div>
+      <div><dt>HHI</dt><dd>índice Herfindahl-Hirschman: soma dos quadrados dos market shares.
+        Mede concentração — quanto maior, menos disputado o mercado.</dd></div>
+      <div><dt>YoY e CAGR</dt><dd>variação contra o ano anterior e taxa composta de crescimento
+        anual no período completo da série.</dd></div>
+      <div><dt>Δ Share</dt><dd>variação da participação de mercado em pontos percentuais contra
+        o ano anterior. Ganhar share e crescer não são a mesma coisa: dá para crescer e perder
+        share num mercado que cresce mais rápido.</dd></div>
+    </dl></div>
+
+    <div class="secao-tit">Curso e geografia</div>
+    <div class="card"><dl class="glossario-dl" data-i18n-bloco="gl-geografia">
+      <div><dt>Rótulo CINE</dt><dd>nome padronizado do curso na Classificação Internacional
+        Normalizada da Educação (CINE/ISCED, UNESCO). São 381 rótulos para 1.497 nomes livres
+        dados pelas IES — só o rótulo é comparável entre instituições.</dd></div>
+      <div><dt>Área do conhecimento</dt><dd>agrupamento amplo da CINE, em 11 áreas. Diferente do
+        rótulo, é exaustivo: soma 100% da base.</dd></div>
+      <div><dt>Município de oferta</dt><dd>a cidade onde o curso é ofertado, que é como o aluno
+        entra na geografia — não a cidade da sede da instituição.</dd></div>
+      <div><dt>Geografia do EAD</dt><dd>no EAD, o município é o do <strong>polo de apoio
+        presencial</strong>, não a residência do aluno. Um polo pequeno pode concentrar muitos
+        alunos de uma região inteira.</dd></div>
+      <div><dt>Líder da praça</dt><dd>grupo com mais alunos naquele estado ou município,
+        excluindo o bucket Independentes.</dd></div>
+    </dl></div>
+
+    <div class="secao-tit">Price Action</div>
+    <div class="card"><dl class="glossario-dl" data-i18n-bloco="gl-precos">
+      <div><dt>Intraday, WTD, MTD, YTD</dt><dd>retorno desde a abertura do dia, desde a última
+        segunda-feira, desde o primeiro pregão do mês e desde o primeiro pregão do ano,
+        respectivamente.</dd></div>
+      <div><dt>Fechamento ajustado</dt><dd>preço de fechamento corrigido por proventos e
+        desdobramentos. Sem esse ajuste, o retorno de um papel que pagou dividendo apareceria
+        menor do que foi.</dd></div>
+      <div><dt>Rebase 100</dt><dd>todas as séries começam em 100 no início do período escolhido,
+        para que a comparação seja de retorno relativo e não de preço.</dd></div>
+      <div><dt>Basket de Education</dt><dd>índice com as companhias selecionadas, ponderado por
+        <strong>valor de mercado</strong>: soma-se ações × preço de cada papel e rebaseia-se o
+        total em 100, de modo que o peso acompanha o preço ao longo do período, como num índice.
+        A cesta é sempre em BRL. A alternativa é peso igual.</dd></div>
+      <div><dt>IBOV e SMLL</dt><dd>Ibovespa e o índice de small caps da B3. O SMLL entra pelo
+        <strong>SMAL11</strong>, o ETF que replica o índice, porque é a série negociável
+        disponível.</dd></div>
+      <div><dt>Tudo em BRL</dt><dd>a Afya negocia em dólar na Nasdaq. Nesta opção o retorno dela
+        é convertido pelo câmbio do dia, que é o que torna a comparação com IBOV e SMLL honesta.
+        Em "moeda local", cada papel rende na própria moeda.</dd></div>
+    </dl></div>
+  </section>
+
+</main>
+
+<script src="vendor/echarts.min.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+GRUPO;TICKER;YAHOO;MOEDA;BOLSA;TIPO
+# Mapeamento grupo economico -> papel negociado, usado por scripts/06_fetch_precos.py.
+# Fica separado de grupos.csv porque e informacao de MERCADO (muda com migracao de listagem,
+# desdobramento, mudanca de ticker) e nao de perimetro societario.
+#
+# Vitru migrou a listagem da Nasdaq (VTRU) para a B3 (VTRU3, Novo Mercado) em junho/2024 -
+# a serie no Yahoo comeca em 2024-06-11. Antes disso o papel nao tem historico nesta fonte.
+Cogna;COGN3;COGN3.SA;BRL;B3;acao
+Vitru;VTRU3;VTRU3.SA;BRL;B3;acao
+YDUQS;YDUQ3;YDUQ3.SA;BRL;B3;acao
+Cruzeiro do Sul;CSED3;CSED3.SA;BRL;B3;acao
+Ser Educacional;SEER3;SEER3.SA;BRL;B3;acao
+Ânima;ANIM3;ANIM3.SA;BRL;B3;acao
+Afya;AFYA;AFYA;USD;Nasdaq;acao
+# Benchmarks. O indice SMLL da B3 nao e servido pelo Yahoo; o SMAL11 (ETF do iShares que
+# replica o SMLL) e o proxy negociavel e serve para comparacao de retorno.
+;IBOV;^BVSP;BRL;B3;indice
+;SMAL11;SMAL11.SA;BRL;B3;indice
+# Cambio, para trazer o papel em USD (Afya) para BRL na comparacao com IBOV/SMLL.
+;USDBRL;BRL=X;BRL;FX;cambio

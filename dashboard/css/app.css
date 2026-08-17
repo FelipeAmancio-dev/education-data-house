@@ -1,0 +1,677 @@
+/* Dashboard do Ensino Superior
+   Identidade visual: paleta Itaú (laranja + azul-marinho), fundo claro, muito respiro,
+   cards com eyebrow de categoria e hierarquia tipográfica forte. */
+
+:root {
+  /* ---- paleta Itaú ---- */
+  --laranja: #EC7000;
+  --laranja-escuro: #C25A00;
+  --laranja-claro: #FF9A3D;
+  --laranja-wash: #FEF4EC;
+  --laranja-borda: #F7C89B;
+  --azul: #003C7D;
+  --azul-medio: #33628F;
+  --azul-claro: #8FB4D9;
+  --azul-wash: #EEF3F9;
+
+  --bg: #ffffff;
+  --bg-alt: #FAFAFA;
+  --bg-sunken: #F2F3F5;
+  --line: #E8E8E8;
+  --line-strong: #D2D4D8;
+  --ink: #1A1A1A;
+  --ink-2: #4A4A4A;
+  --ink-3: #8C8C8C;
+
+  --pos: #1B7A4B;
+  --neg: #C4322B;
+
+  --r: 8px;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .04);
+  --shadow-hover: 0 3px 10px rgba(0, 0, 0, .07);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--bg-alt);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------------------------------------------------------------- topo
+   Cabeçalho escuro com filete laranja, no mesmo padrão do Healthcare Data House:
+   a marca à esquerda e os contatos do time à direita, presentes em todas as telas. */
+header.hd {
+  background: #111111; color: #fff;
+  padding: 15px 34px; box-shadow: 0 3px 0 var(--laranja);
+  display: flex; align-items: center; gap: 18px;
+}
+.hd-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit; }
+.hd-logo {
+  width: 44px; height: 44px; border-radius: 12px; background: var(--laranja);
+  display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
+}
+.hd-logo svg { width: 28px; height: 28px; }
+.hd-txt strong { display: block; font-size: 22px; font-weight: 800; letter-spacing: -.3px; }
+.hd-txt strong span { color: var(--laranja); }
+.hd-txt small { display: block; margin-top: 2px; font-size: 11.5px; color: rgba(255,255,255,.6); }
+.hd-spacer { flex: 1; }
+
+/* seletor de idioma — fica no topo, ao lado do time, visível em todas as telas */
+.lang { display: flex; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; overflow: hidden; }
+.lang button {
+  font-family: inherit; font-size: 11.5px; font-weight: 700; letter-spacing: .04em;
+  padding: 6px 13px; background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,.7); transition: background .15s, color .15s;
+}
+.lang button:hover { color: #fff; }
+.lang button.on { background: var(--laranja); color: #fff; }
+
+.team { display: flex; flex-direction: column; gap: 5px; flex: 0 0 auto; }
+.member { display: flex; align-items: center; gap: 8px; }
+.member .name {
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,.88);
+  margin-left: auto; white-space: nowrap;
+}
+.member a {
+  width: 23px; height: 23px; border-radius: 50%; flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,.7); border: 1px solid rgba(255,255,255,.22);
+  transition: color .15s, border-color .15s, background .15s;
+}
+.member a:hover { color: #fff; border-color: var(--laranja); background: var(--laranja); }
+.member a svg { width: 12px; height: 12px; }
+
+/* ------------------------------------------------------ navegação de blocos */
+nav {
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+  background: var(--bg); border-bottom: 1px solid var(--line);
+  padding: 0 24px; position: sticky; top: 0; z-index: 50;
+}
+nav .volta {
+  font-size: 12.5px; font-weight: 700; color: var(--ink-3); text-decoration: none;
+  padding: 11px 14px 11px 8px; margin-right: 6px; border-right: 1px solid var(--line);
+}
+nav .volta:hover { color: var(--laranja-escuro); }
+nav button {
+  background: none; border: none; cursor: pointer;
+  padding: 12px 16px; font-size: 14px; color: var(--ink-2);
+  border-bottom: 2.5px solid transparent; font-family: inherit; font-weight: 500;
+}
+nav button:hover { color: var(--ink); }
+nav button.on { color: var(--laranja); border-bottom-color: var(--laranja); font-weight: 700; }
+
+/* -------------------------------------------------------------- filtros */
+.filtros {
+  background: var(--bg); border-bottom: 1px solid var(--line);
+  padding: 13px 32px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap;
+  position: sticky; top: 46px; z-index: 40;
+}
+/* barra de filtro local, dentro de uma seção (curso, UF, grupo) */
+.filtros.embutido {
+  position: static; border: 1px solid var(--line); border-radius: var(--r);
+  margin-bottom: 16px; padding: 11px 16px;
+}
+.filtros [hidden] { display: none; }
+/* `display: flex` acima vence o `display: none` que o atributo [hidden] traz do UA, entao
+ * a barra continuava aparecendo nos blocos sem filtro global (Price Action, Mensalidades):
+ * os .f-item sumiam um a um e sobrava o "Limpar filtros" sozinho. */
+.filtros[hidden] { display: none; }
+.f-item { display: flex; align-items: center; gap: 8px; }
+.f-item label {
+  font-size: 11px; color: var(--ink-3); text-transform: uppercase;
+  letter-spacing: .08em; font-weight: 700;
+}
+select, input[type=search] {
+  font-family: inherit; font-size: 13.5px; color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line-strong); border-radius: var(--r); padding: 6px 10px; min-width: 116px;
+}
+select:focus, input:focus { outline: none; border-color: var(--laranja); box-shadow: 0 0 0 3px var(--laranja-wash); }
+.btn {
+  font-family: inherit; font-size: 13px; cursor: pointer; font-weight: 500;
+  background: var(--bg); border: 1px solid var(--line-strong);
+  border-radius: var(--r); padding: 6px 14px; color: var(--ink-2);
+}
+.btn:hover { background: var(--laranja-wash); border-color: var(--laranja-borda); color: var(--laranja-escuro); }
+
+/* --------------------------------------------------------------- layout */
+main { padding: 28px 32px 72px; max-width: 1680px; margin: 0 auto; }
+.view { display: none; }
+.view.on { display: block; }
+
+.secao-tit {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--ink-3); margin: 34px 0 14px;
+}
+.secao-tit:first-child { margin-top: 0; }
+
+.grid { display: grid; gap: 16px; }
+.g4 { grid-template-columns: repeat(4, 1fr); }
+.g3 { grid-template-columns: repeat(3, 1fr); }
+.g2 { grid-template-columns: repeat(2, 1fr); }
+.g21 { grid-template-columns: 2fr 1fr; }
+.g12 { grid-template-columns: 1fr 2fr; }
+@media (max-width: 1150px) {
+  .g4 { grid-template-columns: repeat(2, 1fr); }
+  .g3, .g2, .g21, .g12 { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: var(--bg); border: 1px solid var(--line);
+  border-radius: var(--r); padding: 18px 20px; box-shadow: var(--shadow);
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+.card:hover { box-shadow: var(--shadow-hover); }
+.card.destaque { border-color: var(--laranja-borda); }
+
+/* eyebrow de categoria, no estilo da referência */
+.eyebrow {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .11em;
+  color: var(--ink-3); margin-bottom: 5px;
+}
+.card h3 { font-size: 15px; font-weight: 700; margin: 0 0 4px; color: var(--ink); letter-spacing: -.01em; }
+.card .hint { font-size: 12.5px; color: var(--ink-3); margin: 0 0 16px; line-height: 1.5; }
+
+/* ------------------------------------------------------------------ KPI */
+.kpi { padding: 17px 19px; }
+.kpi .rot {
+  font-size: 10.5px; color: var(--ink-3); text-transform: uppercase;
+  letter-spacing: .1em; font-weight: 700; margin-bottom: 8px;
+}
+.kpi .val {
+  font-size: 32px; font-weight: 700; letter-spacing: -.03em;
+  font-variant-numeric: tabular-nums; line-height: 1.05; color: var(--ink);
+}
+.kpi.ac .val { color: var(--laranja); }
+.kpi .sub { font-size: 12px; color: var(--ink-3); margin-top: 7px; }
+.delta { font-weight: 700; font-variant-numeric: tabular-nums; }
+.delta.pos { color: var(--pos); }
+.delta.neg { color: var(--neg); }
+
+/* --------------------------------------------------------------- tabela */
+.tw { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+th {
+  text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--ink-3); font-weight: 700; padding: 8px 11px;
+  border-bottom: 1.5px solid var(--line-strong); white-space: nowrap;
+}
+th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+th.sortable { cursor: pointer; user-select: none; }
+th.sortable:hover { color: var(--laranja); }
+th.sorted { color: var(--laranja); }
+th.sorted::after { content: " ▾"; }
+th.sorted.asc::after { content: " ▴"; }
+td { padding: 8px 11px; border-bottom: 1px solid var(--line); }
+tbody tr:hover { background: var(--laranja-wash); }
+td.nome { font-weight: 600; }
+.tag {
+  display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 3px;
+  background: var(--bg-sunken); color: var(--ink-2); font-weight: 700;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+.tag.lst { background: var(--laranja-wash); color: var(--laranja-escuro); }
+.barra { height: 5px; background: var(--bg-sunken); border-radius: 3px; overflow: hidden; min-width: 46px; }
+.barra i { display: block; height: 100%; background: var(--laranja); border-radius: 3px; }
+.barra.azul i { background: var(--azul); }
+
+.chart { width: 100%; height: 300px; }
+.chart.alto { height: 400px; }
+.chart.baixo { height: 220px; }
+
+.nota {
+  font-size: 12px; color: var(--ink-3); margin-top: 14px;
+  padding-top: 12px; border-top: 1px solid var(--line); line-height: 1.55;
+}
+.aviso {
+  background: var(--laranja-wash); border: 1px solid var(--laranja-borda); color: var(--laranja-escuro);
+  border-radius: var(--r); padding: 11px 14px; font-size: 12.5px; margin-bottom: 16px;
+}
+.vazio { color: var(--ink-3); font-size: 13.5px; padding: 32px; text-align: center; }
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px;
+  background: var(--bg-sunken); padding: 1px 5px; border-radius: 4px;
+}
+.tag.al { background: #FDECEA; color: #8A2B2B; }
+.tag.ok { background: #E8F3EC; color: var(--pos); }
+tr.total td { font-weight: 700; background: var(--bg-alt); border-top: 1.5px solid var(--line-strong); }
+
+/* ------------------------------------------------------- chips de seleção */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+  border: 1.5px solid var(--line-strong); background: var(--bg); color: var(--ink-2);
+  border-radius: 20px; padding: 6px 15px; display: inline-flex; align-items: center; gap: 8px;
+  transition: all .12s ease;
+}
+.chip:hover { border-color: var(--laranja-borda); color: var(--laranja-escuro); }
+.chip.on { background: var(--laranja); border-color: var(--laranja); color: #fff; }
+.chip .pt { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+.chip.on .pt { background: #fff !important; }
+.chip .tk { font-size: 10.5px; opacity: .72; font-weight: 700; }
+
+/* --------------------------------------------------- cabeçalho do bloco
+   Título do dashboard + ações. O botão de CSV mora aqui: é o mesmo lugar em todos
+   os blocos, então o investidor aprende uma vez onde baixar. */
+.bloco-topo {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding-bottom: 14px; margin-bottom: 20px; border-bottom: 1px solid var(--line);
+}
+.bloco-topo h2 { font-size: 21px; font-weight: 800; letter-spacing: -.03em; margin: 0; }
+.bloco-topo .acoes { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+
+.btn-excel {
+  display: inline-flex; align-items: baseline; gap: 9px; font-weight: 600; padding: 8px 16px;
+}
+.btn-excel small { color: var(--ink-3); font-size: 11px; font-weight: 500; }
+.btn-excel:hover small { color: var(--laranja-escuro); }
+.btn-excel[disabled] { opacity: .6; cursor: default; }
+
+.csv-menu { position: relative; }
+.csv-menu > summary {
+  list-style: none; cursor: pointer; user-select: none;
+  font-size: 13px; font-weight: 600; color: var(--ink-2);
+  border: 1px solid var(--line-strong); border-radius: var(--r); padding: 7px 14px;
+  display: inline-flex; align-items: center; gap: 8px; background: var(--bg);
+}
+.csv-menu > summary::-webkit-details-marker { display: none; }
+.csv-menu > summary:hover { background: var(--laranja-wash); border-color: var(--laranja-borda); color: var(--laranja-escuro); }
+.csv-menu[open] > summary { border-color: var(--laranja); color: var(--laranja-escuro); }
+.csv-lista {
+  position: absolute; right: 0; top: calc(100% + 6px); z-index: 60; min-width: 310px;
+  background: var(--bg); border: 1px solid var(--line-strong); border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.13); padding: 6px; max-height: 60vh; overflow-y: auto;
+}
+.csv-lista button {
+  display: flex; width: 100%; align-items: baseline; gap: 8px; text-align: left;
+  font-family: inherit; font-size: 13px; color: var(--ink); background: none;
+  border: none; border-radius: 6px; padding: 8px 10px; cursor: pointer;
+}
+.csv-lista button:hover { background: var(--laranja-wash); color: var(--laranja-escuro); }
+.csv-lista button small { margin-left: auto; color: var(--ink-3); font-size: 11px; white-space: nowrap; }
+.csv-lista .tudo { border-top: 1px solid var(--line); margin-top: 4px; padding-top: 8px; font-weight: 700; }
+.csv-lista .vazia { padding: 12px; font-size: 12.5px; color: var(--ink-3); }
+
+.carimbo { font-size: 11.5px; color: var(--ink-3); }
+.filtros .spacer { flex: 1; }
+input[type=date] {
+  font-family: inherit; font-size: 13.5px; color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line-strong); border-radius: var(--r); padding: 5px 9px;
+}
+input[type=date]:focus { outline: none; border-color: var(--laranja); box-shadow: 0 0 0 3px var(--laranja-wash); }
+
+/* --------------------------------------------------------------- glossário */
+.glossario-fonte p { font-size: 13.5px; line-height: 1.65; margin: 0 0 12px; color: var(--ink-2); }
+.glossario-fonte p:last-child { margin-bottom: 0; }
+.glossario-fonte strong { color: var(--ink); }
+.glossario-dl { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 34px; margin: 0; }
+.glossario-dl > div { font-size: 13px; line-height: 1.6; }
+.glossario-dl dt { font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+.glossario-dl dd { margin: 0; color: var(--ink-2); }
+@media (max-width: 1000px) { .glossario-dl { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------------------------------ home */
+.card-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px;
+}
+.bloco {
+  background: var(--bg); border: 1px solid var(--line); border-radius: 14px;
+  padding: 20px 22px; text-decoration: none; color: inherit;
+  display: flex; flex-direction: column; gap: 14px;
+  box-shadow: var(--shadow); transition: transform .15s, box-shadow .15s, border-color .15s;
+}
+.bloco:hover {
+  transform: translateY(-3px); box-shadow: 0 10px 26px rgba(10,10,10,.10);
+  border-color: var(--laranja-borda);
+}
+.bloco .ilus { height: 66px; }
+.bloco .ilus svg { height: 100%; width: auto; max-width: 100%; }
+.bloco .cat {
+  display: block; font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .11em; color: var(--ink-3); margin-bottom: 4px;
+}
+.bloco h3 { font-size: 17px; font-weight: 700; letter-spacing: -.02em; margin: 0 0 7px; }
+.bloco:hover h3 { color: var(--laranja-escuro); }
+.bloco:hover h3::after { content: " →"; }
+.bloco p { font-size: 12.5px; color: var(--ink-3); line-height: 1.6; margin: 0; }
+
+/* legenda categórica (mapa de líderes, séries por grupo) */
+.legenda { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 12px; }
+.legenda span { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--ink-2); }
+.legenda i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+#carregando {
+  position: fixed; inset: 0; background: var(--bg); z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 14px; color: var(--ink-3); font-size: 13.5px;
+}
+#carregando .mk { width: 36px; height: 4px; background: var(--laranja); border-radius: 2px; }
+
+/* ------------------------------------------------ ambiente regulatório
+   Aparência de equity research, não de portal jurídico: densidade alta, hierarquia
+   forte e selos que distinguem regra vigente de discussão à primeira vista. */
+.rg-busca-item input[type=search] { min-width: 260px; }
+.rg-contagem { font-size: 11.5px; color: var(--ink-3); margin-bottom: 10px; }
+
+.rg-fontes { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.rg-fontes a { font-size: 12.5px; color: var(--azul); text-decoration: none; font-weight: 600; }
+.rg-fontes a:hover { color: var(--laranja-escuro); text-decoration: underline; }
+
+/* selos de situação — a distinção mais importante da página */
+.rg-selo {
+  display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .04em;
+  text-transform: uppercase; padding: 2px 8px; border-radius: 3px; white-space: nowrap;
+}
+.rg-vigente   { background: #E8F3EC; color: #1B7A4B; }
+.rg-transicao { background: var(--laranja-wash); color: var(--laranja-escuro); }
+.rg-discussao { background: #EEF3F9; color: var(--azul); }
+.rg-revogada  { background: var(--bg-sunken); color: var(--ink-3); text-decoration: line-through; }
+.rg-rel-alta  { background: #FDECEA; color: #8A2B2B; }
+.rg-rel-media { background: var(--laranja-wash); color: var(--laranja-escuro); }
+.rg-rel-baixa { background: var(--bg-sunken); color: var(--ink-2); }
+.rg-conf { background: #FFF6D6; color: #7A5B00; }
+
+/* cartão de tema */
+.rg-tema { margin-bottom: 16px; }
+.rg-tema-topo { display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap; }
+.rg-tema-topo h3 { font-size: 18px; }
+.rg-tema-selos { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+.rg-resumo { font-size: 13.5px; line-height: 1.6; color: var(--ink-2); margin: 8px 0 16px; }
+
+.rg-rot {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--ink-3); margin-bottom: 4px; display: block;
+}
+.rg-linhas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.rg-linhas p { margin: 0; font-size: 12.5px; line-height: 1.55; color: var(--ink); }
+@media (max-width: 1150px) { .rg-linhas { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px)  { .rg-linhas { grid-template-columns: 1fr; } }
+
+/* como era → o que mudou → como é hoje */
+.rg-marco {
+  margin-top: 16px; padding: 14px 16px; border-radius: var(--r);
+  background: var(--laranja-wash); border: 1px solid var(--laranja-borda);
+}
+.rg-antes-depois { display: flex; align-items: stretch; gap: 12px; }
+.rg-antes-depois > div:not(.rg-seta) { flex: 1; }
+.rg-antes-depois span {
+  display: block; font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--laranja-escuro); margin-bottom: 3px;
+}
+.rg-antes-depois p { margin: 0; font-size: 12px; line-height: 1.5; color: var(--ink); }
+.rg-seta { display: flex; align-items: center; color: var(--laranja); font-weight: 700; }
+@media (max-width: 900px) {
+  .rg-antes-depois { flex-direction: column; }
+  .rg-seta { transform: rotate(90deg); justify-content: center; }
+}
+
+/* timeline compacta: só marcos, não toda portaria */
+.rg-timeline {
+  display: flex; gap: 0; margin-top: 16px; padding-top: 14px;
+  border-top: 1px solid var(--line); overflow-x: auto;
+}
+.rg-tl-item {
+  flex: 1; min-width: 150px; padding: 0 12px; position: relative;
+  border-top: 3px solid var(--line-strong); padding-top: 10px;
+}
+.rg-tl-item:first-child { padding-left: 0; }
+.rg-tl-vigente   { border-top-color: #1B7A4B; }
+.rg-tl-transicao { border-top-color: var(--laranja); }
+.rg-tl-discussao { border-top-color: var(--azul-claro); }
+.rg-tl-revogada  { border-top-color: var(--line-strong); }
+.rg-tl-data { font-size: 10.5px; color: var(--ink-3); font-weight: 700; }
+.rg-tl-txt strong { display: block; font-size: 12.5px; line-height: 1.4; margin-top: 2px; }
+.rg-tl-txt span { display: block; font-size: 11.5px; color: var(--ink-3); margin-top: 3px; line-height: 1.45; }
+.rg-tl-revogada .rg-tl-txt strong { color: var(--ink-3); }
+
+/* feed de decisões */
+.rg-dec { border-bottom: 1px solid var(--line); padding: 14px 0; }
+.rg-dec:last-child { border-bottom: none; }
+.rg-dec.on { background: var(--bg-alt); border-radius: var(--r); padding: 14px 12px; }
+.rg-dec-topo { display: flex; gap: 16px; align-items: flex-start; }
+.rg-dec-data {
+  flex: 0 0 92px; font-size: 12.5px; font-weight: 700; color: var(--ink-2);
+  font-variant-numeric: tabular-nums; padding-top: 2px;
+}
+.rg-dec-meio { flex: 1; min-width: 0; }
+.rg-dec-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.rg-dec-doc { font-size: 14px; font-weight: 700; letter-spacing: -.01em; }
+.rg-dec-resumo { font-size: 12.5px; line-height: 1.55; color: var(--ink-2); margin-top: 4px; }
+.rg-dec-acao { flex: 0 0 auto; display: flex; flex-direction: column; gap: 6px; }
+.rg-dec-acao .btn { text-decoration: none; text-align: center; white-space: nowrap; font-size: 12px; }
+@media (max-width: 860px) {
+  .rg-dec-topo { flex-direction: column; }
+  .rg-dec-acao { flex-direction: row; }
+}
+
+/* painel de detalhe */
+.rg-painel { margin: 12px 0 2px 108px; padding: 14px 16px; background: var(--bg);
+             border: 1px solid var(--line-strong); border-radius: var(--r); }
+.rg-painel-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 24px; }
+.rg-painel-grid p { margin: 0; font-size: 12.5px; line-height: 1.55; }
+.rg-datas { list-style: none; margin: 0; padding: 0; }
+.rg-datas li { display: flex; gap: 10px; font-size: 12.5px; padding: 2px 0; }
+.rg-datas li span { color: var(--ink-3); min-width: 130px; }
+.rg-painel-pe { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line);
+                display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.rg-painel-pe .btn { text-decoration: none; margin-left: auto; }
+.rg-aviso-conf { font-size: 12px; color: #7A5B00; background: #FFF6D6;
+                 padding: 5px 10px; border-radius: 4px; }
+@media (max-width: 860px) {
+  .rg-painel { margin-left: 0; }
+  .rg-painel-grid { grid-template-columns: 1fr; }
+}
+
+/* ------------------------------- regulatório: esquemas visuais do tema
+   Números grandes no lugar de parágrafo, e o link do ato colado na peça que ele
+   institui — regra e fonte não deveriam ficar em lugares diferentes da tela. */
+.rg-fonte {
+  display: inline-block; margin-top: 8px; font-size: 10.5px; font-weight: 700;
+  color: var(--azul); text-decoration: none; letter-spacing: .01em;
+}
+a.rg-fonte:hover { color: var(--laranja-escuro); text-decoration: underline; }
+
+.rg-destaques { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+@media (max-width: 1150px) { .rg-destaques { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .rg-destaques { grid-template-columns: 1fr; } }
+
+.rg-dest {
+  padding: 13px 15px; border-radius: var(--r); background: var(--bg-alt);
+  border: 1px solid var(--line); border-left: 3px solid var(--line-strong);
+}
+.rg-dest-valor { font-size: 26px; font-weight: 700; letter-spacing: -.03em; line-height: 1.1; }
+.rg-dest-rot {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--ink-3); margin-top: 3px;
+}
+.rg-dest-det { font-size: 12px; line-height: 1.45; color: var(--ink-2); margin-top: 6px; }
+
+/* o tom carrega o sinal: vermelho fecha, laranja aperta, verde abre */
+.rg-tom-neg    { border-left-color: var(--neg); }
+.rg-tom-neg .rg-dest-valor { color: var(--neg); }
+.rg-tom-aviso  { border-left-color: var(--laranja); }
+.rg-tom-aviso .rg-dest-valor { color: var(--laranja-escuro); }
+.rg-tom-pos    { border-left-color: var(--pos); }
+.rg-tom-pos .rg-dest-valor { color: var(--pos); }
+.rg-tom-neutro { border-left-color: var(--azul); }
+.rg-tom-neutro .rg-dest-valor { color: var(--azul); }
+
+/* matriz curso × formato permitido */
+/* Mapa em tamanho de leitura.
+   ⚠️ Já foi tentado o caminho dos pequenos múltiplos — 8 mapas de 210px lado a lado —
+   e ficou apertado demais para ler. Hoje é UM mapa grande com seletor de grupo: a
+   comparação entre grupos continua honesta porque a escala das bolhas é comum a todos,
+   calculada sobre o conjunto e não sobre o grupo exibido. */
+.chart.mapa { height: 560px; }
+@media (max-width: 900px) { .chart.mapa { height: 420px; } }
+
+/* KPIs compactos da praça aberta: cabem ao lado do gráfico sem virar cartão gigante */
+.praca-kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+.praca-kpi {
+  border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px;
+  background: var(--bg-alt);
+}
+.praca-kpi .rot {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .09em;
+  color: var(--ink-3); margin-bottom: 3px;
+}
+.praca-kpi .val {
+  font-size: 20px; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums;
+}
+.praca-kpi .sub { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+
+/* Detalhe do resumo do tema: o texto que os destaques (número + rótulo curto) não cabem.
+   Fica em lista de itens curtos, cada um com a etiqueta do ato — e NÃO em prosa corrida,
+   que já foi tentada e recusada em três rodadas de corte. */
+.rg-pontos { margin: 16px 0; }
+.rg-ponto {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  padding: 9px 0 9px 14px; border-left: 2px solid var(--line);
+}
+.rg-ponto + .rg-ponto { border-top: 1px solid var(--line); }
+.rg-ponto p { margin: 0; flex: 1 1 380px; font-size: 12.5px; line-height: 1.55; color: var(--ink-2); }
+.rg-ponto .rg-fonte { margin-left: auto; flex: 0 0 auto; }
+
+.rg-matriz { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.rg-matriz-topo {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  padding: 10px 14px; background: var(--bg-sunken);
+}
+.rg-matriz-topo .rg-rot { margin: 0; }
+.rg-matriz-topo .rg-fonte { margin: 0 0 0 auto; }
+.rg-mx-linha {
+  display: flex; align-items: center; gap: 16px; padding: 10px 14px;
+  border-top: 1px solid var(--line); border-left: 3px solid transparent;
+}
+.rg-mx-grupo { flex: 1; font-size: 12.5px; color: var(--ink); }
+.rg-mx-formato {
+  flex: 0 0 auto; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 3px;
+  background: var(--bg-sunken); color: var(--ink-2); white-space: nowrap;
+}
+.rg-mx-linha.rg-tom-neg   .rg-mx-formato { background: #FDECEA; color: #8A2B2B; }
+.rg-mx-linha.rg-tom-aviso .rg-mx-formato { background: var(--laranja-wash); color: var(--laranja-escuro); }
+.rg-mx-linha.rg-tom-pos   .rg-mx-formato { background: #E8F3EC; color: var(--pos); }
+
+/* rodapé compacto do tema: o que sobrou de texto, em duas linhas */
+.rg-pe-tema {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px;
+  margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--ink-2); line-height: 1.5;
+}
+@media (max-width: 760px) { .rg-pe-tema { grid-template-columns: 1fr; } }
+
+.rg-tl-txt a {
+  display: block; font-size: 12.5px; font-weight: 700; line-height: 1.4;
+  margin-top: 2px; color: var(--ink); text-decoration: none;
+}
+.rg-tl-txt a:hover { color: var(--laranja-escuro); text-decoration: underline; }
+
+/* ------------------ regulatório: temas como blocos separados e sem prosa
+   Terceira rodada de enxugamento, a pedido: nada de frase completa nos esquemas.
+   Cada tema é um bloco com faixa de cor própria — é a cor que separa os temas,
+   não mais um título grande. */
+.rg-tema {
+  background: var(--bg); border: 1px solid var(--line); border-radius: 12px;
+  box-shadow: var(--shadow); overflow: hidden; margin-bottom: 26px;
+}
+.rg-tema-cab {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding: 13px 20px; border-left: 5px solid var(--azul);
+  background: var(--bg-alt); border-bottom: 1px solid var(--line);
+}
+.rg-tema-cab h3 { margin: 0; font-size: 19px; font-weight: 800; letter-spacing: -.02em; }
+.rg-tema-cab .rg-tema-selos { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+.rg-tema-corpo { padding: 18px 20px; }
+.rg-cor-laranja .rg-tema-cab { border-left-color: var(--laranja); }
+.rg-cor-laranja .rg-tema-cab h3 { color: var(--laranja-escuro); }
+.rg-cor-azul .rg-tema-cab { border-left-color: var(--azul); }
+.rg-cor-azul .rg-tema-cab h3 { color: var(--azul); }
+.rg-cor-verde .rg-tema-cab { border-left-color: var(--pos); }
+.rg-cor-verde .rg-tema-cab h3 { color: var(--pos); }
+
+.rg-tema .rg-destaques { margin-top: 0; }
+.rg-dest-det { font-size: 11.5px; color: var(--ink-3); }
+
+/* como era → o que mudou → hoje, em fragmentos */
+.rg-fluxo {
+  display: flex; align-items: stretch; gap: 10px; margin: 16px 0;
+  padding: 14px 16px; border-radius: var(--r);
+  background: var(--bg-sunken); border: 1px solid var(--line);
+}
+.rg-fx { flex: 1; }
+.rg-fx span {
+  display: block; font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--ink-3); margin-bottom: 4px;
+}
+.rg-fx b { display: block; font-size: 13px; font-weight: 600; line-height: 1.4; color: var(--ink); }
+.rg-fx-mudou b { color: var(--laranja-escuro); }
+.rg-fluxo .rg-seta { display: flex; align-items: center; color: var(--ink-3); font-size: 18px; }
+@media (max-width: 900px) {
+  .rg-fluxo { flex-direction: column; }
+  .rg-fluxo .rg-seta { transform: rotate(90deg); justify-content: center; }
+}
+
+/* timeline sem descrição: data + ato clicável */
+.rg-tema .rg-timeline { margin-top: 4px; padding-top: 12px; }
+.rg-tema .rg-tl-item { min-width: 165px; }
+.rg-tema .rg-tl-item a, .rg-tema .rg-tl-item strong {
+  display: block; font-size: 12px; font-weight: 600; line-height: 1.35; margin-top: 3px;
+  color: var(--ink); text-decoration: none;
+}
+.rg-tema .rg-tl-item a:hover { color: var(--laranja-escuro); text-decoration: underline; }
+
+/* em discussão / próximo prazo viram etiquetas, não parágrafo */
+.rg-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.rg-chip {
+  font-size: 11.5px; color: var(--ink-2); background: var(--bg-alt);
+  border: 1px solid var(--line); border-radius: 20px; padding: 5px 14px;
+}
+.rg-chip i {
+  font-style: normal; font-weight: 700; text-transform: uppercase; font-size: 9.5px;
+  letter-spacing: .09em; color: var(--ink-3); margin-right: 8px;
+}
+
+/* abas de tema do regulatório — navegação principal do módulo, não um filtro a mais */
+.rg-abas { margin-bottom: 14px; gap: 10px; }
+.rg-abas .chip { font-size: 14px; padding: 8px 20px; font-weight: 700; }
+
+/* ------------------------- feed diário do DOU (aba "Últimas publicações")
+   Densidade alta de propósito: são dezenas de atos por semana e o investidor varre a
+   lista procurando o que interessa. A barra colorida à esquerda dá a relevância antes
+   da leitura — é o que permite pular as linhas de baixa sem lê-las. */
+.rg-dia {
+  border-left: 3px solid var(--line-strong); padding: 11px 0 11px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.rg-dia:last-child { border-bottom: none; }
+.rg-dia-alta  { border-left-color: var(--neg); background: #FDECEA33; }
+.rg-dia-media { border-left-color: var(--laranja); }
+.rg-dia-baixa { border-left-color: var(--line-strong); opacity: .72; }
+.rg-dia-baixa:hover { opacity: 1; }
+
+.rg-dia-topo { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 3px; }
+.rg-dia-data {
+  font-size: 11.5px; font-weight: 700; color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.rg-dia-orgao { font-size: 11px; color: var(--ink-3); }
+.rg-dia-link {
+  margin-left: auto; font-size: 11px; font-weight: 700; color: var(--azul);
+  text-decoration: none; white-space: nowrap;
+}
+.rg-dia-link:hover { color: var(--laranja-escuro); text-decoration: underline; }
+.rg-dia-tit { font-size: 13.5px; font-weight: 700; line-height: 1.35; color: var(--ink); }
+.rg-dia-res { font-size: 12.5px; line-height: 1.5; color: var(--ink-2); margin-top: 3px; }
+.rg-dia-motivo {
+  font-size: 11px; color: var(--ink-3); margin-top: 5px; font-style: italic;
+}
+@media (max-width: 700px) { .rg-dia-link { margin-left: 0; } }
+
+/* feed enxuto: data, tags e o ato. O resumo mora no painel de detalhe. */
+.rg-dec-doc { font-size: 14.5px; }
+.rg-dec { padding: 11px 0; }

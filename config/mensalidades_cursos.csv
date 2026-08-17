@@ -1,0 +1,41 @@
+MODALIDADE;CURSO;SINONIMOS
+# Cursos acompanhados no tracking de mensalidade, por modalidade.
+# CURSO   = nome canonico, usado no dashboard.
+# SINONIMOS = como o curso aparece no site de cada faculdade, separados por |.
+#             A busca tenta cada sinonimo ate achar; e o que resolve casos como
+#             "Direito com Opice Blum" (Anhembi) e "Ciencias Contabeis" x "Contabilidade".
+#             O motor da Estacio casa por nome EXATO (por prefixo, "Medicina" pegaria
+#             "Medicina Veterinaria"), entao o nome usado por cada site precisa estar aqui:
+#             e por isso que "Gestao de Recursos Humanos" entrou em Gestao de Pessoas.
+#             Medicina nao aparece na Estacio de proposito: na YDUQS ela e ofertada pela
+#             marca IDOMED, que nao esta na prateleira da Estacio.
+presencial;Direito;Direito|Direito com Opice Blum
+presencial;Psicologia;Psicologia
+presencial;Enfermagem;Enfermagem
+presencial;Medicina;Medicina
+presencial;Administração;Administração|Administracao
+presencial;Odontologia;Odontologia
+presencial;Medicina Veterinária;Medicina Veterinária|Medicina Veterinaria|Veterinária
+presencial;Fisioterapia;Fisioterapia
+presencial;Sistemas de Informação;Sistemas de Informação|Sistemas de Informacao
+presencial;Biomedicina;Biomedicina
+semipresencial;Pedagogia;Pedagogia
+semipresencial;Administração;Administração|Administracao
+semipresencial;Fisioterapia;Fisioterapia
+semipresencial;Biomedicina;Biomedicina
+semipresencial;Educação Física;Educação Física|Educacao Fisica|Educação Física - Bacharelado
+semipresencial;Farmácia;Farmácia|Farmacia
+semipresencial;Nutrição;Nutrição|Nutricao
+semipresencial;Logística;Logística|Logistica
+semipresencial;Ciências Contábeis;Ciências Contábeis|Ciencias Contabeis|Contabilidade
+semipresencial;Publicidade e Propaganda;Publicidade e Propaganda|Publicidade
+ead;Pedagogia;Pedagogia
+ead;Administração;Administração|Administracao
+ead;Sistemas de Informação;Sistemas de Informação|Sistemas de Informacao
+ead;Educação Física;Educação Física|Educacao Fisica|Educação Física - Bacharelado
+ead;Ciências Contábeis;Ciências Contábeis|Ciencias Contabeis|Contabilidade
+ead;Enfermagem;Enfermagem
+ead;Gestão de Pessoas;Gestão de Pessoas|Gestao de Pessoas|Gestão de Recursos Humanos|Recursos Humanos
+ead;Logística;Logística|Logistica
+ead;Farmácia;Farmácia|Farmacia
+ead;Nutrição;Nutrição|Nutricao

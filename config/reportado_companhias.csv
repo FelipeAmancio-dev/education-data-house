@@ -1,0 +1,19 @@
+GRUPO;ANO;FONTE;DATA_BASE;ALUNOS_PRESENCIAL;ALUNOS_EAD;ALUNOS_TOTAL;ESCOPO;GRAD_PRESENCIAL;GRAD_EAD;GRAD_TOTAL;GRAD_DERIVACAO;OBS
+# Numeros de base de alunos REPORTADOS pelas proprias companhias (earnings release 4T24),
+# extraidos diretamente dos PDFs oficiais em 2026-08-12.
+#
+# COLUNAS ALUNOS_* trazem o NUMERO-MANCHETE tal como a empresa divulga. NAO servem para
+# comparar com o Censo: o escopo varia (pos-graduacao, tecnico, cursos livres, preparatorio).
+#
+# COLUNAS GRAD_* trazem o recorte SOMENTE GRADUACAO, que e o unico comparavel com o Censo
+# da Educacao Superior. Sao derivadas das aberturas do proprio release - a coluna
+# GRAD_DERIVACAO registra a conta feita, para poder ser conferida. E esta a coluna que
+# scripts/valida_reconciliacao.py usa.
+#
+YDUQS;2024;Release 4T24 (yduqs.com.br), pag.6;2024-12-31;273600;1026100;1319300;graduacao+pos+cursos_livres;293200;486000;779200;Presencial 273.600 (segmento Presencial, graduacao) + Premium 19.600 (Medicina e IBMEC, presencial) = 293.200. EAD = Graduacao Digital pura 486.000, excluindo Qconcursos (498,6 mil, preparatorio para concursos, nao e ensino superior) e o restante do Ensino Digital que nao e graduacao;Presencial e Ensino Digital sao os nomes dos segmentos da empresa, nao das modalidades INEP. O numero-manchete de 1.319.300 inclui Qconcursos e por isso NAO deve ser confrontado com o Censo
+Vitru;2024;Release 4Q24 (vitru.com.br/ir), Table 3;2024-12-31;20500;804300;824800;graduacao+pos;20400;744100;764500;Graduacao ex-pos, conforme abertura do proprio release: Presencial 20.400 e EAD 744.100;Numero exclui alunos "unengaged" por criterio proprio adotado desde 1T24 - seguindo o proprio release, isso reduz deliberadamente a base reportada vs. a matricula formal do Censo
+Ser Educacional;2024;Release 4T24 (sereducacional.com), pag.5 e 7;2024-12-31;164879;142951;330284;graduacao+pos+tecnico;164879;142951;307830;Grad. Hibrida 164.879 + Grad. Digital 142.951. O manchete de 330.284 inclui pos e tecnico, que ficam de fora;"Hibrida" e o nome do segmento presencial da empresa
+Ânima;2024;Release 4T24 (animaeducacao.com.br), pag.9-11;2024-12-31;202900;121900;324800;graduacao;202900;121900;324800;Ja e graduacao pura: Anima Core Graduacao 191.400 (exceto medicina) + Inspirali Graduacao Medicina 11.500 + Ensino Digital Graduacao 121.900;Exclui pos-graduacao stricto sensu/basico/tecnico (Outros, 1,9 mi) e Educacao Continuada (pos lato sensu), que estao fora do Censo
+Afya;2024;Release 4Q24 (ir.afya.com.br), Table 2;2024-12-31;76988;;76988;graduacao;;;76988;Total Undergrad (end of period) = Medical School 24.255 + Undergrad Health Science 25.570 + Other Ex-Health Undergrad 27.163. A empresa nao divulga split presencial/EAD;Exclui Continuing Education (50.521), fora do Censo. O Censo atribui 23.194 matriculas EAD ao grupo, que a Afya nao menciona - ver docs/00_HANDOFF.md 6.2
+Cogna;2024;;;;;;;;;;;PENDENTE - nao foi possivel acessar o release de 4T24 (apenas 4T25 foi encontrado, que traz apenas comparativos percentuais de 2S24, sem a tabela de base de alunos em numeros absolutos). Precisa de nova tentativa ou envio manual do PDF
+Cruzeiro do Sul;2024;Apresentacao 4T25 (cruzeirodosuleducacional.com.br), pag.4-5, coluna 4T24 comparativa;2024-12-31;151000;340000;491000;graduacao;151000;340000;491000;Ja e graduacao pura: Presencial 151.000 + Digital 340.000. Medicina e Pos-grad/Colegio sao mostrados a parte pela empresa e nao entram;Numeros lidos como coluna comparativa 4T24 dentro da apresentacao de 4T25. Total da empresa 4T24 (todos os segmentos) reportado em outra fonte como ~526 mil

@@ -1,0 +1,97 @@
+# Publica o dashboard no GitHub Pages.
+#
+# Serve a pasta `dashboard/` COMO ELA É — não o arquivo único. Isso é de propósito: o
+# `precos.js` reconsulta `data/precos.json` a cada 5 minutos e redesenha quando o carimbo
+# muda, então basta o workflow de preços atualizar aquele arquivo para a página servida
+# ficar fresca sozinha. O `dashboard_standalone.html` embute tudo e precisaria de rebuild
+# a cada coleta, o que seria trabalho a toa.
+#
+# ⚠️ LEIA ANTES DE LIGAR: no GitHub, site do Pages é PÚBLICO — inclusive a partir de
+# repositório privado, exceto em plano Enterprise. Ligar isto deixa o dashboard e os
+# e-mails do time no cabeçalho acessíveis a quem tiver a URL. Os dados são públicos
+# (Censo, DOU, e-MEC), mas o produto é trabalho interno. Se isso não puder ser exposto,
+# NÃO ligue este workflow: sirva os mesmos arquivos num host do banco — a pasta
+# `dashboard/` é estática e funciona em qualquer servidor de arquivos.
+#
+# Para ligar: Settings → Pages → Source: "GitHub Actions".
+name: Publicar dashboard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "dashboard/**"
+      - ".github/workflows/publicar.yml"
+
+  # ⚠️ ISTO NÃO É REDUNDANTE COM O `push` ACIMA, e sem isto a automação inteira falharia
+  # em silêncio: um push feito com o `GITHUB_TOKEN` **não dispara outros workflows**. É
+  # proteção do GitHub contra laço infinito, e a consequência aqui é que os commits de
+  # `precos.yml` e `dou_diario.yml` atualizariam os dados sem nunca republicar a página —
+  # o site ficaria congelado enquanto o repositório avançava, que é o pior dos mundos:
+  # parece que está funcionando.
+  #
+  # `workflow_run` é o gancho que fecha a corrente, porque escuta a CONCLUSÃO do workflow
+  # e não o push que ele fez.
+  workflow_run:
+    workflows: ["Preços do setor", "Feed diário do DOU"]
+    types: [completed]
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  # uma publicação por vez; não cancela a que está no meio, para não deixar o site
+  # servindo um deploy pela metade
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    # quando vem de `workflow_run`, só publica se a coleta tiver dado certo — republicar
+    # em cima de uma coleta que falhou colocaria dado pela metade no ar
+    if: >-
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # `workflow_run` roda no commit que disparou o workflow ANTERIOR, não no que ele
+      # acabou de criar. Sem `ref`, o deploy publicaria os dados de antes da coleta.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      # confere que o payload está inteiro ANTES de publicar: subir um site que abre no
+      # "Carregando dados do Censo…" para sempre é pior que não publicar
+      - name: Conferir o payload
+        run: |
+          python - <<'PY'
+          import json, os, sys
+          base = "dashboard/data"
+          req = ["meta.json", "dim.json", "c_ies_mod.json", "c_cine_mod.json",
+                 "c_mun_mod.json", "c_ies_ano.json", "precos.json", "mensalidades.json",
+                 "regulatorio.json", "emec.json", "geo/uf.geojson"]
+          falta = [f for f in req if not os.path.exists(os.path.join(base, f))]
+          if falta:
+              sys.exit("faltando em dashboard/data: " + ", ".join(falta))
+          for f in req:
+              p = os.path.join(base, f)
+              try:
+                  json.load(open(p, encoding="utf-8"))
+              except Exception as e:
+                  sys.exit(f"{f} não é JSON válido: {e}")
+          print(f"ok — {len(req)} arquivos conferidos")
+          PY
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dashboard
+      - id: deploy
+        uses: actions/deploy-pages@v4

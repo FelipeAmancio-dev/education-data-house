@@ -1,0 +1,104 @@
+{
+  "_meta": {
+    "descricao": "Traducao dos codigos numericos do Censo da Educacao Superior para descricoes.",
+    "fonte": "ANEXO I - Dicionario de Dados, Censo da Educacao Superior 2024 (INEP)",
+    "validado_em": "2026-08-11",
+    "nota": "Valores efetivamente presentes na base 2024 estao marcados em '_presentes_2024'. Categorias 6, 8 e 9 de TP_CATEGORIA_ADMINISTRATIVA existem no dicionario historico mas nao ocorrem em 2024."
+  },
+
+  "TP_DIMENSAO": {
+    "_descricao": "Dimensao geografica da linha. CRITICO: define quais metricas sao validas em cada linha.",
+    "_presentes_2024": [1, 2, 3, 4],
+    "1": "Cursos presenciais ofertados no Brasil",
+    "2": "Cursos a distancia ofertados no Brasil",
+    "3": "Cursos a distancia com dimensao de dados somente a nivel Brasil",
+    "4": "Cursos a distancia ofertados por instituicoes brasileiras no exterior"
+  },
+
+  "TP_MODALIDADE_ENSINO": {
+    "_descricao": "Modalidade de ensino do curso",
+    "_presentes_2024": [1, 2],
+    "1": "Presencial",
+    "2": "EAD"
+  },
+
+  "TP_NIVEL_ACADEMICO": {
+    "_descricao": "Nivel academico do curso",
+    "_presentes_2024": [1, 2],
+    "1": "Graduacao",
+    "2": "Sequencial de Formacao Especifica"
+  },
+
+  "TP_GRAU_ACADEMICO": {
+    "_descricao": "Grau conferido ao concluinte. Nulo em cursos ABI e sequenciais.",
+    "_presentes_2024": [1, 2, 3, null],
+    "1": "Bacharelado",
+    "2": "Licenciatura",
+    "3": "Tecnologico",
+    "4": "Bacharelado e Licenciatura",
+    "null": "Nao aplicavel (sequencial ou Area Basica de Ingresso - ABI)"
+  },
+
+  "TP_REDE": {
+    "_descricao": "Rede de ensino",
+    "_presentes_2024": [1, 2],
+    "1": "Publica",
+    "2": "Privada"
+  },
+
+  "TP_CATEGORIA_ADMINISTRATIVA": {
+    "_descricao": "Categoria administrativa da IES",
+    "_presentes_2024": [1, 2, 3, 4, 5, 7],
+    "1": "Publica Federal",
+    "2": "Publica Estadual",
+    "3": "Publica Municipal",
+    "4": "Privada com fins lucrativos",
+    "5": "Privada sem fins lucrativos",
+    "6": "Privada - Particular em sentido estrito",
+    "7": "Especial",
+    "8": "Privada comunitaria",
+    "9": "Privada confessional"
+  },
+
+  "TP_ORGANIZACAO_ACADEMICA": {
+    "_descricao": "Organizacao academica da IES",
+    "_presentes_2024": [1, 2, 3, 4, 5],
+    "1": "Universidade",
+    "2": "Centro Universitario",
+    "3": "Faculdade",
+    "4": "Instituto Federal de Educacao, Ciencia e Tecnologia",
+    "5": "Centro Federal de Educacao Tecnologica"
+  },
+
+  "CO_REGIAO": {
+    "_descricao": "Regiao geografica (IBGE)",
+    "_presentes_2024": [1, 2, 3, 4, 5],
+    "1": "Norte",
+    "2": "Nordeste",
+    "3": "Sudeste",
+    "4": "Sul",
+    "5": "Centro-Oeste"
+  },
+
+  "CO_CINE_AREA_GERAL": {
+    "_descricao": "Area geral CINE/UNESCO. ATENCAO: campo TEXTO com zero a esquerda.",
+    "00": "Programas basicos",
+    "01": "Educacao",
+    "02": "Artes e humanidades",
+    "03": "Ciencias sociais, comunicacao e informacao",
+    "04": "Negocios, administracao e direito",
+    "05": "Ciencias naturais, matematica e estatistica",
+    "06": "Computacao e Tecnologias da Informacao e Comunicacao (TIC)",
+    "07": "Engenharia, producao e construcao",
+    "08": "Agricultura, silvicultura, pesca e veterinaria",
+    "09": "Saude e bem-estar",
+    "10": "Servicos"
+  },
+
+  "IN_FLAGS": {
+    "_descricao": "Padrao das variaveis IN_* (indicadoras binarias)",
+    "0": "Nao",
+    "1": "Sim",
+    "null": "Nao aplicavel"
+  }
+}

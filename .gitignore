@@ -1,0 +1,35 @@
+# ⚠️ ESTE ARQUIVO EXISTE PARA IMPEDIR UM ACIDENTE DE 1,1 GB.
+#
+# `data_raw/` guarda os zips originais do Censo. Sem esta lista, um `git init` seguido de
+# `git add .` empurraria tudo para o GitHub: estoura o limite de 100 MB por arquivo, e o
+# que passar fica no histórico para sempre — remover depois exige reescrever a história.
+#
+# A regra é: entra no repositório o que é FONTE (scripts, config, docs) e o que o
+# dashboard SERVE (dashboard/). Não entra o que é insumo bruto nem o que é gerado e pesa.
+
+# ---------------------------------------------------------------- insumo bruto
+# 1,1 GB. Baixado do INEP; reprodutível, e não é nosso para redistribuir.
+data_raw/
+
+# ------------------------------------------------------------ intermediários
+# 49 MB de Parquet, refeitos por 01_ingest.py + 02_build_cubes.py a partir dos zips.
+data_processed/*.parquet
+
+# O histórico de mensalidades e os candidatos do DOU são append-only e NÃO se refazem
+# sozinhos — estes ficam versionados de propósito.
+!data_processed/mensalidades.jsonl
+!data_processed/dou_candidatos.jsonl
+!data_processed/emec_ies.csv
+
+# ------------------------------------------------------------------- gerados
+# O arquivo único tem ~6 MB e é refeito por 05_build_standalone.py a cada mudança —
+# versioná-lo encheria o histórico de binário grande sem ganho nenhum.
+outputs/*.html
+
+# ---------------------------------------------------------------------- ruído
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+~$*.xlsx
+*.tmp

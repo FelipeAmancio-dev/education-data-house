@@ -1,0 +1,43 @@
+GRUPO;IES;ENGINE;URL;ATIVO
+# Faculdades acompanhadas no tracking de mensalidade.
+# ENGINE = qual adaptador de coleta usar. Sites que compartilham a mesma plataforma
+#          usam o mesmo motor: Anhembi e Sao Judas rodam o portal da Anima, Anhanguera
+#          e Unopar rodam o da Cogna. Sao 6 motores para 9 faculdades.
+# ATIVO  = 0 desliga a coleta daquela IES sem apagar a linha.
+#
+# Sondagem de 12/08/2026 (navegador headless, UA de Chrome real):
+#   anima      Anhembi e Sao Judas  OK  - motor implementado e coletando. Consertado em
+#                                   12/08/2026: a pagina renderiza so por volta dos 5s (o
+#                                   motor dormia 2,2s e dizia "sem botao"), o assistente
+#                                   ganhou um passo de modalidade antes da unidade, e o
+#                                   clique na opcao precisa ficar preso a lista que abriu —
+#                                   solto, ele pega "Presencial" do menu do topo e navega
+#                                   para /modalidades/presencial/ sem acusar erro.
+#   estacio    Estacio              OK  - motor implementado, SEM navegador: a listagem e
+#                                   servida por uma API publica (api.portal.estacio.br) que
+#                                   responde a HTTP puro com o header x-marca-origin.
+#                                   Consultada por unidade, ela mostra que o preco NAO e
+#                                   nacional — o presencial varia muito de praca. Ver o
+#                                   comentario do motor em 07_fetch_mensalidades.py.
+#   uninassau  Uninassau            OK  - preco visivel; busca por cidade
+#   uniasselvi Uniasselvi           OK  - preco visivel; 4 selects na pagina
+#   unicesumar Unicesumar           EXPLORAR - correcao de 12/08/2026: o CPF que eu tinha
+#                                   apontado como barreira e o login da Area do Candidato
+#                                   (#cpfAreaCandidato, escondido na pagina), nao o portao
+#                                   do preco. A pagina e listagem de curso com busca e um
+#                                   lead so de e-mail. O preco deve estar apos escolher o
+#                                   curso. Nenhum dado pessoal parece necessario.
+#   cruzeiro   Cruzeiro do Sul      URL antiga dava 404; corrigida, falta explorar
+#   cogna      Anhanguera e Unopar  RESOLVIDO - o "Access Denied" era o Chromium que o
+#                                   Playwright baixa. Com channel="chrome" (o Chrome
+#                                   instalado na maquina) o site abre normal, ate headless.
+#                                   Ver abre_navegador() em 07_fetch_mensalidades.py.
+Ânima;Anhembi Morumbi;anima;https://portal.anhembi.br/cursos/graduacao/?modalidade=todos;1
+Ânima;São Judas;anima;https://www.usjt.br/cursos/graduacao/?modalidade=todos;1
+Cogna;Anhanguera;cogna;https://www.anhanguera.com/cursos/;1
+Cogna;Unopar;cogna;https://www.unopar.com.br/cursos/;1
+YDUQS;Estácio;estacio;https://estacio.br/cursos/graduacao;1
+Cruzeiro do Sul;Cruzeiro do Sul;cruzeiro;https://www.cruzeirodosul.edu.br/graduacao/;0
+Ser Educacional;Uninassau;uninassau;https://vest.uninassau.edu.br/;0
+Vitru;Uniasselvi;uniasselvi;https://portal.uniasselvi.com.br/cursos/graduacao;1
+Vitru;Unicesumar;unicesumar;https://inscricoes.unicesumar.edu.br/graduacao/;0

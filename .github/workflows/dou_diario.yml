@@ -1,0 +1,79 @@
+# Feed diário do DOU — coleta automática às 7h da manhã.
+#
+# ⚠️ LEIA ANTES DE ESPERAR RESULTADO: este workflow atualiza o ARQUIVO no repositório e,
+# se o Pages estiver ligado, a página servida. Ele **não** atualiza o artifact publicado
+# em claude.ai — aquele é um retrato do momento da publicação e só muda quando alguém
+# republica. Não é limitação de agendamento, é de arquitetura: a página publicada não tem
+# acesso de rede para buscar dado novo.
+#
+# Ou seja: para o link do artifact refletir o DOU do dia, alguém precisa republicar. Para
+# um link que se atualiza sozinho, é preciso o Pages ligado (ver docs/06_publicacao.md).
+#
+# ⚠️ Horário: o cron do GitHub é UTC e o Brasil é UTC−3 o ano todo (sem horário de verão
+# desde 2019). 7h de Brasília = 10h UTC.
+#
+# ⚠️ O cron do GitHub NÃO é pontual — em horário de pico atrasa, às vezes dezenas de
+# minutos. Para um feed diário isso é irrelevante; não tente compensar com horário torto.
+name: Feed diário do DOU
+
+on:
+  schedule:
+    - cron: "0 10 * * 1-5"     # 07:00 BRT, dias úteis
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dou-diario
+  cancel-in-progress: true
+
+jobs:
+  coletar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # o coletor precisa de navegador de verdade: o in.gov.br derruba `WebFetch` e barra
+      # o Chromium do Playwright. `--with-deps` instala as bibliotecas de sistema.
+      - name: Instalar Playwright + Chrome
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chrome
+
+      - name: Coletar o DOU
+        run: python scripts/11_fetch_dou_diario.py --dias 20
+
+      # ⚠️ Conferência antes de commitar. O coletor segue adiante quando um dia falha —
+      # e é isso que se quer numa varredura de 20 dias —, mas um arquivo com metade dos
+      # atos commitado em silêncio seria pior que rodada nenhuma.
+      - name: Conferir a coleta
+        run: |
+          python - <<'PY'
+          import json, sys
+          d = json.load(open("dashboard/data/dou_diario.json", encoding="utf-8"))
+          n, dias = d.get("n", 0), len(d.get("dias", []))
+          rel = d.get("por_relevancia", {})
+          print(f"atos: {n} · dias: {dias} · {rel}")
+          if dias < 10:
+              sys.exit(f"só {dias} dias coletados de 20 — provável bloqueio do in.gov.br")
+          if n < 50:
+              sys.exit(f"só {n} atos em {dias} dias — volume abaixo do esperado")
+          print("ok")
+          PY
+
+      - name: Commitar se mudou
+        run: |
+          if git diff --quiet -- dashboard/data/dou_diario.json; then
+            echo "sem mudança — nada a commitar"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard/data/dou_diario.json
+          git commit -m "DOU: feed de $(date -u '+%Y-%m-%d')"
+          git push

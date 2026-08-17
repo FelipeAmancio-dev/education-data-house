@@ -1,0 +1,714 @@
+{
+  "_leia_me": [
+    "Base do módulo Ambiente Regulatório. ESTE É O ARQUIVO QUE SE EDITA À MÃO — o JSON que o",
+    "dashboard consome é gerado por scripts/08_build_regulatorio.py, que valida e enriquece.",
+    "",
+    "REGRA QUE NÃO SE NEGOCIA: nada entra aqui sem fonte primária verificável. Número de ato,",
+    "data e ementa saem do documento oficial, não de notícia. Quando a confirmação veio de",
+    "imprensa e o ato ainda não foi conferido no DOU/MEC, marque confianca='a_confirmar' — a",
+    "tela mostra isso e o investidor sabe o que está lendo. É melhor a linha aparecer marcada",
+    "do que aparecer como se fosse conferida.",
+    "",
+    "status: vigente | transicao | discussao | revogada",
+    "relevancia: alta (material para as companhias ou para a estrutura competitiva)",
+    "            media (relevante, sem impacto financeiro imediatamente evidente)",
+    "            baixa (administrativo ou procedural)",
+    "confianca: oficial (link para o ato) | a_confirmar (falta bater no DOU)"
+  ],
+  "atualizado_em": "2026-08-14",
+  "fontes": [
+    {
+      "nome": "MEC Normas",
+      "url": "https://mecnormas.mec.gov.br/"
+    },
+    {
+      "nome": "Portal MEC",
+      "url": "https://www.gov.br/mec/"
+    },
+    {
+      "nome": "Diário Oficial da União",
+      "url": "https://www.in.gov.br/"
+    },
+    {
+      "nome": "SERES — Regulação da Educação Superior",
+      "url": "https://www.gov.br/mec/pt-br/politica-regulacao-supervisao-educacao-superior"
+    },
+    {
+      "nome": "Inep",
+      "url": "https://www.gov.br/inep/"
+    },
+    {
+      "nome": "FNDE / Fies",
+      "url": "https://www.fnde.gov.br/"
+    },
+    {
+      "nome": "Planalto — leis e decretos",
+      "url": "https://www.planalto.gov.br/"
+    }
+  ],
+  "temas": [
+    {
+      "id": "ead",
+      "nome": "EaD & Polos",
+      "status": "transicao",
+      "relevancia": "alta",
+      "resumo": "O marco de 2025 acabou com o EaD 100% on-line em boa parte da graduação. É a mudança de maior impacto estrutural do período para o setor privado: cinco cursos passaram a ser exclusivamente presenciais e quatro áreas inteiras perderam o formato totalmente on-line. Como as regras valem para novas matrículas, o efeito entra na base aos poucos.",
+      "regra_atual": "Cursos de Medicina, Direito, Odontologia, Enfermagem e Psicologia só podem ser ofertados presencialmente. Áreas de saúde, agrárias, licenciaturas e engenharias não podem mais ser 100% on-line — passam a exigir formato semipresencial nas novas matrículas.",
+      "em_discussao": "Carga síncrona · infraestrutura · credenciamento de polos",
+      "proximo_prazo": "Cronograma de adaptação (Portaria nº 381/2025)",
+      "marco": {
+        "titulo": "Principal mudança estrutural",
+        "como_era": "Quase toda graduação 100% on-line",
+        "o_que_mudou": "Presencialidade mínima e veto por área",
+        "como_hoje": "Regras por área, em adaptação",
+        "doc_era": "Decreto nº 9.057/2017",
+        "url_era": "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/decreto/d9057.htm",
+        "doc_mudou": "Decreto nº 12.456/2025",
+        "url_mudou": "https://www.in.gov.br/web/dou/-/decreto-n-12.456-de-19-de-maio-de-2025-630398639",
+        "doc_hoje": "Portaria MEC nº 381/2025",
+        "url_hoje": "https://www.in.gov.br/web/dou/-/portaria-mec-n-381-de-20-de-maio-de-2025-630693013"
+      },
+      "timeline": [
+        {
+          "data": "2017-05-25",
+          "titulo": "Decreto nº 9.057/2017 — regra anterior de EaD",
+          "status": "revogada",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/decreto/d9057.htm"
+        },
+        {
+          "data": "2025-05-19",
+          "titulo": "Decreto nº 12.456/2025 — Nova Política de EaD",
+          "status": "vigente",
+          "url": "https://www.in.gov.br/web/dou/-/decreto-n-12.456-de-19-de-maio-de-2025-630398639"
+        },
+        {
+          "data": "2025-05-20",
+          "titulo": "Portaria MEC nº 381/2025 — regras de transição",
+          "status": "transicao",
+          "url": "https://www.in.gov.br/web/dou/-/portaria-mec-n-381-de-20-de-maio-de-2025-630693013"
+        },
+        {
+          "data": "2025-07-10",
+          "titulo": "Portaria MEC nº 506/2025 — docentes, tutores e polos",
+          "status": "vigente",
+          "url": "https://www.in.gov.br/web/dou/-/portaria-mec-n-506-de-10-de-julho-de-2025-641610361"
+        }
+      ],
+      "destaques": [
+        {
+          "valor": "5",
+          "rot": "cursos só presenciais",
+          "detalhe": "Medicina · Direito · Odontologia · Enfermagem · Psicologia",
+          "doc": "Decreto nº 12.456/2025",
+          "url": "https://www.in.gov.br/web/dou/-/decreto-n-12.456-de-19-de-maio-de-2025-630398639",
+          "tom": "neg"
+        },
+        {
+          "valor": "4",
+          "rot": "áreas sem 100% on-line",
+          "detalhe": "Saúde · Agrárias · Licenciaturas · Engenharias",
+          "doc": "Decreto nº 12.456/2025",
+          "url": "https://www.in.gov.br/web/dou/-/decreto-n-12.456-de-19-de-maio-de-2025-630398639",
+          "tom": "aviso"
+        },
+        {
+          "valor": "3",
+          "rot": "formatos de oferta",
+          "detalhe": "Presencial · Semipresencial · EaD",
+          "doc": "Portaria MEC nº 378/2025",
+          "url": "https://www.in.gov.br/web/dou/-/portaria-mec-n-378-de-19-de-maio-de-2025-630395302",
+          "tom": "neutro"
+        },
+        {
+          "valor": "Polos",
+          "rot": "onde o custo aperta",
+          "detalhe": "Corpo docente · tutores · infraestrutura",
+          "doc": "Portaria MEC nº 506/2025",
+          "url": "https://www.in.gov.br/web/dou/-/portaria-mec-n-506-de-10-de-julho-de-2025-641610361",
+          "tom": "aviso"
+        }
+      ],
+      "matriz": {
+        "titulo": "O que cada curso pode ofertar hoje",
+        "doc": "Decreto nº 12.456/2025 · Portaria MEC nº 378/2025",
+        "url": "https://www.in.gov.br/web/dou/-/decreto-n-12.456-de-19-de-maio-de-2025-630398639",
+        "linhas": [
+          {
+            "grupo": "Medicina · Direito · Odontologia · Enfermagem · Psicologia",
+            "formato": "Só presencial",
+            "tom": "neg"
+          },
+          {
+            "grupo": "Saúde · Agrárias · Licenciaturas · Engenharias",
+            "formato": "Semipresencial",
+            "tom": "aviso"
+          },
+          {
+            "grupo": "Demais cursos de graduação",
+            "formato": "EaD permitido",
+            "tom": "pos"
+          }
+        ]
+      },
+      "cor": "laranja",
+      "pontos": [
+        {
+          "texto": "O Decreto nº 12.456/2025 substituiu o Decreto nº 9.057/2017, que era a norma que permitia oferta 100% on-line em quase toda a graduação.",
+          "doc": "Decreto nº 12.456/2025",
+          "url": "https://www.in.gov.br/en/web/dou/-/decreto-n-12.456-de-19-de-maio-de-2025-630398639"
+        },
+        {
+          "texto": "A Portaria MEC nº 378/2025 fixou os três formatos de oferta — presencial, semipresencial e EaD — e é ela que determina qual formato cada curso pode usar.",
+          "doc": "Portaria MEC nº 378/2025",
+          "url": "https://www.in.gov.br/en/web/dou/-/portaria-mec-n-378-de-19-de-maio-de-2025-630395302"
+        },
+        {
+          "texto": "O aperto de custo não está no veto, e sim na Portaria MEC nº 506/2025: ela trata de corpo docente, tutores e polos, que é onde a operação de EaD gasta.",
+          "doc": "Portaria MEC nº 506/2025",
+          "url": "https://www.in.gov.br/en/web/dou/-/portaria-mec-n-506-de-10-de-julho-de-2025-641610361"
+        },
+        {
+          "texto": "A Portaria MEC nº 381/2025 traz o cronograma de adaptação. As restrições valem para novas matrículas, então o efeito na base entra aos poucos, safra a safra.",
+          "doc": "Portaria MEC nº 381/2025",
+          "url": "https://www.in.gov.br/en/web/dou/-/portaria-mec-n-381-de-20-de-maio-de-2025-630693013"
+        }
+      ]
+    },
+    {
+      "id": "medicina",
+      "nome": "Medicina",
+      "status": "vigente",
+      "relevancia": "alta",
+      "resumo": "A expansão por chamamento foi interrompida e a avaliação da formação ganhou exame próprio. Aperta a oferta e a qualidade ao mesmo tempo — mas a revogação é mais estreita do que a manchete sugere: os processos judiciais e a Portaria nº 650/2023 seguem de pé, e a pressão migra do licenciamento para a supervisão.",
+      "regra_atual": "Não há chamamento público vigente para autorizar novos cursos de Medicina em instituições privadas: a Portaria MEC nº 129/2026 revogou o Edital nº 1/2023. Seguem valendo a Portaria MEC nº 650/2023, os demais editais em vigor e os processos judiciais nos parâmetros do STF. A avaliação passa pelo Enamed, obrigatório e aplicado em duas etapas.",
+      "em_discussao": "Novo chamamento · pedidos judiciais · efeitos do Enamed",
+      "proximo_prazo": "Prova do Enamed em 13/09/2026",
+      "marco": {
+        "titulo": "Onde o ambiente aperta",
+        "como_era": "Expansão retomada em 2023, muito judicializada",
+        "o_que_mudou": "Chamamento revogado e exame próprio criado",
+        "como_hoje": "Oferta travada; pressão vai para a supervisão",
+        "doc_era": "Edital nº 1/2023",
+        "url_era": "https://www.gov.br/mec/pt-br/politica-regulacao-supervisao-educacao-superior/autorizacao-de-curso-de-medicina",
+        "doc_mudou": "Portaria MEC nº 129/2026",
+        "url_mudou": "https://www.gov.br/mec/pt-br/centrais-de-conteudo/comunicados/mec-revoga-selecao-de-propostas-para-cursos-de-medicina",
+        "doc_hoje": "Portaria MEC nº 276/2026",
+        "url_hoje": "https://www.in.gov.br/web/dou/-/portaria-mec-n-276-de-27-de-marco-de-2026-696054487"
+      },
+      "timeline": [
+        {
+          "data": "2023-10-04",
+          "titulo": "Edital de Chamamento Público nº 1/2023",
+          "status": "revogada"
+        },
+        {
+          "data": "2025-03-26",
+          "titulo": "Edital nº 2/2025 altera o cronograma",
+          "status": "revogada"
+        },
+        {
+          "data": "2026-02-10",
+          "titulo": "Portaria MEC nº 129/2026 revoga o Edital nº 1/2023",
+          "status": "vigente",
+          "url": "https://www.gov.br/mec/pt-br/centrais-de-conteudo/comunicados/mec-revoga-selecao-de-propostas-para-cursos-de-medicina"
+        },
+        {
+          "data": "2026-03-27",
+          "titulo": "Portaria MEC nº 276/2026 — Enamed",
+          "status": "vigente",
+          "url": "https://www.in.gov.br/web/dou/-/portaria-mec-n-276-de-27-de-marco-de-2026-696054487"
+        },
+        {
+          "data": "2026-05-28",
+          "titulo": "Edital Inep nº 71/2026 — Enamed 2026",
+          "status": "vigente",
+          "url": "https://www.gov.br/inep/pt-br/centrais-de-conteudo/noticias/enamed/publicado-edital-do-enamed-2026"
+        }
+      ],
+      "destaques": [
+        {
+          "valor": "Fechado",
+          "rot": "novos cursos por chamamento",
+          "detalhe": "Edital nº 1/2023 revogado",
+          "doc": "Portaria MEC nº 129/2026",
+          "url": "https://www.gov.br/mec/pt-br/centrais-de-conteudo/comunicados/mec-revoga-selecao-de-propostas-para-cursos-de-medicina",
+          "tom": "neg"
+        },
+        {
+          "valor": "Segue",
+          "rot": "Mais Médicos e judicial",
+          "detalhe": "Portaria nº 650/2023 e processos no STF",
+          "doc": "Comunicado MEC",
+          "url": "https://www.gov.br/mec/pt-br/centrais-de-conteudo/comunicados/mec-revoga-selecao-de-propostas-para-cursos-de-medicina",
+          "tom": "pos"
+        },
+        {
+          "valor": "2 etapas",
+          "rot": "Enamed obrigatório",
+          "detalhe": "Fim do 4º e do 6º ano",
+          "doc": "Portaria MEC nº 276/2026",
+          "url": "https://www.in.gov.br/web/dou/-/portaria-mec-n-276-de-27-de-marco-de-2026-696054487",
+          "tom": "aviso"
+        },
+        {
+          "valor": "13/09/2026",
+          "rot": "próxima prova",
+          "detalhe": "Enamed 2026, nacional",
+          "doc": "Edital Inep nº 71/2026",
+          "url": "https://www.gov.br/inep/pt-br/centrais-de-conteudo/noticias/enamed/publicado-edital-do-enamed-2026",
+          "tom": "neutro"
+        }
+      ],
+      "cor": "azul",
+      "pontos": [
+        {
+          "texto": "A revogação do chamamento não fecha tudo: a Portaria MEC nº 129/2026 derruba o Edital nº 1/2023, mas não atinge a Portaria nº 650/2023, os demais editais em vigor nem os processos judiciais, que seguem nos parâmetros do STF.",
+          "doc": "Comunicado MEC",
+          "url": "https://www.gov.br/mec/pt-br/centrais-de-conteudo/comunicados/mec-revoga-selecao-de-propostas-para-cursos-de-medicina"
+        },
+        {
+          "texto": "O Enamed virou exame obrigatório em duas etapas, ao fim do 4º e do 6º ano — a avaliação passou a ser de formação, não só de curso.",
+          "doc": "Portaria MEC nº 276/2026",
+          "url": "https://www.in.gov.br/web/dou/-/portaria-mec-n-276-de-27-de-marco-de-2026-696054487"
+        },
+        {
+          "texto": "A Portaria Inep nº 413/2025 é o ato que estruturou o exame; no DOU ela sai como \"PORTARIA Nº 413\", sem a sigla do Inep no título.",
+          "doc": "Portaria Inep nº 413/2025",
+          "url": "https://www.in.gov.br/web/dou/-/portaria-n-413-de-18-de-junho-de-2025-637197707"
+        },
+        {
+          "texto": "A próxima prova é nacional, em 13/09/2026.",
+          "doc": "Edital Inep nº 71/2026",
+          "url": "https://www.gov.br/inep/pt-br/centrais-de-conteudo/noticias/enamed/publicado-edital-do-enamed-2026"
+        }
+      ]
+    },
+    {
+      "id": "fies",
+      "nome": "Fies",
+      "status": "vigente",
+      "relevancia": "alta",
+      "resumo": "A reforma reservou metade das vagas ao Fies Social, com até 100% financiável para renda familiar per capita de até meio salário mínimo inscrita no CadÚnico. Muda o perfil do aluno financiado e, com ele, a captação e o mix das companhias — além da reserva, mudaram critérios de renda, juros e distribuição de vagas.",
+      "regra_atual": "Metade das vagas do programa é destinada ao Fies Social, para renda familiar per capita de até meio salário mínimo com inscrição no CadÚnico, com possibilidade de financiar 100% do curso. A reforma alterou também critérios de renda, taxa de juros e distribuição de vagas.",
+      "em_discussao": "Coparticipação · renegociação · regras das IES",
+      "proximo_prazo": "Inscrições semestrais no Portal Único",
+      "marco": {
+        "titulo": "O que mudou para o setor",
+        "como_era": "Sem reserva por renda; financiamento parcial",
+        "o_que_mudou": "Fies Social com metade das vagas",
+        "como_hoje": "Metade da oferta para baixa renda",
+        "doc_era": "Resolução CG-Fies nº 58/2024",
+        "url_era": "https://www.in.gov.br/web/dou/-/resolucao-n-58-de-8-de-fevereiro-de-2024-543202533",
+        "doc_mudou": "Lei nº 15.388/2026",
+        "url_mudou": "https://www.in.gov.br/web/dou/-/lei-n-15.388-de-14-de-abril-de-2026-699917783",
+        "doc_hoje": "Lei nº 15.388/2026",
+        "url_hoje": "https://www.in.gov.br/web/dou/-/lei-n-15.388-de-14-de-abril-de-2026-699917783"
+      },
+      "timeline": [
+        {
+          "data": "2024-02-16",
+          "titulo": "Resolução CG-Fies nº 58/2024 — Fies Social",
+          "status": "vigente",
+          "url": "https://www.in.gov.br/web/dou/-/resolucao-n-58-de-8-de-fevereiro-de-2024-543202533"
+        },
+        {
+          "data": "2026-01-01",
+          "titulo": "Reforma do Fies passa a valer",
+          "status": "vigente"
+        },
+        {
+          "data": "2026-02-03",
+          "titulo": "Inscrições do Fies 2026.1",
+          "status": "vigente"
+        },
+        {
+          "data": "2026-04-15",
+          "titulo": "Lei nº 15.388/2026 — base legal da reforma",
+          "status": "vigente",
+          "url": "https://www.in.gov.br/web/dou/-/lei-n-15.388-de-14-de-abril-de-2026-699917783"
+        }
+      ],
+      "destaques": [
+        {
+          "valor": "50%",
+          "rot": "das vagas no Fies Social",
+          "detalhe": "Renda per capita até ½ salário · CadÚnico",
+          "doc": "Lei nº 15.388/2026",
+          "url": "https://www.in.gov.br/web/dou/-/lei-n-15.388-de-14-de-abril-de-2026-699917783",
+          "tom": "pos"
+        },
+        {
+          "valor": "100%",
+          "rot": "financiamento possível",
+          "detalhe": "Público do Fies Social",
+          "doc": "Resolução CG-Fies nº 58/2024",
+          "url": "https://www.in.gov.br/web/dou/-/resolucao-n-58-de-8-de-fevereiro-de-2024-543202533",
+          "tom": "pos"
+        },
+        {
+          "valor": "112 mil",
+          "rot": "vagas em 2026",
+          "detalhe": "67.301 no 1º semestre",
+          "doc": "Lei nº 15.388/2026",
+          "url": "https://www.in.gov.br/web/dou/-/lei-n-15.388-de-14-de-abril-de-2026-699917783",
+          "tom": "neutro"
+        },
+        {
+          "valor": "Mix",
+          "rot": "efeito para as companhias",
+          "detalhe": "Perfil do aluno financiado e captação",
+          "doc": "Lei nº 15.388/2026",
+          "url": "https://www.in.gov.br/web/dou/-/lei-n-15.388-de-14-de-abril-de-2026-699917783",
+          "tom": "aviso"
+        }
+      ],
+      "cor": "verde",
+      "pontos": [
+        {
+          "texto": "A Lei nº 15.388/2026 é a base legal da reforma; as novas regras passaram a valer em 01/01/2026, antes da lei consolidada ser publicada em abril.",
+          "doc": "Lei nº 15.388/2026",
+          "url": "https://www.in.gov.br/web/dou/-/lei-n-15.388-de-14-de-abril-de-2026-699917783"
+        },
+        {
+          "texto": "O público do Fies Social é renda familiar per capita de até meio salário mínimo com inscrição no CadÚnico — é o critério que define quem entra na metade reservada.",
+          "doc": "Resolução CG-Fies nº 58/2024",
+          "url": "https://www.in.gov.br/web/dou/-/resolucao-n-58-de-8-de-fevereiro-de-2024-543202533"
+        },
+        {
+          "texto": "São 112 mil vagas em 2026, das quais 67.301 no primeiro semestre.",
+          "doc": "Lei nº 15.388/2026",
+          "url": "https://www.in.gov.br/web/dou/-/lei-n-15.388-de-14-de-abril-de-2026-699917783"
+        },
+        {
+          "texto": "A reforma mexeu também em critérios de renda, taxa de juros e distribuição de vagas — não só na reserva do Fies Social.",
+          "doc": "Lei nº 15.388/2026",
+          "url": "https://www.in.gov.br/web/dou/-/lei-n-15.388-de-14-de-abril-de-2026-699917783"
+        }
+      ]
+    }
+  ],
+  "decisoes": [
+    {
+      "data": "2026-05-28",
+      "tema": "medicina",
+      "documento": "Edital Inep nº 71, de 28 de maio de 2026",
+      "orgao": "Inep",
+      "resumo": "Publica as diretrizes, os procedimentos e os prazos do Enamed 2026. Prova marcada para 13 de setembro de 2026, em todos os estados e no Distrito Federal, com inscrições de 15 a 29 de junho pelo Sistema Enamed.",
+      "o_que_mudou": "Operacionaliza o exame para o ciclo de 2026, com aplicação em duas etapas — fim do 4º ano e fim do 6º ano.",
+      "quem_afeta": "Instituições com curso de Medicina e estudantes concluintes e do 4º ano.",
+      "relevancia": "alta",
+      "status": "vigente",
+      "confianca": "oficial",
+      "fonte_url": "https://www.gov.br/inep/pt-br/centrais-de-conteudo/noticias/enamed/publicado-edital-do-enamed-2026",
+      "datas": [
+        {
+          "rotulo": "Publicação",
+          "data": "2026-05-28"
+        },
+        {
+          "rotulo": "Inscrições",
+          "data": "2026-06-15"
+        },
+        {
+          "rotulo": "Aplicação da prova",
+          "data": "2026-09-13"
+        }
+      ],
+      "keywords": [
+        "enamed",
+        "medicina",
+        "inep",
+        "avaliação",
+        "prova",
+        "enade"
+      ]
+    },
+    {
+      "data": "2026-03-27",
+      "tema": "medicina",
+      "documento": "Portaria MEC nº 276, de 27 de março de 2026",
+      "orgao": "MEC",
+      "resumo": "Dispõe sobre o Exame Nacional de Avaliação da Formação Médica (Enamed). Publicada no DOU de 30/03/2026, Edição 60, Seção 1, p. 63.",
+      "o_que_mudou": "Cria a base normativa do exame no âmbito do MEC, complementando as portarias do Inep sobre o tema.",
+      "quem_afeta": "Todas as instituições com curso de Medicina.",
+      "relevancia": "alta",
+      "status": "vigente",
+      "confianca": "oficial",
+      "fonte_url": "https://www.in.gov.br/web/dou/-/portaria-mec-n-276-de-27-de-marco-de-2026-696054487",
+      "datas": [
+        {
+          "rotulo": "Assinatura",
+          "data": "2026-03-27"
+        },
+        {
+          "rotulo": "Publicação no DOU",
+          "data": "2026-03-30"
+        }
+      ],
+      "keywords": [
+        "enamed",
+        "medicina",
+        "mec",
+        "avaliação",
+        "qualidade"
+      ]
+    },
+    {
+      "data": "2026-02-10",
+      "tema": "medicina",
+      "documento": "Portaria MEC nº 129/2026",
+      "orgao": "MEC",
+      "resumo": "Revoga o Edital de Chamamento Público nº 1/2023, que selecionava propostas de mantenedoras privadas para autorização de cursos de Medicina.",
+      "o_que_mudou": "Interrompe a via administrativa de expansão de cursos privados de Medicina. Atenção: a revogação NÃO derruba o resto do Mais Médicos — a Portaria MEC nº 650/2023 e demais editais em vigor seguem valendo, e os processos administrativos e judiciais em curso continuam sendo analisados nos parâmetros definidos pelo STF. Nota de apuração: o ato não foi localizado na busca do Diário Oficial em 13/08/2026; a fonte é o comunicado oficial do próprio MEC.",
+      "quem_afeta": "Grupos com projetos de novos cursos de Medicina em análise pelo chamamento público.",
+      "relevancia": "alta",
+      "status": "vigente",
+      "confianca": "oficial",
+      "fonte_url": "https://www.gov.br/mec/pt-br/centrais-de-conteudo/comunicados/mec-revoga-selecao-de-propostas-para-cursos-de-medicina",
+      "datas": [
+        {
+          "rotulo": "Publicação",
+          "data": "2026-02-10"
+        }
+      ],
+      "keywords": [
+        "medicina",
+        "chamamento público",
+        "autorização",
+        "vagas",
+        "mais médicos",
+        "edital"
+      ]
+    },
+    {
+      "data": "2025-06-18",
+      "tema": "medicina",
+      "documento": "Portaria Inep nº 413, de 18 de junho de 2025",
+      "orgao": "Inep",
+      "resumo": "Ato do Inep que integra o arcabouço normativo do Enamed. Publicada no DOU de 23/06/2025, Edição 115, Seção 1, p. 28, com republicação em 26/06/2025.",
+      "o_que_mudou": "Estabelece regras do exame no âmbito do Inep. No DOU o ato sai como 'Portaria nº 413' — sem a sigla Inep no título, o que atrapalha a busca.",
+      "quem_afeta": "Instituições com curso de Medicina.",
+      "relevancia": "media",
+      "status": "vigente",
+      "confianca": "oficial",
+      "fonte_url": "https://www.in.gov.br/web/dou/-/portaria-n-413-de-18-de-junho-de-2025-637197707",
+      "datas": [
+        {
+          "rotulo": "Assinatura",
+          "data": "2025-06-18"
+        },
+        {
+          "rotulo": "Publicação no DOU",
+          "data": "2025-06-23"
+        },
+        {
+          "rotulo": "Republicação",
+          "data": "2025-06-26"
+        }
+      ],
+      "keywords": [
+        "enamed",
+        "inep",
+        "medicina",
+        "avaliação"
+      ]
+    },
+    {
+      "data": "2025-05-19",
+      "tema": "ead",
+      "documento": "Decreto nº 12.456, de 19 de maio de 2025",
+      "orgao": "Planalto",
+      "resumo": "Institui a Nova Política de Educação a Distância. Dispõe sobre a oferta de EaD por instituições de educação superior em cursos de graduação e altera o Decreto nº 9.235/2017.",
+      "o_que_mudou": "Integra o EaD ao sistema geral de regulação e cria presencialidade mínima. Medicina, Direito, Odontologia, Enfermagem e Psicologia passam a ser exclusivamente presenciais. Saúde, agrárias, licenciaturas e engenharias não podem mais ser 100% on-line e passam a semipresenciais nas novas matrículas.",
+      "quem_afeta": "Todas as instituições com oferta a distância — é a mudança de maior impacto estrutural do período para o setor privado.",
+      "relevancia": "alta",
+      "status": "vigente",
+      "confianca": "oficial",
+      "fonte_url": "https://www.in.gov.br/en/web/dou/-/decreto-n-12.456-de-19-de-maio-de-2025-630398639",
+      "datas": [
+        {
+          "rotulo": "Publicação",
+          "data": "2025-05-19"
+        }
+      ],
+      "keywords": [
+        "ead",
+        "polo",
+        "semipresencial",
+        "presencialidade",
+        "decreto",
+        "marco regulatório",
+        "graduação"
+      ]
+    },
+    {
+      "data": "2025-05-20",
+      "tema": "ead",
+      "documento": "Portaria MEC nº 381, de 20 de maio de 2025",
+      "orgao": "MEC",
+      "resumo": "Estabelece as regras de transição para a aplicação do Decreto nº 12.456/2025 e define o calendário de processos regulatórios no Sistema e-MEC para 2025.",
+      "o_que_mudou": "Dá o cronograma de adaptação ao novo marco e organiza a fila regulatória do e-MEC no ano da virada.",
+      "quem_afeta": "Instituições com oferta a distância ou semipresencial em adaptação.",
+      "relevancia": "alta",
+      "status": "transicao",
+      "confianca": "oficial",
+      "fonte_url": "https://www.in.gov.br/en/web/dou/-/portaria-mec-n-381-de-20-de-maio-de-2025-630693013",
+      "datas": [
+        {
+          "rotulo": "Publicação",
+          "data": "2025-05-20"
+        }
+      ],
+      "keywords": [
+        "ead",
+        "transição",
+        "adaptação",
+        "portaria",
+        "prazo",
+        "polo"
+      ]
+    },
+    {
+      "data": "2026-04-15",
+      "tema": "fies",
+      "documento": "Lei nº 15.388, de 14 de abril de 2026",
+      "orgao": "Planalto",
+      "resumo": "Reforça o caráter inclusivo do Fundo de Financiamento Estudantil (Fies), com manutenção e expansão do programa. Publicada no DOU de 15/04/2026, Edição 71, Seção 1, p. 1, nos Atos do Poder Legislativo.",
+      "o_que_mudou": "É a base legal da reforma que reservou metade das vagas ao Fies Social e ampliou o percentual financiável para o público de baixa renda.",
+      "quem_afeta": "Instituições participantes do Fies e candidatos de baixa renda.",
+      "relevancia": "alta",
+      "status": "vigente",
+      "confianca": "oficial",
+      "fonte_url": "https://www.in.gov.br/web/dou/-/lei-n-15.388-de-14-de-abril-de-2026-699917783",
+      "datas": [
+        {
+          "rotulo": "Sanção",
+          "data": "2026-04-14"
+        },
+        {
+          "rotulo": "Publicação no DOU",
+          "data": "2026-04-15"
+        }
+      ],
+      "keywords": [
+        "fies",
+        "fies social",
+        "lei",
+        "financiamento",
+        "vagas",
+        "inclusão"
+      ]
+    },
+    {
+      "data": "2025-05-19",
+      "tema": "ead",
+      "documento": "Portaria MEC nº 378, de 19 de maio de 2025",
+      "orgao": "MEC",
+      "resumo": "Dispõe sobre os formatos de oferta dos cursos superiores de graduação.",
+      "o_que_mudou": "É a norma que define os formatos — presencial, semipresencial e a distância — em que a graduação passa a se organizar sob o novo marco.",
+      "quem_afeta": "Todas as instituições de educação superior.",
+      "relevancia": "alta",
+      "status": "vigente",
+      "confianca": "oficial",
+      "fonte_url": "https://www.in.gov.br/en/web/dou/-/portaria-mec-n-378-de-19-de-maio-de-2025-630395302",
+      "datas": [
+        {
+          "rotulo": "Publicação",
+          "data": "2025-05-19"
+        }
+      ],
+      "keywords": [
+        "ead",
+        "formato",
+        "semipresencial",
+        "presencial",
+        "graduação",
+        "oferta"
+      ]
+    },
+    {
+      "data": "2025-07-10",
+      "tema": "ead",
+      "documento": "Portaria MEC nº 506, de 10 de julho de 2025",
+      "orgao": "MEC",
+      "resumo": "Regulamenta o Decreto nº 12.456/2025 quanto à formação do corpo docente, aos mediadores pedagógicos, aos tutores e aos polos de EaD.",
+      "o_que_mudou": "Detalha exigências de pessoal e de polo — o lado de custo do novo marco, que é onde a régua aperta para quem opera rede grande de polos.",
+      "quem_afeta": "Instituições com oferta a distância e suas redes de polos.",
+      "relevancia": "alta",
+      "status": "vigente",
+      "confianca": "oficial",
+      "fonte_url": "https://www.in.gov.br/en/web/dou/-/portaria-mec-n-506-de-10-de-julho-de-2025-641610361",
+      "datas": [
+        {
+          "rotulo": "Publicação",
+          "data": "2025-07-10"
+        }
+      ],
+      "keywords": [
+        "ead",
+        "polo",
+        "tutor",
+        "mediador",
+        "corpo docente",
+        "infraestrutura"
+      ]
+    },
+    {
+      "data": "2025-03-26",
+      "tema": "medicina",
+      "documento": "Edital MEC nº 2, de 26 de março de 2025",
+      "orgao": "MEC",
+      "resumo": "Altera o cronograma do Edital de Chamamento Público nº 1/2023, com resultado final previsto para 29 de agosto de 2025.",
+      "o_que_mudou": "Reprograma o calendário da seleção de novos cursos de Medicina — que viria a ser revogada por inteiro em fevereiro de 2026.",
+      "quem_afeta": "Mantenedoras privadas com proposta no chamamento público.",
+      "relevancia": "media",
+      "status": "revogada",
+      "confianca": "oficial",
+      "fonte_url": "https://www.gov.br/mec/pt-br/politica-regulacao-supervisao-educacao-superior/autorizacao-de-curso-de-medicina",
+      "datas": [
+        {
+          "rotulo": "Publicação",
+          "data": "2025-03-26"
+        },
+        {
+          "rotulo": "Resultado final previsto",
+          "data": "2025-08-29"
+        }
+      ],
+      "keywords": [
+        "medicina",
+        "edital",
+        "chamamento público",
+        "cronograma",
+        "autorização"
+      ]
+    },
+    {
+      "data": "2024-02-16",
+      "tema": "fies",
+      "documento": "Resolução CG-Fies nº 58, de 8 de fevereiro de 2024",
+      "orgao": "FNDE",
+      "resumo": "Ato do Comitê Gestor do Fies que trata do Fies Social. Publicada no DOU de 16/02/2024, Edição 32, Seção 1, p. 29.",
+      "o_que_mudou": "Marca a entrada do Fies Social no arcabouço do programa, antes da reforma consolidada na Lei nº 15.388/2026.",
+      "quem_afeta": "Candidatos de baixa renda inscritos no CadÚnico e instituições participantes.",
+      "relevancia": "media",
+      "status": "vigente",
+      "confianca": "oficial",
+      "fonte_url": "https://www.in.gov.br/web/dou/-/resolucao-n-58-de-8-de-fevereiro-de-2024-543202533",
+      "datas": [
+        {
+          "rotulo": "Publicação no DOU",
+          "data": "2024-02-16"
+        }
+      ],
+      "keywords": [
+        "fies",
+        "fies social",
+        "cadúnico",
+        "comitê gestor",
+        "fnde",
+        "resolução"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+GRUPO;NOME_EXIBICAO;TIPO;TICKER;BOLSA;COR;ORDEM
+Cogna;Cogna Educação;listada;COGN3;B3;#EC7000;1
+Vitru;Vitru Educação;listada;VTRU;Nasdaq;#003C7D;2
+YDUQS;YDUQS;listada;YDUQ3;B3;#F2A25C;3
+Cruzeiro do Sul;Cruzeiro do Sul Educacional;listada;CSED3;B3;#4A7FB5;4
+Ser Educacional;Ser Educacional;listada;SEER3;B3;#A34B00;5
+Ânima;Ânima Educação;listada;ANIM3;B3;#8FB4D9;6
+Afya;Afya;listada;AFYA;Nasdaq;#6E7B87;7
+UNINTER;UNINTER;independente;;;#C25A00;10
+UNIP;UNIP / Objetivo;independente;;;#33628F;11
+UNINOVE;UNINOVE;independente;;;#FF9A3D;12
+UNIFATECIE;UNIFATECIE;independente;;;;20
+FMU;FMU / FIAM-FAAM;independente;;;;21
+UNIFACVEST;UNIFACVEST;independente;;;;22
+Uniplan;Uniplan;independente;;;;23
+UniCV;UniCV;independente;;;;24
+Multivix;Multivix;independente;;;;25
+Fametro (AM);Fametro (AM);independente;;;;26
+Veiga de Almeida;Veiga de Almeida;independente;;;;27
+Uniube;Uniube;independente;;;;28
+FAM - Americas;FAM – Américas;independente;;;;29
+Unisa;Unisa;independente;;;;30
+Unifecaf;Unifecaf;independente;;;;31
+Universo;Universo (Salgado de Oliveira);independente;;;;32
+UniSUAM;UniSUAM;independente;;;;33
+Uninga;Uningá;independente;;;;34
+Gran;Gran;independente;;;;35
+UniGrande;UniGrande;independente;;;;36
+UniFTC;UniFTC;independente;;;;37
+Celso Lisboa;Celso Lisboa;independente;;;;38
+Unigran;Unigran;independente;;;;39
+UniAmerica Descomplica;UniAmérica Descomplica;independente;;;;40
+Unipar;Unipar;independente;;;;41
+Tiradentes;Tiradentes (Unit);independente;;;;42
+PUC Minas;PUC Minas;confessional_comunitaria;;;;50
+PUCPR;PUCPR;confessional_comunitaria;;;;51
+Mackenzie;Mackenzie;confessional_comunitaria;;;;52
+Catolica (UBEC);Católica (UBEC);confessional_comunitaria;;;;53
+Unicap;Unicap;confessional_comunitaria;;;;54
+USF;USF;confessional_comunitaria;;;;55
+UNINTA;UNINTA;confessional_comunitaria;;;;56
+Ulbra;Ulbra;confessional_comunitaria;;;;57
+Unifor;Unifor;confessional_comunitaria;;;;58
+SENAC;SENAC;sistema_s;;;;60
+Independentes;Independentes / não mapeado;outros;;;#9aa5b1;99

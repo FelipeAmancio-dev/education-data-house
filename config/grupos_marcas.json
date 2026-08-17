@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "descricao": "Tokens de marca por grupo, usados pelo audit_grupos.py para achar IES candidatas.",
+    "uso": "Busca por palavra inteira (case/acento-insensitive) no NO_IES e no NO_MANTENEDORA.",
+    "aviso": "Gera CANDIDATOS para revisao humana. Nunca aplica grupo automaticamente.",
+    "precedencia": "A atribuicao real vem de Suporte IES.xlsx + grupos_mantenedoras.csv + ies_grupo_overrides.csv."
+  },
+
+  "_falsos_positivos": {
+    "_descricao": "CO_IES ja verificados como NAO pertencentes ao grupo que o token sugeriria. O audit os ignora.",
+    "386":   "Centro Universitario de Goias - mantenedora 269 'SOCIEDADE ANHANGUERA DE ENSINO', independente. 'Anhanguera' e toponimo goiano, nao a Anhanguera da Cogna (mantenedora 16452)",
+    "2688":  "Faculdade INESP - mantenedora 'IADEB-MODULO', sem relacao com Cruzeiro do Sul",
+    "24381": "Faculdade Georgina (Camocim/CE) - mantenedora 'CENTRO DE ENSINO SUPERIOR SAO JUDAS TADEU EIRELI', homonimo do Sao Judas da Anima",
+    "5600":  "Faculdades Integradas Sao Judas Tadeu (Porto Alegre) - mantenedora 212, homonimo",
+    "220":   "Faculdade Sao Judas Tadeu (RJ) - mantenedora 158, homonimo",
+    "21108": "Faculdade Sao Judas de Terra Boa (PR) - mantenedora 'INSTITUTO EDUCACIONAL COOPERARE', homonimo",
+    "11841": "Faculdade Evolucao Alto Oeste Potiguar - 'potiguar' e gentilico do RN, nao a Universidade Potiguar da Anima",
+    "22713": "Faculdade do Oeste Potiguar - idem, gentilico",
+    "15980": "FG Faculdade Global (Porto Alegre) - mantenedora 'UNIFG EDTECH', homonimo do UniFG da Anima (Guanambi/BA)",
+    "4969":  "Centro Universitario Itop - mantenedora 3172 'INSTITUTO TOCANTINENSE DE EDUCACAO SUPERIOR E PESQUISA', distinta das mantenedoras ITPAC da Afya (1336, 3575, 15521)",
+    "21892": "Centro de Ensino Superior de Palmas - mesma mantenedora 3172, idem",
+    "1247":  "FACINAN (Nova Andradina/MS) - mantenedora 644 'ASSOCIACAO EDUCACIONAL NOVE DE JULHO', homonima da mantenedora 222 da UNINOVE (SP). Entidades distintas",
+    "20499": "Faculdade da Policia Militar (GO) - mantenedora 'FUNDACAO TIRADENTES', sem relacao com o Grupo Tiradentes/Unit (mantenedora 274)"
+  },
+
+  "Cogna":           ["ANHANGUERA", "PITAGORAS", "UNOPAR", "UNIDERP", "UNIME", "UNIRONDON", "KROTON", "PLATOS"],
+  "YDUQS":           ["ESTACIO", "IBMEC", "DAMASIO", "WYDEN", "UNIFANOR", "UNIFBV", "UNIFAVIP", "UNIRUY", "UNIFAMETRO", "IDOMED", "ADTALEM"],
+  "Ser Educacional": ["UNINASSAU", "NASSAU", "UNAMA", "UNIVERITAS", "NABUCO", "FAEL", "UNIFACOL"],
+  "Ânima":           ["UNISUL", "SAO JUDAS", "ANHEMBI", "UNIFACS", "POTIGUAR", "UNICURITIBA", "SOCIESC", "AGES", "FADERGS", "IBMR", "MILTON CAMPOS", "RITTER", "UNIBH", "FASEH", "UNIFG"],
+  "Vitru":           ["UNIASSELVI", "LEONARDO DA VINCI", "CESUMAR", "UNICESUMAR", "FAMEESP"],
+  "Cruzeiro do Sul": ["CRUZEIRO DO SUL", "UNICID", "UNIFRAN", "BRAZ CUBAS", "MODULO", "UNICSUL", "CEUNSP"],
+  "Afya":            ["AFYA", "ITPAC", "TOCANTINENSE", "UNIREDENTOR", "SANTO AGOSTINHO", "UNIGRANRIO", "IPEMED", "IESVAP", "UNINOVAFAPI"],
+  "UNINTER":         ["UNINTER"],
+  "UNIP":            ["ASSUPERO", "UNIVERSIDADE PAULISTA"],
+  "UNINOVE":         ["NOVE DE JULHO", "UNINOVE"],
+  "Multivix":        ["MULTIVIX"],
+  "Tiradentes":      ["TIRADENTES"],
+  "UniFTC":          ["UNIFTC"],
+  "Universo":        ["SALGADO DE OLIVEIRA", "UNIVERSO"]
+}

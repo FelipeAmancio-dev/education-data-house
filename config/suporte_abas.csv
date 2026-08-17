@@ -1,0 +1,11 @@
+ABA;GRUPO;OBS
+# Mapeia o nome da aba do "Suporte IES.xlsx" para o nome canonico do grupo.
+# Para adicionar uma empresa nova: crie a aba no Excel e registre a linha aqui.
+# Se uma aba nao estiver listada, o pipeline avisa e usa o nome da aba como grupo.
+VITRU;Vitru;
+AFYA;Afya;
+ANIMA;Ânima;
+COGNA;Cogna;
+YDUQS;YDUQS;
+SER EDUCACIONAL;Ser Educacional;
+CRUZEIRO DO SUL;Cruzeiro do Sul;

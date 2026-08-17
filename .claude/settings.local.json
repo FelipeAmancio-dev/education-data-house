@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path C:\\\\education -Force | Select-Object Mode, LastWriteTime, @{N='SizeMB';E={if\\($_.PSIsContainer\\){''}else{[math]::Round\\($_.Length/1MB,2\\)}}}, Name | Format-Table -AutoSize)",
+      "Bash(python \"C:/Users/felip/AppData/Local/Temp/claude/C--education/73309ff6-c1ee-4d2a-adff-991f2988b87f/scratchpad/probe_api4.py\")",
+      "Bash(python \"C:/Users/felip/AppData/Local/Temp/claude/C--education/73309ff6-c1ee-4d2a-adff-991f2988b87f/scratchpad/probe_api5.py\")",
+      "Bash(python \"C:/Users/felip/AppData/Local/Temp/claude/C--education/73309ff6-c1ee-4d2a-adff-991f2988b87f/scratchpad/probe_api6.py\")"
+    ]
+  }
+}

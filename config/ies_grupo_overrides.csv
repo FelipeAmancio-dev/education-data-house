@@ -1,0 +1,21 @@
+CO_IES;GRUPO;MOTIVO
+# Excecoes no nivel de IES. Tem precedencia sobre tudo (Suporte IES.xlsx e regras de mantenedora).
+# Deixe GRUPO vazio para FORCAR uma IES a sair de um grupo.
+#
+# ---- PENDENTES DE CONFIRMACAO (descomente a linha para aplicar) ----
+#
+# UNIFAMETRO (CE): o Suporte IES.xlsx lista "28321 Faculdade de Medicina Unifametro / YDUQS",
+# codigo que nao existe no Censo 2024. As 3 IES Unifametro que existem estao sob a mantenedora
+# 1297 e nao foram mapeadas. Se Unifametro e YDUQS, descomente as 3 linhas abaixo (6.798 alunos).
+#1978;YDUQS;Centro Universitario Fametro (CE) - mantenedora 1297
+#19337;YDUQS;Faculdade Unifametro Maracanau - mantenedora 1297
+#19859;YDUQS;Faculdade Unifametro Cascavel - mantenedora 1297
+#
+# UniFSA Teresina: Centro Universitario Santo Agostinho (PI, 4.727 alunos). A marca
+# "Santo Agostinho" pertence a Afya em outras pracas, mas a mantenedora (781, ASSOCIACAO
+# TERESINENSE DE ENSINO) e distinta das mantenedoras Afya no Censo. Confirmar antes de aplicar.
+#1131;Afya;Centro Universitario Santo Agostinho (UniFSA Teresina)
+#
+# IPEMED: Faculdade IPEMED de Ciencias Medicas (BH, 40 alunos). Marca IPEMED associada a Afya,
+# mas mantenedora 16263 e distinta das mantenedoras Afya no Censo. Confirmar.
+#3839;Afya;Faculdade IPEMED de Ciencias Medicas

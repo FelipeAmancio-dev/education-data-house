@@ -1,0 +1,91 @@
+# Coleta automática dos preços do setor.
+#
+# Roda no GitHub, então funciona com o notebook desligado — que é o ponto. Sem isso a
+# série de preços só avança nos dias em que alguém abre o dashboard, e fica cheia de
+# buraco.
+#
+# O `06_fetch_precos.py` usa SÓ biblioteca padrão do Python: não há `pip install`, e a
+# execução inteira leva ~30 s.
+#
+# ⚠️ Horário: o cron do GitHub é em UTC. O Brasil não tem mais horário de verão desde
+# 2019, então BRT = UTC−3 o ano todo. O pregão da B3 (10h–18h BRT) é 13h–21h UTC.
+name: Preços do setor
+
+on:
+  schedule:
+    # de 5 em 5 minutos, no pregão, dias úteis.
+    #
+    # ⚠️ 5 minutos é o MÍNIMO que o GitHub aceita — cron mais curto é recusado. E o
+    # agendador não é pontual: em horário de pico ele atrasa, às vezes dezenas de minutos,
+    # e pode pular execuções. Para preço isso é aceitável (a tela carimba a hora real da
+    # coleta); não tente compensar com cron mais agressivo, o efeito é o contrário.
+    #
+    # ⚠️ CUSTO: ~96 execuções/dia × 21 dias úteis ≈ 2.000 execuções/mês. Em repositório
+    # PRIVADO isso estoura os 2.000 minutos gratuitos. Em repositório PÚBLICO os minutos
+    # são ilimitados — é o cenário para o qual este cron foi dimensionado.
+    - cron: "*/5 13-21 * * 1-5"
+  workflow_dispatch:        # permite rodar na mão pelo site do GitHub
+
+# necessário para o passo que commita o precos.json de volta no repositório
+permissions:
+  contents: write
+
+concurrency:
+  # se uma execução atrasar e a próxima começar, a antiga é cancelada — duas rodadas
+  # commitando o mesmo arquivo ao mesmo tempo dariam conflito
+  group: precos
+  cancel-in-progress: true
+
+jobs:
+  coletar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Coletar preços
+        run: python scripts/06_fetch_precos.py
+
+      # ⚠️ Este passo existe porque o coletor devolve 0 mesmo com falha PARCIAL: ele só
+      # sai com 1 quando NENHUMA série vem. Num CI isso commitaria um arquivo degradado
+      # em silêncio — e o Yahoo costuma limitar IP de nuvem, que é exatamente o cenário
+      # em que a degradação seria parcial. Aqui a rodada quebra alto.
+      - name: Conferir o que veio
+        run: |
+          python - <<'PY'
+          import json, sys
+          d = json.load(open("dashboard/data/precos.json", encoding="utf-8"))
+          papeis = d.get("papeis", [])
+          series = d.get("series", {})
+          falhas = d.get("falhas", [])
+          print(f"carimbo   : {d.get('atualizado_em')}")
+          print(f"papéis    : {len(papeis)}")
+          print(f"séries    : {len(series)}")
+          for f in falhas:
+              print(f"  [falha] {f.get('ticker')}: {f.get('erro')}")
+
+          # o mcap é degradação aceitável: sem ele o basket cai para peso igual, o que a
+          # própria tela já explica. Falha de SÉRIE, não — aí o gráfico mente.
+          graves = [f for f in falhas if f.get("ticker") != "quote"]
+          if not series:
+              sys.exit("NENHUMA série coletada — provável bloqueio do Yahoo")
+          if graves:
+              sys.exit(f"{len(graves)} papel(is) sem série: "
+                       + ", ".join(x.get("ticker", "?") for x in graves))
+          print("ok")
+          PY
+
+      - name: Commitar se mudou
+        run: |
+          if git diff --quiet -- dashboard/data/precos.json; then
+            echo "sem mudança — nada a commitar"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard/data/precos.json
+          git commit -m "preços: $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
