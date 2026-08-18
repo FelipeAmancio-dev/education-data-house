@@ -60,6 +60,7 @@ python scripts/08_build_regulatorio.py --so-verificar   # só valida, não escre
 python scripts/09_fetch_dou.py                      # varre o DOU e lista candidatos p/ curadoria
 python scripts/10_ingest_emec.py                    # Dados_GEO.xlsx (e-MEC) → de-para + emec.json
 python scripts/audita_mensalidades.py               # confere curso × URL coletada (--limpar remove e reexporta)
+python scripts/audita_dashboard.py                  # auditoria do payload publicado (sai 1 se falhar)
 python scripts/11_fetch_dou_diario.py               # feed diário do DOU, triado por relevância
 python scripts/11_fetch_dou_diario.py --autoteste   # triagem contra os casos conhecidos (sem rede)
 python scripts/11_fetch_dou_diario.py --reclassificar  # reaplica a regra ao feed já coletado
@@ -231,6 +232,79 @@ Cobertura do mapeamento: **60,5% do mercado, 75,7% da rede privada**, em 43 grup
 
 ---
 
+## 4b. A auditoria de fechamento (18/08/2026)
+
+O usuário pediu um *double check* de tudo antes de considerar o dashboard pronto: "procurar
+por potenciais erros, um dado sem conversar com o outro... precisa estar bullet proof".
+Virou `scripts/audita_dashboard.py`, que roda em segundos e **sai 1 se falhar**.
+
+⚠️ **Ele valida o lado OPOSTO do `03_validate.py`.** Aquele valida os microdados antes de
+virarem cubo; este valida `dashboard/data/`, que é o que o investidor vê. São perguntas
+diferentes: um cubo pode estar internamente correto e ainda assim discordar do painel ao
+lado — foi exatamente assim que apareceu o defeito das linhas de `ies_mun` com `qt_mat = 0`.
+
+**A regra que orienta os testes:** todo número que aparece em dois lugares tem que ser o
+mesmo número, e **toda diferença tem que ter explicação declarada**. As 2.580 matrículas que
+separam o total nacional do total geográfico são exterior/N.I., e o teste exige que a
+diferença seja *exatamente* essa — não "pequena".
+
+**Resultado: 0 falhas.** O que passou:
+
+| Teste | Resultado |
+|---|---|
+| Gabarito de 2024 (8 KPIs) | bate item a item |
+| `c_ies_mod` = `c_cine_mod` = `2024_ies_cine` | 10.227.266 nos três |
+| `c_mun_mod` = `2024_ies_mun` | 10.224.686 = total − 2.580 |
+| presencial + EAD e pública + privada | fecham o total |
+| Key Players × Geografia, por grupo | diferença total = 2.580, nenhuma negativa |
+| **Cursos × Key Players, por grupo** | idênticos nos 44 grupos |
+| Soma dos shares | 100,0000% |
+| IES em dois grupos | nenhuma (3.400 códigos) |
+| e-MEC | IGC todo dentro de 1–5, 99,9% das matrículas cobertas |
+| Front-end | 8 blocos, 0 erro de console, 0 chave sem tradução, nenhum NaN/undefined |
+
+### ⚠️ O que a auditoria NÃO resolve: a reconciliação com o release
+
+Aqui está o que precisa ficar registrado, porque é o limite honesto da ferramenta.
+
+| Grupo | Reportado (grad. 4T24) | Censo `QT_MAT` | Gap | Explicação |
+|---|---:|---:|---:|---|
+| **Ânima** | 324.800 | 332.310 | **+2,3%** | reconcilia |
+| **Cruzeiro do Sul** | 491.000 | 512.500 | **+4,4%** | reconcilia |
+| **YDUQS** | 779.200 | 823.886 | **+5,7%** | total ok, mas **presencial −21,8% e EAD +22,4%**: a empresa chama de "Presencial" um segmento que o Censo classifica como EAD. Os dois erros se cancelam no total |
+| **Afya** | 76.988 | 93.566 | **+21,5%** | 23.194 matrículas EAD que a companhia não menciona (§6.2). Sem elas, −8,6% |
+| **Ser Educacional** | 307.830 | 375.541 | **+22,0%** | perímetro conferido IES a IES e correto (vem do `Suporte IES.xlsx`). **Sem explicação fechada** |
+| **Vitru** | 764.500 | 1.080.339 | **+41,3%** | o próprio release exclui alunos *unengaged* por critério adotado em 1T24. É ~30% da base formal |
+| **Cogna** | — | 1.124.318 | — | release de 4T24 não obtido |
+
+⚠️ **Testei a ponte mais óbvia e ela NÃO existe.** `QT_MAT` conta "cursando **e/ou formado**",
+então a hipótese natural é que o excesso sejam os concluintes do ano. Subtraí-los conserta
+Afya (+21,5% → +7,8%) e Ser (+22,0% → +8,2%) **e estraga quem já reconciliava**: Ânima vai
+para −21,2%, YDUQS para −9,0%, Cruzeiro para −9,2%. **Não há ajuste único que sirva para
+todos** — cada gap tem causa própria, e `QT_MAT` cru continua sendo a melhor definição
+isolada. Não invente uma "base ajustada": ela melhoraria três linhas e quebraria três.
+
+⚠️ **A Cogna é o maior buraco e continua aberto.** É 11% do mercado e a única aberta sem
+número reportado. Em 18/08/2026 `ri.cogna.com.br` devolveu **"Access Denied" até com Chrome
+real** — o bloqueio é mais forte que o do DOU. Checagem grosseira de plausibilidade em fonte
+secundária: a companhia comunicou base de ensino superior **acima de 1 milhão no 4T24** e
+**1.197 mil no 1T25**; nosso 1.124.318 cai entre os dois, o que é consistente mas **não é
+reconciliação**. Fonte primária ou nada: se o usuário fornecer o PDF, é rodar
+`valida_reconciliacao.py`.
+
+⚠️ **Quatro grupos saltaram mais de 25% em 2024** e o teste 9 os lista sempre: Unifecaf
+(+63,2%), Ser Educacional (+34,9%), Veiga de Almeida (+30,7%) e UniCV (+26,5%). No caso da
+Ser, o salto foi conferido IES a IES — está espalhado pelas próprias mantidas (Maurício de
+Nassau +30,9 mil, UNAMA +10,7 mil, FAEL +9,2 mil), **não é IES nova entrando no perímetro**.
+É crescimento que o Censo registra e o release não mostra na mesma intensidade.
+
+📌 **Consequência de produto ainda não implementada:** esta tabela não está na interface. A
+tabela de reconciliação **foi removida da tela por decisão do usuário** em rodada anterior, e
+o dado continua em `meta.reportado` dentro do payload. Se ela voltar, o lugar é a
+Methodology — e é a peça que falta para a ferramenta poder ser entregue a investidor.
+
+---
+
 ## 5. Os arquivos que o usuário edita
 
 Todo o resto é gerado. **Nunca edite `config/ies_grupo_map.csv` à mão** — ele é saída.
@@ -286,6 +360,12 @@ não deveria estar em Afya. Não resolvido.
 Foi a única das 7 abertas que não consegui reconciliar. As buscas retornam sempre o 4T25 e o
 domínio `esg.cogna.com.br` bloqueia acesso automatizado (403). **Se o usuário fornecer o PDF,
 extrair e rodar `valida_reconciliacao.py`.**
+
+⚠️ **Tentado de novo em 18/08/2026 e o bloqueio é maior do que se pensava:** `ri.cogna.com.br`
+devolve **"Access Denied" até com Playwright + `channel="chrome"`**, que é a receita que
+destrava o DOU e o portal da Cogna no coletor de mensalidades. Não insista por esse caminho.
+O precedente do Cruzeiro do Sul (ler a coluna comparativa de 4T24 dentro da apresentação de
+4T25) continua sendo a melhor ideia — mas depende de alcançar o arquivo. Ver §4b.
 
 ### 6.4 ✅ e-MEC — RESOLVIDO em 14/08/2026, mas não do jeito esperado
 
