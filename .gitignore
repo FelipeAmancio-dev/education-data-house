@@ -33,3 +33,6 @@ __pycache__/
 Thumbs.db
 ~$*.xlsx
 *.tmp
+
+# backups do audita_mensalidades.py: histórico bruto antes de uma limpeza
+*.jsonl.*.bak

@@ -14,7 +14,13 @@ import {
 } from './dados.js';
 import { $, esc, kpi, tabela, opcoes, chart, baseChart, fmtEixoMi, registrarCSV,
          PALETA, COR_PRES, COR_EAD, LARANJA } from './ui.js';
-import { TX, TXcurso, TXarea, TXregiao, TXorg } from './i18n.js';
+import { TX, TXcurso, TXarea, TXregiao, TXorg, locale } from './i18n.js';
+
+/* Nota do e-MEC com 2 casas NO IDIOMA da tela: 3,11 em pt e 3.11 em en. `toFixed()`
+ * escreve ponto decimal sempre, e a coluna saía com ponto no meio de uma tabela cujos
+ * milhares usam ponto — "3.11" ao lado de "1.124.318" se lê como três mil e onze. */
+const nota2 = v => (v == null || isNaN(v)) ? '—'
+  : v.toLocaleString(locale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 const modLabel = f => f.mod === '1' ? TX('presenciais') : f.mod === '2' ? TX('EAD') : TX('totais');
 /* Denominador de share: nunca inclui grupo (senao todo grupo teria 100%). */
@@ -626,6 +632,13 @@ const SG_UF = { 11: 'RO', 12: 'AC', 13: 'AM', 14: 'RR', 15: 'PA', 16: 'AP', 17: 
  * do bloco Cursos. `null` = ainda não montada; vira o conjunto das abertas na primeira vez. */
 let selGeo = null;
 
+/* Onde o mapa interativo está olhando. Mora fora da view pelo mesmo motivo dos chips: a
+ * view se redesenha inteira a cada clique, e um estado local voltaria para o Brasil toda
+ * vez que o usuário escolhesse um município. `geoUF` vazio = país inteiro; `geoMun` nulo =
+ * a UF inteira (ou o país, se não houver UF escolhida). */
+let geoUF = '';
+let geoMun = null;
+
 function chipsGeo(el, aoTrocar) {
   const listadas = D.gruposLista.filter(k => D.gruposOrd[k]?.tipo === 'listada');
   const outros = D.gruposLista.filter(k => k !== 'Independentes' &&
@@ -689,7 +702,11 @@ function mapaBolhas(el, series, opt = {}) {
                       `${esc(p.seriesName)}<br>${n(p.data[2])} ${TX('alunos')}`,
     },
     geo: {
-      map: 'BR', roam: false,
+      /* ⚠️ `aspectScale: 1`: o padrão do ECharts é 0.75, que comprime a longitude e deixa o
+       * Brasil espremido e alto — foi o "mapa esticado" que o usuário apontou em
+       * 18/08/2026. O país tem 39,2° de largura por 39,0° de altura, então a proporção
+       * honesta aqui é 1. */
+      map: 'BR', roam: false, aspectScale: 1,
       top: (series.length > 1 && !opt.mini) ? 34 : 6, bottom: 6,
       itemStyle: { areaColor: '#F2F3F5', borderColor: '#fff', borderWidth: .8 },
       emphasis: { itemStyle: { areaColor: '#E8E8E8' }, label: { show: false } },
@@ -710,8 +727,14 @@ function mapaBolhas(el, series, opt = {}) {
  *
  * ⚠️ IGC vazio é SEM NOTA, não nota zero. Média com zero embutido puniria quem ainda não
  * foi avaliado, que é caso comum em IES nova. Por isso o denominador é sempre "IES com
- * nota", e o número de avaliadas viaja junto na tabela. */
+ * nota", e o número de avaliadas viaja junto na tabela.
+ *
+ * ⚠️ A tabela de "restrições vigentes" SAIU em 18/08/2026, a pedido do usuário. No lugar
+ * dela entrou o painel de qualidade abaixo, que responde a mesma pergunta por outro
+ * caminho — quão bem avaliada é a operação de cada grupo — em vez de listar IES uma a uma.
+ */
 async function secaoEmec(f, selG) {
+  const ano = f.ano;
   const E = await carregarEmec();
   const av = $('#ge-emec-aviso');
   if (!E) {
@@ -719,113 +742,120 @@ async function secaoEmec(f, selG) {
       'Os dados do e-MEC não estão nesta cópia. Rode ' +
       '<code>python scripts/10_ingest_emec.py</code> para gerar <code>data/emec.json</code> ' +
       'a partir de <code>Dados_GEO.xlsx</code>.')}</div>`;
-    ['#ge-igc', '#ge-sinal'].forEach(s => { $(s).innerHTML = ''; });
-    ['#ge-igc-nota', '#ge-sinal-nota'].forEach(s => { $(s).textContent = ''; });
+    ['#ge-igc', '#ge-qual'].forEach(s => { $(s).innerHTML = ''; });
+    ['#ge-igc-nota', '#ge-qual-nota'].forEach(s => { $(s).textContent = ''; });
     return;
   }
   av.innerHTML = '';
 
-  // agrega por grupo, contando só quem tem nota
+  /* Matrículas por IES no ano, para PONDERAR a qualidade pela base de alunos. `porIES`
+   * com a própria posição como chave devolve exatamente isso, sem laço novo sobre o cubo. */
+  const porIx = porIES(ano, ix => ix, {});
+  const nota = v => (v && /^[1-5]$/.test(v)) ? +v : null;
+
   const porG = new Map();
   const nIES = D.dim.ies.co.length;
   for (let ix = 0; ix < nIES; ix++) {
     const k = gr(ix);
     if (!k || k === 'Independentes') continue;
-    if (f.rede && redeIES(ix) !== +f.rede) continue;
     let o = porG.get(k);
-    if (!o) { o = { soma: 0, comNota: 0, total: 0, sinal: [] }; porG.set(k, o); }
+    if (!o) {
+      o = { soma: 0, comNota: 0, total: 0, matNota: 0, somaPond: 0, matTop: 0,
+            ci: 0, nCi: 0, ciEad: 0, nCiEad: 0 };
+      porG.set(k, o);
+    }
     o.total++;
-    const igc = E.igc[ix];
-    if (igc && /^[1-5]$/.test(igc)) { o.soma += +igc; o.comNota++; }
-    if (E.sinal[ix]) o.sinal.push(ix);
+    const mat = porIx.get(ix)?.mat || 0;
+    const igc = nota(E.igc[ix]);
+    if (igc) {
+      o.soma += igc; o.comNota++;
+      o.matNota += mat; o.somaPond += igc * mat;
+      if (igc >= 4) o.matTop += mat;
+    }
+    const ci = nota(E.ci[ix]);
+    if (ci) { o.ci += ci; o.nCi++; }
+    const ce = nota(E.ci_ead[ix]);
+    if (ce) { o.ciEad += ce; o.nCiEad++; }
   }
 
   const linhasIGC = [...porG.entries()]
     .filter(([k, o]) => o.comNota > 0 && (!selG.length || selG.includes(k)))
-    .map(([k, o]) => ({ grupo: nomeGrupo(k), _raw: k, igc: o.soma / o.comNota,
-                        comNota: o.comNota, total: o.total }))
+    .map(([k, o]) => ({
+      grupo: nomeGrupo(k), _raw: k, igc: o.soma / o.comNota,
+      igcPond: o.matNota ? o.somaPond / o.matNota : null,
+      pctTop: o.matNota ? 100 * o.matTop / o.matNota : null,
+      ci: o.nCi ? o.ci / o.nCi : null, ciEad: o.nCiEad ? o.ciEad / o.nCiEad : null,
+      comNota: o.comNota, total: o.total,
+    }))
     .sort((a, b) => b.igc - a.igc);
 
   chart($('#ge-igc'), {
     ...baseChart(),
-    legend: { show: false },
-    grid: { left: 8, right: 46, top: 10, bottom: 6, containLabel: true },
+    legend: { ...baseChart().legend, data: [TX('IGC médio das IES'), TX('IGC do aluno médio')] },
+    grid: { left: 8, right: 46, top: 30, bottom: 6, containLabel: true },
     xAxis: { type: 'value', min: 0, max: 5, splitLine: { lineStyle: { color: '#F2F3F5' } },
              axisLine: { show: false }, axisTick: { show: false },
              axisLabel: { fontSize: 11.5, color: '#8C8C8C' } },
     yAxis: { type: 'category', data: linhasIGC.map(r => r.grupo), inverse: true,
              axisLine: { show: false }, axisTick: { show: false },
              axisLabel: { fontSize: 11.5, color: '#4A4A4A' } },
-    series: [{
-      type: 'bar', barMaxWidth: 22,
-      data: linhasIGC.map(r => ({ value: +r.igc.toFixed(2),
-                                  itemStyle: { color: corGrupoK(r._raw) } })),
-      label: { show: true, position: 'right', fontSize: 11.5, color: '#4A4A4A',
-               formatter: p => p.value.toFixed(2) },
-    }],
-    tooltip: { ...baseChart().tooltip, trigger: 'item',
-               formatter: p => `<strong>${esc(linhasIGC[p.dataIndex].grupo)}</strong><br>` +
-                 `IGC ${p.value.toFixed(2)}<br>${linhasIGC[p.dataIndex].comNota} ` +
-                 `${TX('de')} ${linhasIGC[p.dataIndex].total} ${TX('IES com nota')}` },
+    /* Duas barras, e a distância entre elas é a leitura. A média simples trata uma IES de
+     * 300 alunos como uma de 300 mil; a ponderada é a nota que o aluno médio do grupo de
+     * fato recebe. Grupo cujo ponderado fica ABAIXO do simples concentra base nas mantidas
+     * pior avaliadas — que é uma informação de risco regulatório, não de vaidade. */
+    series: [
+      { name: TX('IGC médio das IES'), type: 'bar', barMaxWidth: 13,
+        data: linhasIGC.map(r => ({ value: +r.igc.toFixed(2),
+                                    itemStyle: { color: corGrupoK(r._raw), opacity: .45 } })) },
+      { name: TX('IGC do aluno médio'), type: 'bar', barMaxWidth: 13,
+        data: linhasIGC.map(r => ({ value: r.igcPond == null ? null : +r.igcPond.toFixed(2),
+                                    itemStyle: { color: corGrupoK(r._raw) } })),
+        label: { show: true, position: 'right', fontSize: 11.5, color: '#4A4A4A',
+                 formatter: p => p.value == null ? '' : nota2(p.value) } },
+    ],
+    tooltip: { ...baseChart().tooltip, valueFormatter: v => nota2(v) },
   });
-  registrarCSV('geografia', TX('IGC por grupo'),
-    [{ k: 'grupo', t: TX('Grupo') }, { k: 'igc', t: 'IGC' },
-     { k: 'comNota', t: TX('IES com nota') }, { k: 'total', t: TX('IES no grupo') }],
-    linhasIGC.map(r => ({ ...r, igc: +r.igc.toFixed(2) })));
+
+  tabela($('#ge-qual'), [
+    { k: 'grupo', t: TX('Grupo'), tipo: 'txt', fmt: (v, r) =>
+        `<span style="display:inline-flex;align-items:center;gap:7px"><span style="width:8px;
+         height:8px;border-radius:2px;background:${corGrupoK(r._raw)}"></span>${esc(v)}</span>` },
+    { k: 'igc', t: TX('IGC médio'), tipo: 'num', fmt: v => nota2(v) },
+    { k: 'igcPond', t: TX('IGC do aluno médio'), tipo: 'num',
+      fmt: v => nota2(v) },
+    { k: 'pctTop', t: TX('% da base em IES 4 ou 5'), tipo: 'pct' },
+    { k: 'ci', t: 'CI', tipo: 'num', fmt: v => nota2(v) },
+    { k: 'ciEad', t: 'CI-EaD', tipo: 'num', fmt: v => nota2(v) },
+    { k: 'comNota', t: TX('IES com nota'), tipo: 'num',
+      fmt: (v, r) => `${n(v)} <span style="color:var(--ink-3)">/ ${n(r.total)}</span>` },
+  ], linhasIGC, { ordem: 'igcPond',
+    csv: { bloco: 'geografia', nome: TX('Qualidade e-MEC por grupo') } });
 
   $('#ge-igc-nota').textContent = TX(
-    'IGC do e-MEC, de 1 a 5, processado em {d}. A média é só entre as IES COM nota — IES sem ' +
-    'avaliação publicada não entra como zero, que seria lê-la como péssima. A coluna do ' +
-    'tooltip mostra quantas das IES do grupo têm nota. Base casada: {c} IES, cobrindo 99,9% ' +
-    'das matrículas de 2024.',
+    'IGC do e-MEC, de 1 a 5, processado em {d}. As médias são só entre as IES COM nota — IES ' +
+    'sem avaliação publicada não entra como zero, que seria lê-la como péssima. Base casada: ' +
+    '{c} IES, cobrindo 99,9% das matrículas de 2024.',
     { d: E.processado_em ? E.processado_em.split('-').reverse().join('/') : '—',
       c: n(E.casaram) });
 
-  /* Sinalizações: só as RESTRITIVAS entram na tabela. "Unificação de Mantidas" e
-   * "Credenciamento Prévio" são as duas mais numerosas e não são restrição — listá-las
-   * junto de suspensão de FIES faria o quadro parecer muito pior do que é. */
-  const RESTRITIVA = /suspens|descredenciamento|sancionador|cautelar|vedaç|sub judice|saneador/i;
-  const rowsSinal = [];
-  for (let ix = 0; ix < nIES; ix++) {
-    const s = E.sinal[ix];
-    if (!s || !RESTRITIVA.test(s)) continue;
-    if (f.rede && redeIES(ix) !== +f.rede) continue;
-    const k = gr(ix);
-    rowsSinal.push({
-      ies: nomeIES(ix), co: D.dim.ies.co[ix], uf: ufIES(ix) || '—',
-      grupo: k ? nomeGrupo(k) : TX('Independentes / não mapeado'),
-      sinal: s, _aberta: D.gruposOrd[k]?.tipo === 'listada',
-    });
-  }
-  // grupo mapeado primeiro: é o que o investidor procura numa lista de 200 linhas
-  rowsSinal.sort((a, b) => (b._aberta - a._aberta) || a.grupo.localeCompare(b.grupo));
-
-  tabela($('#ge-sinal'), [
-    { k: 'ies', t: 'IES', tipo: 'txt' },
-    { k: 'grupo', t: TX('Grupo'), tipo: 'txt' },
-    { k: 'uf', t: 'UF', tipo: 'txt' },
-    { k: 'sinal', t: TX('Sinalização'), tipo: 'txt',
-      fmt: v => `<span class="tag al">${esc(v)}</span>` },
-  ], rowsSinal, { limite: 15,
-    csv: { bloco: 'geografia', nome: TX('IES com sinalização no e-MEC'),
-           cols: [{ k: 'co', t: 'CO_IES' }, { k: 'ies', t: 'IES' },
-                  { k: 'grupo', t: TX('Grupo') }, { k: 'uf', t: 'UF' },
-                  { k: 'sinal', t: TX('Sinalização') }] } });
-
-  const emGrupo = rowsSinal.filter(r => !r.grupo.startsWith('Independentes')).length;
-  $('#ge-sinal-nota').textContent = TX(
-    '{t} IES com restrição vigente, das quais {g} pertencem a algum grupo mapeado — as 15 ' +
-    'primeiras na tela, todas no Excel. Ficam de fora as sinalizações que não são restrição, ' +
-    'como "Unificação de Mantidas" e "Credenciamento Prévio", que são as duas mais numerosas ' +
-    'e listá-las aqui faria o quadro parecer pior do que é.',
-    { t: n(rowsSinal.length), g: n(emGrupo) });
+  $('#ge-qual-nota').innerHTML = TX(
+    '<strong>IGC médio</strong> trata cada IES igual, do braço de 300 alunos ao de 300 mil. ' +
+    '<strong>IGC do aluno médio</strong> pondera pela matrícula de {a} e é a nota que a base ' +
+    'do grupo de fato recebe — quando ele fica abaixo do IGC médio, a base está concentrada ' +
+    'nas mantidas pior avaliadas, que é risco regulatório e não detalhe de vaidade. ' +
+    '<strong>% da base em IES 4 ou 5</strong> é a fatia de alunos em instituição bem avaliada. ' +
+    '<strong>CI</strong> é o Conceito Institucional (avaliação in loco da instituição) e ' +
+    '<strong>CI-EaD</strong> o equivalente para a oferta a distância — este último importa ' +
+    'mais aqui do que o próprio IGC para quem opera metade da base em EAD. Todas as colunas ' +
+    'ignoram IES sem nota, e a última mostra quantas ficaram de fora.',
+    { a: ano });
 }
 
 export async function geography(f) {
   const ano = f.ano;
   const det = await carregarAno(ano);
   $('#ge-parcial').innerHTML = det.parcial
-    ? `<div class="aviso">${TX('A liderança por praça exige o detalhe por IES × município de ' +
+    ? `<div class="aviso">${TX('O mapa por praça exige o detalhe por IES × município de ' +
        '{a}, não incluído nesta versão de arquivo único — só o ano mais recente vem embutido. ' +
        'Rode <code>python run_dashboard.py</code> para a série completa.', { a: ano })}</div>` : '';
 
@@ -838,7 +868,6 @@ export async function geography(f) {
     const ix = im.ies[i], mx = im.mun[i];
     if (ix < 0 || mx < 0) continue;
     if (f.mod && im.mod[i] !== +f.mod) continue;
-    if (f.rede && redeIES(ix) !== +f.rede) continue;
     const v = im.qt_mat[i], k = gr(ix), sg = ufMun(mx);
     tot += v;
     let a = uf.get(sg);
@@ -851,27 +880,30 @@ export async function geography(f) {
     m.g.set(k, (m.g.get(k) || 0) + v);
   }
 
-  /* Grupo → município → {pres, ead, mat}. É a estrutura que os mapas de bolha pedem, e
-   * não dá para derivar de `mun` acima: lá o `g` guarda só o total por grupo, sem separar
-   * modalidade, que é justamente o corte da seção "pegada física × digital".
+  /* Grupo → município → {pres, ead, mat, ies:Set}. É a estrutura que o mapa e o painel de
+   * praça pedem, e não dá para derivar de `mun` acima: lá o `g` guarda só o total por
+   * grupo, sem separar modalidade nem saber QUANTAS instituições do grupo estão ali.
+   *
+   * ⚠️ O `ies` é um Set de CO_IES, e é o mais perto de "unidades na praça" que o Censo
+   * permite: não existe identificador de campus (§3.4 do hand-off), então duas unidades da
+   * mesma IES na mesma cidade contam como uma. É PISO, e a nota da tela diz isso.
    *
    * ⚠️ Este laço IGNORA `f.mod` de propósito. A comparação presencial × EAD deixaria de
    * existir se o filtro global de modalidade a zerasse — com "EAD" selecionado, o mapa do
-   * presencial ficaria vazio e pareceria que o grupo não tem campus. O filtro de rede
-   * continua valendo. A tela diz isso na nota. */
+   * presencial ficaria vazio e pareceria que o grupo não tem campus. */
   const porGrupoMun = new Map();
   for (let i = 0; i < im.n; i++) {
     const ix = im.ies[i], mx = im.mun[i];
     if (ix < 0 || mx < 0) continue;
-    if (f.rede && redeIES(ix) !== +f.rede) continue;
     const k = gr(ix);
     if (!k) continue;
     let g = porGrupoMun.get(k);
     if (!g) { g = new Map(); porGrupoMun.set(k, g); }
     let o = g.get(mx);
-    if (!o) { o = { pres: 0, ead: 0, mat: 0 }; g.set(mx, o); }
+    if (!o) { o = { pres: 0, ead: 0, mat: 0, ies: new Set() }; g.set(mx, o); }
     const v2 = im.qt_mat[i];
     o.mat += v2;
+    if (v2 > 0) o.ies.add(ix);
     if (im.mod[i] === 1) o.pres += v2; else o.ead += v2;
   }
 
@@ -903,21 +935,26 @@ export async function geography(f) {
           sub: TX('de {q} unidades da federação', { q: uf.size }) }),
   ].join('');
 
-  // a malha precisa estar registrada ANTES do primeiro mapa da tela — os de bolha vêm
-  // primeiro agora, então o registro subiu junto
+  // a malha precisa estar registrada ANTES do primeiro mapa da tela
   if (window.__ufGeo && !window.__mapaReg) {
     echarts.registerMap('BR', window.__ufGeo);
     window.__mapaReg = true;
   }
 
-  /* ══════════════════════════════════════════ CAPILARIDADE ═══════════════ */
+  /* ══════════════════════════════════════ MAPA INTERATIVO ═══════════════════
+   * A peça central do bloco, a pedido do usuário em 18/08/2026: um mapa em que o
+   * investidor escolhe UF e município e lê, ali mesmo, quantas instituições e quantos
+   * alunos cada grupo selecionado tem naquela praça — o overlap direto, no começo da
+   * página, sem descer até uma seção de "abrir uma praça" lá embaixo.
+   *
+   * Três coisas que ele substitui, e que saíram: o filtro de modalidade do mapa (os dois
+   * mapas de pegada logo abaixo já separam presencial de EAD), a barra de "alcance
+   * comparado" ao lado e a seção inteira de "abrir uma praça". */
   chipsGeo($('#ge-chips'), () => geography(window.__filtros));
   const selG = D.gruposLista.filter(k => selGeo.has(k));
   const latlon = mx => [D.dim.mun.lon[mx], D.dim.mun.lat[mx]];
   const temGeo = mx => D.dim.mun.lat[mx] != null && D.dim.mun.lon[mx] != null;
 
-  /* Pontos de um grupo, opcionalmente só de uma modalidade. `campo` é 'mat', 'pres' ou
-   * 'ead' — a mesma função serve ao mapa de capilaridade e aos dois de pegada. */
   const pontosDe = (k, campo) => {
     const g = porGrupoMun.get(k);
     if (!g) return [];
@@ -931,96 +968,220 @@ export async function geography(f) {
     return out;
   };
 
-  /* UM mapa grande com seletor de grupo.
-   *
-   * ⚠️ Já foram tentadas as duas alternativas, nesta ordem: (1) todos os grupos
-   * sobrepostos num mapa só — ~9.000 bolhas translúcidas empilhadas, ilegível; (2) oito
-   * pequenos múltiplos de 210px — apertado demais para ler. Hoje é um mapa em tamanho de
-   * leitura e o usuário escolhe o grupo.
-   *
-   * A comparação entre grupos continua honesta porque `maxCap` é calculado sobre TODOS os
-   * selecionados, não sobre o grupo exibido: trocar de grupo não reescala as bolhas, e uma
-   * bolha do mesmo tamanho significa o mesmo número de alunos em qualquer grupo. */
-  const modoCap = opcoes($('#ge-cap-mod'),
-    [{ v: 'mat', t: TX('Todas') }, { v: 'pres', t: TX('Só presencial') },
-     { v: 'ead', t: TX('Só EAD') }],
-    () => geography(window.__filtros)) || 'mat';
-  const grupoCap = opcoes($('#ge-cap-grupo'),
-    selG.map(k => ({ v: k, t: nomeGrupo(k) })),
-    () => geography(window.__filtros)) || selG[0];
-
-  const maxCap = Math.max(1, ...selG.flatMap(k => pontosDe(k, modoCap).map(p => p[2])));
-  const ptsCap = grupoCap ? pontosDe(grupoCap, modoCap) : [];
-  mapaBolhas($('#ge-cap'), [{ nome: nomeGrupo(grupoCap), cor: corGrupoK(grupoCap,
-                              D.gruposLista.indexOf(grupoCap)), pontos: ptsCap }],
-             { max: maxCap });
-  $('#ge-cap-tit').textContent = TX('Capilaridade — {g}', { g: nomeGrupo(grupoCap) });
-  $('#ge-cap-resumo').textContent = TX('{q} municípios · {v} alunos', {
-    q: n(ptsCap.length), v: compacto(ptsCap.reduce((s, p) => s + p[2], 0)) });
-
-  /* Ranking ao lado do mapa. Serve a dois propósitos: dá contexto ao mapa (1.703
-   * municípios é muito ou pouco?) e ocupa a faixa que sobrava — o Brasil é quase quadrado
-   * e o cartão é largo, então um mapa sozinho deixava um vazio grande dos dois lados. */
-  const rankCap = selG.map(k => {
-    const pts = pontosDe(k, modoCap);
-    return { grupo: nomeGrupo(k), _raw: k, munic: pts.length,
-             mat: pts.reduce((s, p) => s + p[2], 0), _on: k === grupoCap };
-  }).sort((a, b) => b.munic - a.munic);
-  tabela($('#ge-cap-rank'), [
-    { k: 'grupo', t: TX('Grupo'), tipo: 'txt', fmt: (v, r) =>
-        `<span style="display:inline-flex;align-items:center;gap:7px;${r._on ? 'font-weight:700' : ''}">
-           <span style="width:8px;height:8px;border-radius:50%;background:${corGrupoK(r._raw)}"></span>
-           ${esc(v)}${r._on ? ' ◂' : ''}</span>` },
-    // `barra` sem `fmt` rotula com pct() e sairia "1.703,0%"; aqui o valor é CONTAGEM.
-    // A barra em si já escala pelo maior da coluna, que é o que se quer comparar.
-    { k: 'munic', t: TX('Municípios'), tipo: 'barra', fmt: v => n(v) },
-    { k: 'mat', t: TX('Alunos'), tipo: 'num', fmt: v => compacto(v) },
-  ], rankCap, { ordem: 'munic' });
-
-  /* ⚠️ Presença = ter ALUNO no município, não ter linha no cubo.
-   *
-   * `ies_mun` tem 1.044 linhas com `qt_mat = 0` — município onde a IES tem oferta
-   * registrada e nenhum aluno matriculado. Contá-las inflava a Cogna de 1.703 para 1.986
-   * municípios e, pior, fazia a sobreposição competitiva tratar praça vazia como disputa.
-   * O mapa já filtrava (`v <= 0`) e a tabela não, e foi a divergência entre os dois que
-   * denunciou o problema. Agora os dois usam o mesmo critério. */
   const munDe = k => {
     const s = new Set();
     for (const [mx, o] of (porGrupoMun.get(k) || new Map())) if (o.mat > 0) s.add(mx);
     return s;
   };
-  const capLinhas = selG.map(k => {
-    const g = porGrupoMun.get(k) || new Map();
-    let nPres = 0, nEad = 0, nMun = 0, mat = 0;
-    for (const o of g.values()) {
-      if (o.mat <= 0) continue;
-      nMun++;
-      if (o.pres > 0) nPres++;
-      if (o.ead > 0) nEad++;
-      mat += o.mat;
-    }
-    return {
-      grupo: nomeGrupo(k), _raw: k, munic: nMun, pres: nPres, ead: nEad, mat,
-      // quanto do alcance NÃO tem estrutura física por trás
-      leve: nMun ? 100 * (nMun - nPres) / nMun : 0,
-      porMun: nMun ? mat / nMun : 0,
-    };
-  }).sort((a, b) => b.munic - a.munic);
 
-  $('#ge-cap-nota').textContent = TX(
-    'A bolha é o número de ALUNOS no município — não o número de campi nem de polos —, ' +
-    'dimensionada pela raiz, porque em escala linear São Paulo apagaria todo o interior, que ' +
-    'é o que interessa aqui. A posição é o centroide do município ({q} dos {t} têm ' +
-    'coordenada), não o endereço de nenhuma unidade: o Censo dá o município de oferta, e não ' +
-    'a rua. No presencial o município é onde o curso é dado; no EAD, onde está o polo.',
+  // quantos dos grupos escolhidos estão em cada município — a base do overlap
+  const presencaPorMun = new Map();
+  selG.forEach(k => munDe(k).forEach(mx => {
+    if (!presencaPorMun.has(mx)) presencaPorMun.set(mx, new Set());
+    presencaPorMun.get(mx).add(k);
+  }));
+
+  // ---- seletor de UF e de município ----------------------------------------
+  const ufsOrd = [...uf.keys()].sort();
+  opcoes($('#ge-uf-sel'),
+    [{ v: '', t: TX('Brasil — todas as UFs') }, ...ufsOrd.map(u => ({ v: u, t: u }))],
+    () => { geoUF = $('#ge-uf-sel').value; geoMun = null; geography(window.__filtros); });
+  $('#ge-uf-sel').value = geoUF;
+
+  const munDaUF = [...mun.entries()]
+    .filter(([ix]) => !geoUF || ufMun(ix) === geoUF)
+    .sort((a, b) => b[1].mat - a[1].mat);
+  opcoes($('#ge-mun-sel'),
+    [{ v: '', t: TX('Nenhum — ver a UF inteira') },
+     ...munDaUF.slice(0, 400).map(([ix, m]) => ({ v: String(ix), t: `${nomeMun(ix)} — ${compacto(m.mat)}` }))],
+    () => { const v = $('#ge-mun-sel').value; geoMun = v === '' ? null : +v; geography(window.__filtros); });
+  $('#ge-mun-sel').value = geoMun == null ? '' : String(geoMun);
+  if (geoMun != null && $('#ge-mun-sel').value !== String(geoMun)) {
+    // o município escolhido no mapa pode estar fora dos 400 maiores da lista
+    $('#ge-mun-sel').insertAdjacentHTML('afterbegin',
+      `<option value="${geoMun}">${esc(nomeMun(geoMun))}</option>`);
+    $('#ge-mun-sel').value = String(geoMun);
+  }
+
+  /* Bolhas: uma por município alcançado pelos selecionados, colorida por QUANTOS deles
+   * estão ali. É a sobreposição competitiva lida direto no mapa — o que antes era um mapa
+   * separado três seções abaixo. */
+  const FAIXAS = [
+    { rot: TX('Só um grupo'), cor: '#8FB4D9', teste: q => q === 1 },
+    { rot: TX('Dois grupos'), cor: '#EC7000', teste: q => q === 2 },
+    { rot: TX('Três ou mais'), cor: '#A34B00', teste: q => q >= 3 },
+  ];
+  const ptsPorFaixa = FAIXAS.map(fx => [...presencaPorMun.entries()]
+    .filter(([mx, s]) => fx.teste(s.size) && temGeo(mx))
+    .map(([mx, s]) => {
+      const [lon, lat] = latlon(mx);
+      const alunos = selG.reduce((acc, k) => acc + (porGrupoMun.get(k)?.get(mx)?.mat || 0), 0);
+      return [lon, lat, alunos, nomeMun(mx), mx, s.size];
+    }));
+
+  const maxInt = Math.max(1, ...ptsPorFaixa.flat().map(p => p[2]));
+  const raioInt = v => Math.max(3.5, Math.min(34, 34 * Math.sqrt(v / maxInt)));
+  const bbox = geoUF ? enquadra(bboxUF(geoUF), $('#ge-mapa-int')) : null;
+
+  const mapaInt = chart($('#ge-mapa-int'), {
+    textStyle: { fontFamily: '-apple-system, "Segoe UI", Roboto, sans-serif' },
+    legend: { type: 'plain', top: 0, left: 0, itemWidth: 10, itemHeight: 10, itemGap: 16,
+              icon: 'circle', data: FAIXAS.map(x => x.rot),
+              textStyle: { fontSize: 11.5, color: '#4A4A4A' } },
+    tooltip: {
+      trigger: 'item', backgroundColor: '#fff', borderColor: '#D2D4D8', borderWidth: 1,
+      padding: [9, 12], textStyle: { color: '#1A1A1A', fontSize: 12.5 },
+      extraCssText: 'box-shadow:0 4px 14px rgba(0,0,0,.10);border-radius:8px',
+      formatter: p => {
+        const mx = p.data[4];
+        const linhas = selG.map(k => {
+          const o = porGrupoMun.get(k)?.get(mx);
+          return o && o.mat > 0
+            ? `<span style="display:inline-block;width:8px;height:8px;border-radius:2px;
+                 background:${corGrupoK(k)}"></span> ${esc(nomeGrupo(k))}: <strong>${n(o.mat)}</strong>`
+            : null;
+        }).filter(Boolean);
+        return `<strong>${esc(p.data[3])} — ${esc(ufMun(mx))}</strong><br>` +
+               `<span style="color:#8C8C8C">${n(mun.get(mx)?.mat || 0)} ${TX('alunos na praça')} · ` +
+               `${p.data[5]} ${TX('dos selecionados')}</span><br>${linhas.join('<br>')}` +
+               `<br><span style="color:#8C8C8C;font-size:11.5px">${TX('clique para abrir a praça')}</span>`;
+      },
+    },
+    /* ⚠️ `aspectScale: 1` conserta o mapa "esticado" que o usuário apontou. O padrão do
+     * ECharts é 0.75, que comprime a longitude — o Brasil, que é quase quadrado em graus
+     * (39,2° de largura por 39,0° de altura), saía espremido e alto. Com 1 a proporção
+     * fica geometricamente neutra.
+     *
+     * `roam` liga arrastar e dar zoom com a roda, que é o comportamento de mapa que o
+     * usuário pediu; `boundingCoords` faz o enquadramento pular para a UF escolhida em vez
+     * de obrigar a garimpar no zoom. */
+    geo: {
+      map: 'BR', roam: true, aspectScale: 1, zoom: 1,
+      scaleLimit: { min: 1, max: 14 },
+      top: 40, bottom: 8,
+      ...(bbox ? { boundingCoords: bbox } : {}),
+      itemStyle: { areaColor: '#F5F6F7', borderColor: '#D8DBDF', borderWidth: .8 },
+      emphasis: { itemStyle: { areaColor: '#EDEFF1' }, label: { show: false } },
+      select: { disabled: true },
+    },
+    series: FAIXAS.map((fx, i) => ({
+      name: fx.rot, type: 'scatter', coordinateSystem: 'geo',
+      data: ptsPorFaixa[i], symbolSize: d => raioInt(d[2]),
+      itemStyle: { color: fx.cor, opacity: .62, borderColor: '#fff', borderWidth: .5 },
+      emphasis: { itemStyle: { opacity: 1 } },
+      /* Rótulo de município só quando há UF escolhida: no Brasil inteiro seriam milhares
+       * de nomes sobrepostos. Escolhida a UF, o mapa já está ampliado e os nomes são
+       * justamente o que torna a leitura parecida com um mapa de navegação. */
+      /* ⚠️ Rótulo só dos municípios DO ESTADO escolhido. Enquadrar uma UF deixa os
+       * vizinhos no quadro — é mapa, não recorte —, e rotular todo mundo fazia "Fortaleza"
+       * aparecer com destaque numa tela cujo título diz PE. O vizinho continua visível como
+       * bolha, que é o contexto certo; o nome fica para quem é do estado em foco. */
+      label: geoUF ? {
+        show: true, position: 'right', fontSize: 10.5, color: '#4A4A4A',
+        formatter: p => (ufMun(p.data[4]) === geoUF && p.data[2] >= 300 ? p.data[3] : ''),
+      } : { show: false },
+      labelLayout: { hideOverlap: true },
+      selectedMode: false,
+    })),
+  });
+  if (mapaInt) {
+    mapaInt.off('click');
+    mapaInt.on('click', p => {
+      if (!p.data || p.data[4] == null) return;
+      geoMun = p.data[4];
+      geoUF = ufMun(geoMun) || '';
+      geography(window.__filtros);
+    });
+  }
+
+  // ---- painel da praça -----------------------------------------------------
+  const escopo = geoMun != null ? mun.get(geoMun)
+    : geoUF ? uf.get(geoUF) : null;
+  const nomeEscopo = geoMun != null ? `${nomeMun(geoMun)} — ${ufMun(geoMun)}`
+    : geoUF || TX('Brasil');
+
+  /* Agrega os grupos no escopo escolhido. Um município usa `porGrupoMun` direto; uma UF
+   * inteira soma os municípios dela — a mesma fonte, para os dois nunca discordarem. */
+  const noEscopo = k => {
+    const g = porGrupoMun.get(k);
+    if (!g) return { pres: 0, ead: 0, mat: 0, ies: new Set(), munic: 0 };
+    if (geoMun != null) {
+      const o = g.get(geoMun);
+      return o ? { ...o, munic: o.mat > 0 ? 1 : 0 } : { pres: 0, ead: 0, mat: 0, ies: new Set(), munic: 0 };
+    }
+    const acc = { pres: 0, ead: 0, mat: 0, ies: new Set(), munic: 0 };
+    for (const [mx, o] of g) {
+      if (geoUF && ufMun(mx) !== geoUF) continue;
+      if (o.mat <= 0) continue;
+      acc.pres += o.pres; acc.ead += o.ead; acc.mat += o.mat; acc.munic++;
+      o.ies.forEach(v => acc.ies.add(v));
+    }
+    return acc;
+  };
+
+  const matEscopo = escopo ? escopo.mat : tot;
+  const praca = selG.map(k => {
+    const o = noEscopo(k);
+    return { grupo: nomeGrupo(k), _raw: k, ies: o.ies.size, munic: o.munic,
+             pres: o.pres, ead: o.ead, mat: o.mat,
+             share: matEscopo ? 100 * o.mat / matEscopo : 0 };
+  }).sort((a, b) => b.mat - a.mat);
+
+  const presentes = praca.filter(r => r.mat > 0);
+  const somaSel = presentes.reduce((s, r) => s + r.mat, 0);
+  const Lp = escopo ? lider(escopo) : (liderNac ? { lider: liderNac[0], matLider: liderNac[1] } : { lider: null, matLider: 0 });
+
+  $('#ge-praca-tit').textContent = TX('Quem está em {m}', { m: nomeEscopo });
+  $('#ge-praca-kpis').innerHTML = `<div class="praca-kpis">
+    <div class="praca-kpi"><div class="rot">${TX('Alunos na praça')}</div>
+      <div class="val">${compacto(matEscopo)}</div>
+      <div class="sub">${pct(matEscopo ? 100 * (escopo ? escopo.pres : 0) / matEscopo : 0)} ${TX('presencial')}</div></div>
+    <div class="praca-kpi"><div class="rot">${TX('Dos selecionados')}</div>
+      <div class="val">${n(presentes.length)}<span style="font-size:13px;color:var(--ink-3)">/${selG.length}</span></div>
+      <div class="sub">${TX('presentes aqui')}</div></div>
+    <div class="praca-kpi"><div class="rot">${TX('Peso do conjunto')}</div>
+      <div class="val">${pct(matEscopo ? 100 * somaSel / matEscopo : 0)}</div>
+      <div class="sub">${compacto(somaSel)} ${TX('alunos')}</div></div>
+    <div class="praca-kpi"><div class="rot">${TX('Líder da praça')}</div>
+      <div class="val" style="font-size:15px">${Lp.lider ? esc(nomeGrupo(Lp.lider)) : '—'}</div>
+      <div class="sub">${pct(matEscopo ? 100 * Lp.matLider / matEscopo : 0)} ${TX('da praça')}</div></div>
+  </div>`;
+
+  const colsPraca = [
+    { k: 'grupo', t: TX('Grupo'), tipo: 'txt', fmt: (v, r) =>
+        `<span style="display:inline-flex;align-items:center;gap:7px;${r.mat ? '' : 'opacity:.45'}">
+           <span style="width:8px;height:8px;border-radius:2px;background:${corGrupoK(r._raw)}"></span>
+           ${esc(v)}</span>` },
+    { k: 'ies', t: TX('IES na praça'), tipo: 'num', fmt: v => v ? n(v) : '—' },
+    ...(geoMun == null ? [{ k: 'munic', t: TX('Municípios'), tipo: 'num', fmt: v => v ? n(v) : '—' }] : []),
+    { k: 'pres', t: TX('Presencial'), tipo: 'num', fmt: v => v ? n(v) : '—' },
+    { k: 'ead', t: TX('EAD'), tipo: 'num', fmt: v => v ? n(v) : '—' },
+    { k: 'mat', t: TX('Alunos'), tipo: 'num', fmt: v => v ? n(v) : '—' },
+    { k: 'share', t: TX('Share na praça'), tipo: 'barra' },
+  ];
+  tabela($('#ge-praca-tab'), colsPraca, praca, { ordem: 'mat',
+    csv: { bloco: 'geografia', nome: TX('Overlap em {m}', { m: nomeEscopo }) } });
+
+  $('#ge-praca-nota').innerHTML = TX(
+    'Denominador: as {t} matrículas de {m} em {a}. Linha apagada é grupo sem aluno aqui — ' +
+    'fica na lista de propósito, porque ausência numa praça é informação competitiva. ' +
+    '<strong>IES na praça</strong> é o número de instituições distintas do grupo com aluno ' +
+    'no recorte, e é PISO de unidades: o Censo não tem identificador de campus, então dois ' +
+    'campi da mesma IES na mesma cidade contam como um. A cor da bolha no mapa é quantos dos ' +
+    'grupos selecionados dividem aquele município.',
+    { t: n(matEscopo), m: nomeEscopo, a: ano });
+
+  $('#ge-mapa-nota').textContent = TX(
+    'Arraste para navegar e use a roda para aproximar; escolher a UF enquadra o estado e liga ' +
+    'os nomes dos municípios. Clique numa bolha para abrir a praça no painel ao lado. A bolha ' +
+    'é o número de ALUNOS dos grupos selecionados no município, dimensionada pela raiz — em ' +
+    'escala linear São Paulo apagaria todo o interior, que é o que interessa aqui. A posição é ' +
+    'o centroide do município ({q} dos {t} têm coordenada), não o endereço de nenhuma unidade: ' +
+    'o Censo dá o município de oferta, não a rua. No presencial é onde o curso é dado; no EAD, ' +
+    'onde está o polo.',
     { q: n(D.dim.mun.lat.filter(v => v != null).length), t: n(D.dim.mun.lat.length) });
 
   /* ═══════════════════════════════ PEGADA FÍSICA × DIGITAL ═══════════════ */
-  /* ⚠️ Aqui os selecionados entram SOMADOS, numa cor só por mapa — não uma série por
-   * grupo. A pergunta desta seção não é "qual grupo", é "quanto do alcance tem estrutura
-   * física por trás"; sete cores sobrepostas responderiam pior e repetiriam o painel de
-   * cima. As cores são as do projeto: presencial = azul (estrutura instalada),
-   * EAD = laranja (o que cresce). Quem quiser abrir por grupo tem a tabela abaixo. */
   const uniao = campo => {
     const acc = new Map();
     selG.forEach(k => {
@@ -1034,11 +1195,7 @@ export async function geography(f) {
     });
   };
   const ptsFis = uniao('pres'), ptsDig = uniao('ead');
-  // escala comum aos dois mapas: e o contraste entre eles e o proprio ponto da secao
   const maxFD = Math.max(1, ...ptsFis.map(p => p[2]), ...ptsDig.map(p => p[2]));
-  // ⚠️ O título diz "municípios COM presencial", não "unidades": o Censo não tem
-  // identificador de campus nem de polo, então dois campi na mesma cidade contam como um.
-  // É piso do número de unidades, não o número — ver a nota da seção.
   $('#ge-fis-tit').textContent = TX('Presencial — {q} municípios com campus',
     { q: n(ptsFis.length) });
   $('#ge-dig-tit').textContent = TX('EAD — {q} municípios com polo', { q: n(ptsDig.length) });
@@ -1047,61 +1204,59 @@ export async function geography(f) {
   mapaBolhas($('#ge-dig'), [{ nome: TX('EAD'), cor: COR_EAD, pontos: ptsDig }],
              { max: maxFD });
 
-  tabela($('#ge-fisdig'), [
-    { k: 'grupo', t: TX('Grupo'), tipo: 'txt', fmt: (v, r) =>
-        `<span style="display:inline-flex;align-items:center;gap:8px"><span style="width:9px;
-         height:9px;border-radius:2px;background:${corGrupoK(r._raw)}"></span>${esc(v)}</span>` },
-    { k: 'munic', t: TX('Municípios no total'), tipo: 'num' },
-    { k: 'pres', t: TX('Com presencial'), tipo: 'num' },
-    { k: 'ead', t: TX('Com EAD'), tipo: 'num' },
-    { k: 'leve', t: TX('% sem estrutura física'), tipo: 'pct' },
-    { k: 'porMun', t: TX('Alunos por município'), tipo: 'num', fmt: v => n(Math.round(v)) },
-  ], capLinhas, { ordem: 'munic',
-    csv: { bloco: 'geografia', nome: TX('Capilaridade por grupo') } });
+  /* ⚠️ Densidade, não contagem. O gráfico responde "quantos alunos cabem numa praça de
+   * cada modalidade", que é a diferença econômica entre as duas operações: um campus
+   * concentra milhares de alunos numa cidade, um polo de EAD atende dezenas ou centenas em
+   * muitas. Barras lado a lado, não empilhadas — são duas médias independentes, e somá-las
+   * não significaria nada. */
+  const dens = selG.map(k => {
+    const g = porGrupoMun.get(k) || new Map();
+    let mPres = 0, mEad = 0, aPres = 0, aEad = 0, munic = 0, mat = 0;
+    for (const o of g.values()) {
+      if (o.mat <= 0) continue;
+      munic++; mat += o.mat;
+      if (o.pres > 0) { mPres++; aPres += o.pres; }
+      if (o.ead > 0) { mEad++; aEad += o.ead; }
+    }
+    return { grupo: nomeGrupo(k), _raw: k, munic, mat,
+             porPres: mPres ? aPres / mPres : 0, porEad: mEad ? aEad / mEad : 0,
+             munPres: mPres, munEad: mEad };
+  }).sort((a, b) => b.porPres - a.porPres);
 
-  $('#ge-fisdig-nota').textContent = TX(
-    'A bolha é sempre ALUNO, nunca unidade: no presencial, matrículas no município onde o ' +
-    'curso é dado; no EAD, matrículas no município do polo — e o polo é mesmo onde o aluno ' +
-    'está, não a sede (a Unopar, sede no PR, distribui seus alunos por 27 UFs, e o PR fica ' +
-    'com 5%). A CONTAGEM de municípios é proxy de campi e de polos, e é um PISO: o Censo não ' +
-    'traz identificador de campus nem de polo, então dois campi na mesma cidade contam como ' +
-    'um. Estes dois mapas ignoram o filtro de modalidade de propósito — com "EAD" ' +
-    'selecionado, o mapa do presencial ficaria vazio e pareceria que o grupo não tem campus. ' +
-    'O filtro de rede continua valendo.');
+  chart($('#ge-dens'), {
+    ...baseChart(),
+    legend: { ...baseChart().legend, data: [T_PRES(), T_EAD()] },
+    grid: { left: 8, right: 16, top: 30, bottom: 6, containLabel: true },
+    xAxis: { ...baseChart().xAxis, data: dens.map(r => r.grupo),
+             axisLabel: { fontSize: 10.5, color: '#8C8C8C', rotate: 28, interval: 0 } },
+    yAxis: { ...baseChart().yAxis,
+             axisLabel: { fontSize: 11.5, color: '#8C8C8C', formatter: v => compacto(v) } },
+    series: [
+      { name: T_PRES(), type: 'bar', barMaxWidth: 22, itemStyle: { color: COR_PRES },
+        data: dens.map(r => Math.round(r.porPres)) },
+      { name: T_EAD(), type: 'bar', barMaxWidth: 22, itemStyle: { color: COR_EAD },
+        data: dens.map(r => Math.round(r.porEad)) },
+    ],
+    tooltip: { ...baseChart().tooltip, valueFormatter: v => n(v) },
+  });
+  registrarCSV('geografia', TX('Alunos por município'),
+    [{ k: 'grupo', t: TX('Grupo') }, { k: 'munic', t: TX('Municípios') },
+     { k: 'munPres', t: TX('Com presencial') }, { k: 'munEad', t: TX('Com EAD') },
+     { k: 'porPres', t: TX('Alunos por município — presencial') },
+     { k: 'porEad', t: TX('Alunos por município — EAD') }],
+    dens.map(r => ({ grupo: r.grupo, munic: r.munic, munPres: r.munPres, munEad: r.munEad,
+                     porPres: Math.round(r.porPres), porEad: Math.round(r.porEad) })));
+
+  $('#ge-dens-nota').textContent = TX(
+    'Alunos ÷ municípios em que o grupo tem aquela modalidade — densidade por praça, não ' +
+    'total. É a diferença econômica entre as duas operações: o campus concentra muitos alunos ' +
+    'em poucas cidades e o polo espalha poucos por muitas. As barras não se somam: são duas ' +
+    'médias independentes, cada uma com o próprio denominador. Estes dois mapas e este ' +
+    'gráfico ignoram o filtro de modalidade de propósito — com "EAD" selecionado, o mapa do ' +
+    'presencial ficaria vazio e pareceria que o grupo não tem campus.');
 
   /* ═════════════════════════════ SOBREPOSIÇÃO COMPETITIVA ═══════════════ */
-  // quantos dos grupos escolhidos estão em cada município
-  const presencaPorMun = new Map();
-  selG.forEach(k => munDe(k).forEach(mx => {
-    if (!presencaPorMun.has(mx)) presencaPorMun.set(mx, new Set());
-    presencaPorMun.get(mx).add(k);
-  }));
-  const FAIXAS = [
-    { rot: TX('Só um grupo'), cor: '#8FB4D9', teste: q => q === 1 },
-    { rot: TX('Dois grupos'), cor: '#EC7000', teste: q => q === 2 },
-    { rot: TX('Três ou mais'), cor: '#A34B00', teste: q => q >= 3 },
-  ];
-  const sobSeries = FAIXAS.map(fx => ({
-    nome: fx.rot, cor: fx.cor,
-    pontos: [...presencaPorMun.entries()]
-      .filter(([mx, s]) => fx.teste(s.size) && temGeo(mx))
-      .map(([mx, s]) => {
-        const [lon, lat] = latlon(mx);
-        const alunos = selG.reduce((acc, k) => acc + (porGrupoMun.get(k)?.get(mx)?.mat || 0), 0);
-        return [lon, lat, alunos, `${nomeMun(mx)} — ${ufMun(mx)} · ${s.size} ${TX('grupos')}`];
-      }),
-  }));
-  $('#ge-sob-tit').textContent = TX('Onde os {q} selecionados se cruzam', { q: selG.length });
-  mapaBolhas($('#ge-sob'), sobSeries, { opacidade: .55 });
-
   const disputados = [...presencaPorMun.values()].filter(s => s.size > 1).length;
-  $('#ge-sob-nota').textContent = TX(
-    'Dos {t} municípios alcançados por pelo menos um dos selecionados, {d} têm mais de um ' +
-    'deles presente — {p} do território coberto. Presença aqui é ter ao menos um aluno no ' +
-    'município, em qualquer modalidade; não mede quem é mais forte, mede onde há disputa.',
-    { t: n(presencaPorMun.size), d: n(disputados),
-      p: pct(presencaPorMun.size ? 100 * disputados / presencaPorMun.size : 0) });
-
   const exclLinhas = selG.map(k => {
     const meus = munDe(k);
     let so = 0;
@@ -1111,287 +1266,86 @@ export async function geography(f) {
              pctExcl: meus.size ? 100 * so / meus.size : 0 };
   }).sort((a, b) => b.exclusivo - a.exclusivo);
   tabela($('#ge-excl'), [
-    { k: 'grupo', t: TX('Grupo'), tipo: 'txt' },
+    { k: 'grupo', t: TX('Grupo'), tipo: 'txt', fmt: (v, r) =>
+        `<span style="display:inline-flex;align-items:center;gap:7px"><span style="width:8px;
+         height:8px;border-radius:2px;background:${corGrupoK(r._raw)}"></span>${esc(v)}</span>` },
+    { k: 'munic', t: TX('Municípios'), tipo: 'num' },
     { k: 'exclusivo', t: TX('Só ele'), tipo: 'num' },
     { k: 'dividido', t: TX('Divide'), tipo: 'num' },
     { k: 'pctExcl', t: TX('% exclusivo'), tipo: 'pct' },
   ], exclLinhas, { ordem: 'exclusivo',
     csv: { bloco: 'geografia', nome: TX('Exclusividade por município') } });
+  $('#ge-excl-nota').textContent = TX(
+    'Dos {t} municípios alcançados por pelo menos um dos selecionados, {d} têm mais de um ' +
+    'deles presente — {p} do território coberto. Presença é ter ao menos um aluno no ' +
+    'município, em qualquer modalidade: não mede quem é mais forte, mede onde há disputa. ' +
+    'Praça exclusiva não é sinônimo de praça boa — costuma ser cidade pequena, e o número ' +
+    'de alunos por município no gráfico acima é o contraponto.',
+    { t: n(presencaPorMun.size), d: n(disputados),
+      p: pct(presencaPorMun.size ? 100 * disputados / presencaPorMun.size : 0) });
 
   /* ══════════════════════════ QUALIDADE E SITUAÇÃO (e-MEC) ══════════════ */
-  await secaoEmec(f, selG);
+  await secaoEmec(f, selG, porGrupoMun);
+}
 
-  const lideres = new Map();
-  const dadosMapa = Object.entries(SG_UF).map(([co, sg]) => {
-    const a = uf.get(sg);
-    if (!a) return { name: co, value: 0, sg, txt: TX('sem oferta') };
-    const L = lider(a);
-    if (L.lider) lideres.set(L.lider, (lideres.get(L.lider) || 0) + 1);
-    const top3 = ranking(a.g).slice(0, 3)
-      .map(([k, v]) => `${esc(nomeGrupo(k))}: ${n(v)} (${pct(100 * v / a.mat)})`).join('<br>');
-    return {
-      name: co, value: L.matLider, sg, grupo: L.lider,
-      itemStyle: { areaColor: L.lider ? corGrupoK(L.lider) : '#EEEFF1' },
-      txt: `<span style="color:#8C8C8C">${TX('{v} matrículas na UF', { v: n(a.mat) })}</span><br>${top3}`,
-    };
-  });
-  chart($('#ge-mapa'), {
-    textStyle: { fontFamily: '-apple-system, "Segoe UI", Roboto, sans-serif' },
-    tooltip: {
-      trigger: 'item', backgroundColor: '#fff', borderColor: '#D2D4D8', borderWidth: 1,
-      padding: [9, 12], textStyle: { color: '#1A1A1A', fontSize: 12.5 },
-      extraCssText: 'box-shadow:0 4px 14px rgba(0,0,0,.10);border-radius:8px',
-      formatter: p => `<strong>${p.data?.sg || ''}</strong>` +
-        (p.data?.grupo ? ` · ${TX('líder')} ${esc(nomeGrupo(p.data.grupo))}` : '') +
-        `<br>${p.data?.txt || ''}`,
-    },
-    series: [{
-      type: 'map', map: 'BR', roam: false, data: dadosMapa,
-      itemStyle: { borderColor: '#fff', borderWidth: .8 },
-      emphasis: { itemStyle: { areaColor: LARANJA }, label: { show: false } },
-      select: { disabled: true },
-    }],
-  });
-  $('#ge-mapa-leg').innerHTML = '<div class="legenda">' +
-    [...lideres.entries()].sort((a, b) => b[1] - a[1]).map(([k, q]) =>
-      `<span><i style="background:${corGrupoK(k)}"></i>${esc(nomeGrupo(k))} <b>${q}</b></span>`).join('') +
-    '</div>';
+/* Ajusta a caixa à PROPORÇÃO DO QUADRO antes de mandá-la para o `boundingCoords`.
+ *
+ * ⚠️ Sem isto o enquadramento CORTA o estado, e foi o que aconteceu com PE: a faixa
+ * continental dele tem 6,6° de largura por 2,2° de altura (3:1) e o cartão é 1,36:1 —
+ * o ECharts ajustou pela altura e deixou Recife fora do quadro, mostrando só o sertão.
+ * Igualando a proporção da caixa à do elemento, sobra margem em vez de corte, qualquer que
+ * seja o critério de ajuste. Como `aspectScale` é 1, um grau de longitude e um de latitude
+ * valem o mesmo em pixel, então a conta é direta.
+ *
+ * Os descontos de 16 e 48 px são as folgas declaradas no `geo` (left/right e top/bottom). */
+function enquadra(bb, el) {
+  if (!bb || !el || !el.clientWidth) return bb;
+  const alvo = Math.max(.2, (el.clientWidth - 16) / Math.max(1, el.clientHeight - 48));
+  const [[x0, y1], [x1, y0]] = bb;
+  const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+  let lon = x1 - x0, lat = y1 - y0;
+  if (lon / lat > alvo) lat = lon / alvo; else lon = lat * alvo;
+  return [[cx - lon / 2, cy + lat / 2], [cx + lon / 2, cy - lat / 2]];
+}
 
-  // -------------------------------------------------- tabela lider por UF
-  const rowsUFL = [...uf.entries()].map(([sg, a]) => {
-    const L = lider(a);
-    return {
-      uf: sg, regiao: TXregiao(a.regiao), mat: a.mat, pres: a.pres, ead: a.ead,
-      pctEad: a.mat ? 100 * a.ead / a.mat : 0, share: tot ? 100 * a.mat / tot : 0,
-      lider: L.lider ? nomeGrupo(L.lider) : '—', _lider: L.lider,
-      matLider: L.matLider, shareLider: a.mat ? 100 * L.matLider / a.mat : 0,
-      vice: L.vice ? nomeGrupo(L.vice) : '—', shareVice: a.mat ? 100 * L.matVice / a.mat : 0,
-      indep: a.mat ? 100 * L.indep / a.mat : 0,
-    };
-  }).sort((a, b) => b.mat - a.mat);
-  const celGrupo = (v, r) => r._lider
-    ? `<span style="display:inline-flex;align-items:center;gap:7px"><span style="width:8px;height:8px;
-       border-radius:2px;background:${corGrupoK(r._lider)}"></span>${esc(v)}</span>` : '—';
-  tabela($('#ge-lider-uf'), [
-    { k: 'uf', t: 'UF', tipo: 'txt' },
-    { k: 'mat', t: TX('Matrículas'), tipo: 'num' },
-    { k: 'lider', t: TX('Líder'), tipo: 'txt', fmt: celGrupo },
-    { k: 'matLider', t: TX('Alunos do líder'), tipo: 'num' },
-    { k: 'shareLider', t: TX('Share do líder'), tipo: 'barra' },
-    { k: 'vice', t: TX('Vice'), tipo: 'txt' },
-    { k: 'shareVice', t: TX('Share vice'), tipo: 'pct' },
-    { k: 'indep', t: TX('% não mapeado'), tipo: 'pct' },
-  ], rowsUFL, { ordem: 'mat',
-    csv: { bloco: 'geografia', nome: TX('Liderança por UF'),
-           cols: [{ k: 'uf', t: 'UF' }, { k: 'regiao', t: TX('Região') },
-                  { k: 'mat', t: TX('Matrículas') }, { k: 'pres', t: TX('Presencial') },
-                  { k: 'ead', t: TX('EAD') }, { k: 'lider', t: TX('Líder') },
-                  { k: 'matLider', t: TX('Alunos do líder') },
-                  { k: 'shareLider', t: TX('Share do líder') }, { k: 'vice', t: TX('Vice') },
-                  { k: 'shareVice', t: TX('Share vice') }, { k: 'indep', t: TX('% não mapeado') }] } });
-
-  // -------------------------------------------------------- abrir uma praca
-  const ufSel = opcoes($('#ge-uf-sel'), rowsUFL.map(r => ({ v: r.uf, t: `${r.uf} — ${r.regiao}` })),
-                       () => geography(window.__filtros)) || rowsUFL[0]?.uf;
-  const aSel = uf.get(ufSel);
-  $('#ge-uf-tit').textContent = TX('Ranking de players em {u}', { u: ufSel });
-  $('#ge-uf-mun-tit').textContent = TX('Maiores municípios de {u}', { u: ufSel });
-  const rowsPl = aSel ? [...aSel.g.entries()].map(([k, v]) => ({
-    grupo: k === 'Independentes' ? TX('Independentes / não mapeado') : nomeGrupo(k), _raw: k,
-    mat: v, share: 100 * v / aSel.mat,
-  })).sort((a, b) => b.mat - a.mat) : [];
-  tabela($('#ge-uf-players'), [
-    { k: 'grupo', t: TX('Grupo'), tipo: 'txt', fmt: (v, r) => r._raw === 'Independentes' ? esc(v)
-        : `<span style="display:inline-flex;align-items:center;gap:7px"><span style="width:8px;height:8px;
-           border-radius:2px;background:${corGrupoK(r._raw)}"></span>${esc(v)}</span>` },
-    { k: 'mat', t: TX('Alunos na UF'), tipo: 'num' },
-    { k: 'share', t: TX('Share na UF'), tipo: 'barra' },
-  ], rowsPl, { ordem: 'mat', limite: 15,
-    csv: { bloco: 'geografia', nome: TX('Players em {u}', { u: ufSel }),
-           cols: [{ k: 'grupo', t: TX('Grupo') }, { k: 'mat', t: TX('Alunos na UF') },
-                  { k: 'share', t: TX('Share na UF') }] } });
-
-  /* ───────────────────── overlap dentro de um município ─────────────────────
-   * O nível mais fino que o Censo permite. Responde "nesta cidade, quem está e com
-   * quanto" — que é a pergunta que a matriz por UF não alcança, porque um estado grande
-   * esconde que os players podem estar em cidades diferentes dentro dele.
+/* Caixa envolvente de uma UF, a partir da malha já carregada. Serve ao `boundingCoords`
+ * do mapa interativo: escolher a UF enquadra o estado em vez de obrigar a garimpar no
+ * zoom. Cacheada porque a malha não muda dentro da sessão. */
+const _bboxCache = new Map();
+function bboxUF(sigla) {
+  if (_bboxCache.has(sigla)) return _bboxCache.get(sigla);
+  const g = window.__ufGeo;
+  if (!g) return null;
+  const co = Object.keys(SG_UF).find(k => SG_UF[k] === sigla);
+  const feat = (g.features || []).find(x => String(x.properties?.codarea) === String(co));
+  if (!feat) return null;
+  /* ⚠️ Só a MAIOR massa contínua do estado entra na caixa. Pernambuco denunciou isto:
+   * Fernando de Noronha é município de PE e fica a 9° de longitude da costa, então a caixa
+   * ingênua do estado ia de −41,4° a −32,4° — o enquadramento de "PE" abria um pedaço do
+   * Nordeste inteiro, com Fortaleza e Natal no quadro e Recife espremida no canto. A ilha
+   * continua no mapa como bolha; ela é que não manda mais no enquadramento.
    *
-   * ⚠️ O seletor de município é repopulado a cada troca de UF. `opcoes()` do ui.js existe
-   * exatamente para isso: repopula quando a lista muda e preserva a escolha se ela ainda
-   * existir — um `<select>` populado "uma vez só" travaria vazio, que é a armadilha nº 4
-   * já paga neste projeto. */
-  const munDaUF = [...mun.entries()]
-    .filter(([ix]) => ufMun(ix) === ufSel)
-    .sort((a, b) => b[1].mat - a[1].mat);
-  const munSelIx = opcoes($('#ge-mun-sel'),
-    munDaUF.map(([ix, m]) => ({ v: String(ix), t: `${nomeMun(ix)} — ${compacto(m.mat)}` })),
-    () => geography(window.__filtros));
-  const mIx = munSelIx != null && munSelIx !== '' ? +munSelIx : (munDaUF[0]?.[0] ?? null);
-  const mDados = mIx != null ? mun.get(mIx) : null;
-
-  if (!mDados) {
-    $('#ge-praca-tit').textContent = TX('Quem está neste município');
-    $('#ge-praca-kpis').innerHTML = '';
-    $('#ge-praca-tab').innerHTML = `<div class="vazio">${TX('Sem dados para esta praça.')}</div>`;
-    $('#ge-praca-nota').textContent = '';
-    chart($('#ge-praca'), { series: [] });
-  } else {
-    const nomeP = `${nomeMun(mIx)} — ${ufSel}`;
-    $('#ge-praca-tit').textContent = TX('Quem está em {m}', { m: nomeP });
-
-    // presencial e EAD separados por grupo, só dos selecionados nos chips
-    const praca = selG.map(k => {
-      const o = porGrupoMun.get(k)?.get(mIx) || { pres: 0, ead: 0, mat: 0 };
-      return { grupo: nomeGrupo(k), _raw: k, pres: o.pres, ead: o.ead, mat: o.mat,
-               share: mDados.mat ? 100 * o.mat / mDados.mat : 0 };
-    }).sort((a, b) => b.mat - a.mat);
-
-    chart($('#ge-praca'), {
-      ...baseChart(),
-      legend: { ...baseChart().legend, data: [T_PRES(), T_EAD()] },
-      grid: { left: 8, right: 60, top: 30, bottom: 6, containLabel: true },
-      xAxis: { type: 'value', splitLine: { lineStyle: { color: '#F2F3F5' } },
-               axisLine: { show: false }, axisTick: { show: false },
-               axisLabel: { fontSize: 11.5, color: '#8C8C8C', formatter: fmtEixoMi } },
-      yAxis: { type: 'category', data: praca.map(r => r.grupo), inverse: true,
-               axisLine: { show: false }, axisTick: { show: false },
-               axisLabel: { fontSize: 12, color: '#4A4A4A' } },
-      series: [
-        { name: T_PRES(), type: 'bar', stack: 'a', barMaxWidth: 24,
-          itemStyle: { color: COR_PRES }, data: praca.map(r => r.pres) },
-        { name: T_EAD(), type: 'bar', stack: 'a', barMaxWidth: 24,
-          itemStyle: { color: COR_EAD }, data: praca.map(r => r.ead),
-          label: { show: true, position: 'right', fontSize: 11, color: '#4A4A4A',
-                   formatter: p => praca[p.dataIndex].mat
-                     ? `${compacto(praca[p.dataIndex].mat)} · ${pct(praca[p.dataIndex].share)}`
-                     : TX('ausente') } },
-      ],
-      tooltip: { ...baseChart().tooltip, valueFormatter: v => n(v) },
-    });
-
-    const presentes = praca.filter(r => r.mat > 0);
-    const somaSel = presentes.reduce((s, r) => s + r.mat, 0);
-    const Lp = lider(mDados);
-    $('#ge-praca-kpis').innerHTML = `<div class="praca-kpis">
-      <div class="praca-kpi"><div class="rot">${TX('Alunos na praça')}</div>
-        <div class="val">${compacto(mDados.mat)}</div>
-        <div class="sub">${pct(mDados.mat ? 100 * mDados.pres / mDados.mat : 0)} ${TX('presencial')}</div></div>
-      <div class="praca-kpi"><div class="rot">${TX('Dos selecionados')}</div>
-        <div class="val">${n(presentes.length)}<span style="font-size:13px;color:var(--ink-3)">/${selG.length}</span></div>
-        <div class="sub">${TX('presentes aqui')}</div></div>
-      <div class="praca-kpi"><div class="rot">${TX('Peso do conjunto')}</div>
-        <div class="val">${pct(mDados.mat ? 100 * somaSel / mDados.mat : 0)}</div>
-        <div class="sub">${compacto(somaSel)} ${TX('alunos')}</div></div>
-      <div class="praca-kpi"><div class="rot">${TX('Líder da praça')}</div>
-        <div class="val" style="font-size:15px">${Lp.lider ? esc(nomeGrupo(Lp.lider)) : '—'}</div>
-        <div class="sub">${pct(mDados.mat ? 100 * Lp.matLider / mDados.mat : 0)} ${TX('da praça')}</div></div>
-    </div>`;
-
-    tabela($('#ge-praca-tab'), [
-      { k: 'grupo', t: TX('Grupo'), tipo: 'txt', fmt: (v, r) =>
-          `<span style="display:inline-flex;align-items:center;gap:7px;${r.mat ? '' : 'opacity:.45'}">
-             <span style="width:8px;height:8px;border-radius:2px;background:${corGrupoK(r._raw)}"></span>
-             ${esc(v)}</span>` },
-      { k: 'mat', t: TX('Alunos'), tipo: 'num', fmt: v => v ? n(v) : '—' },
-      { k: 'share', t: TX('Share na praça'), tipo: 'barra' },
-    ], praca, { ordem: 'mat',
-      csv: { bloco: 'geografia', nome: TX('Overlap em {m}', { m: nomeP }),
-             cols: [{ k: 'grupo', t: TX('Grupo') }, { k: 'pres', t: TX('Presencial') },
-                    { k: 'ead', t: TX('EAD') }, { k: 'mat', t: TX('Alunos') },
-                    { k: 'share', t: TX('Share na praça') }] } });
-
-    $('#ge-praca-nota').textContent = TX(
-      'Denominador: as {t} matrículas de {m} em {a}. Barra vazia é grupo que não tem aluno ' +
-      'nesta cidade — está na lista de propósito, porque ausência numa praça é informação ' +
-      'competitiva. O rótulo do fim da barra traz o total do grupo e a fatia dele na praça.',
-      { t: n(mDados.mat), m: nomeP, a: ano });
-  }
-
-  const munUF = [...mun.entries()].filter(([ix]) => ufMun(ix) === ufSel)
-    .map(([ix, m]) => {
-      const L = lider(m);
-      return { mun: nomeMun(ix), mat: m.mat, pres: m.pres, ead: m.ead,
-               lider: L.lider ? nomeGrupo(L.lider) : '—', _lider: L.lider,
-               shareLider: m.mat ? 100 * L.matLider / m.mat : 0 };
-    }).sort((a, b) => b.mat - a.mat);
-  tabela($('#ge-uf-mun'), [
-    { k: 'mun', t: TX('Município'), tipo: 'txt' },
-    { k: 'mat', t: TX('Matrículas'), tipo: 'num' },
-    { k: 'lider', t: TX('Líder'), tipo: 'txt', fmt: celGrupo },
-    { k: 'shareLider', t: TX('Share do líder'), tipo: 'barra' },
-  ], munUF, { ordem: 'mat', limite: 20,
-    csv: { bloco: 'geografia', nome: TX('Municípios de {u}', { u: ufSel }),
-           cols: [{ k: 'mun', t: TX('Município') }, { k: 'mat', t: TX('Matrículas') },
-                  { k: 'pres', t: TX('Presencial') }, { k: 'ead', t: TX('EAD') },
-                  { k: 'lider', t: TX('Líder') }, { k: 'shareLider', t: TX('Share do líder') }] } });
-
-  // ------------------------------------------ maiores municipios do pais
-  const rowsMun = [...mun.entries()].map(([ix, m]) => {
-    const L = lider(m);
-    return {
-      mun: nomeMun(ix), uf: ufMun(ix), mat: m.mat, pres: m.pres, ead: m.ead,
-      lider: L.lider ? nomeGrupo(L.lider) : '—', _lider: L.lider,
-      matLider: L.matLider, shareLider: m.mat ? 100 * L.matLider / m.mat : 0,
-      players: L.players,
-    };
-  }).sort((a, b) => b.mat - a.mat);
-  tabela($('#ge-mun-lider'), [
-    { k: 'mun', t: TX('Município'), tipo: 'txt' },
-    { k: 'uf', t: 'UF', tipo: 'txt' },
-    { k: 'mat', t: TX('Matrículas'), tipo: 'num' },
-    { k: 'pres', t: TX('Presencial'), tipo: 'num' },
-    { k: 'ead', t: TX('EAD'), tipo: 'num' },
-    { k: 'lider', t: TX('Líder'), tipo: 'txt', fmt: celGrupo },
-    { k: 'matLider', t: TX('Alunos do líder'), tipo: 'num' },
-    { k: 'shareLider', t: TX('Share do líder'), tipo: 'barra' },
-    { k: 'players', t: TX('Grupos mapeados'), tipo: 'num' },
-  ], rowsMun, { ordem: 'mat', limite: 40,
-    csv: { bloco: 'geografia', nome: TX('Municípios do país com líder'),
-           cols: [{ k: 'mun', t: TX('Município') }, { k: 'uf', t: 'UF' },
-                  { k: 'mat', t: TX('Matrículas') }, { k: 'pres', t: TX('Presencial') },
-                  { k: 'ead', t: TX('EAD') }, { k: 'lider', t: TX('Líder') },
-                  { k: 'matLider', t: TX('Alunos do líder') },
-                  { k: 'shareLider', t: TX('Share do líder') }] } });
-  $('#ge-nota').textContent = TX(
-    'Geografia usa apenas as dimensões 1 e 2 do Censo e atribui o aluno ao município de oferta. ' +
-    'No EAD, esse município é o do polo de apoio presencial — não a residência do aluno; um polo ' +
-    'pequeno pode concentrar muitos alunos. Líder exclui o bucket "Independentes", que não é um ' +
-    'player. {q} matrículas ficam fora do recorte geográfico com os filtros atuais (exterior/N.I. ' +
-    'e o que os filtros excluem). A tabela mostra 40 municípios; o CSV traz todos os {t}.',
-    { q: n(kpiAno(ano).mat_total - tot), t: n(rowsMun.length) });
-
-  // ------------------------------------------------- composicao regional
-  const porReg = new Map();
-  uf.forEach(a => {
-    let o = porReg.get(a.regiao);
-    if (!o) { o = { pres: 0, ead: 0, mat: 0 }; porReg.set(a.regiao, o); }
-    o.pres += a.pres; o.ead += a.ead; o.mat += a.mat;
+   * Vale para os outros casos da mesma família (Atol das Rocas em RN, Trindade no ES) sem
+   * precisar listar nenhum deles. */
+  const aneis = [];
+  const colhe = c => {
+    if (typeof c[0] === 'number') return;
+    if (typeof c[0][0] === 'number') { aneis.push(c); return; }
+    c.forEach(colhe);
+  };
+  colhe(feat.geometry.coordinates);
+  if (!aneis.length) return null;
+  const maior = aneis.reduce((a, b) => (b.length > a.length ? b : a));
+  let minLon = 180, maxLon = -180, minLat = 90, maxLat = -90;
+  maior.forEach(([lon, lat]) => {
+    minLon = Math.min(minLon, lon); maxLon = Math.max(maxLon, lon);
+    minLat = Math.min(minLat, lat); maxLat = Math.max(maxLat, lat);
   });
-  const rr = [...porReg.entries()].sort((a, b) => b[1].mat - a[1].mat);
-  chart($('#ge-reg'), {
-    ...baseChart(),
-    legend: { ...baseChart().legend, data: [T_PRES(), T_EAD()] },
-    xAxis: { ...baseChart().xAxis, data: rr.map(x => TXregiao(x[0])) },
-    yAxis: { ...baseChart().yAxis, axisLabel: { fontSize: 11.5, color: '#8C8C8C', formatter: fmtEixoMi } },
-    series: [
-      { name: T_PRES(), type: 'bar', stack: 'a', itemStyle: { color: COR_PRES }, barMaxWidth: 44,
-        data: rr.map(x => x[1].pres) },
-      { name: T_EAD(), type: 'bar', stack: 'a', itemStyle: { color: COR_EAD }, barMaxWidth: 44,
-        data: rr.map(x => x[1].ead) },
-    ],
-    tooltip: { ...baseChart().tooltip, valueFormatter: v => n(v) },
-  });
-  registrarCSV('geografia', TX('Composição por região'),
-    [{ k: 'regiao', t: TX('Região') }, { k: 'mat', t: TX('Matrículas') },
-     { k: 'pres', t: TX('Presencial') }, { k: 'ead', t: TX('EAD') }],
-    rr.map(([r, v]) => ({ regiao: TXregiao(r), mat: v.mat, pres: v.pres, ead: v.ead })));
-
-  tabela($('#ge-uf'), [
-    { k: 'uf', t: 'UF', tipo: 'txt' }, { k: 'regiao', t: TX('Região'), tipo: 'txt' },
-    { k: 'mat', t: TX('Matrículas'), tipo: 'num' }, { k: 'pres', t: TX('Presencial'), tipo: 'num' },
-    { k: 'ead', t: TX('EAD'), tipo: 'num' }, { k: 'pctEad', t: TX('% EAD'), tipo: 'pct' },
-    { k: 'share', t: TX('Share'), tipo: 'barra' },
-  ], rowsUFL, { ordem: 'mat' });
+  // folga de 8% para o estado não encostar na borda do quadro
+  const fx = (maxLon - minLon) * .08, fy = (maxLat - minLat) * .08;
+  const bb = [[minLon - fx, maxLat + fy], [maxLon + fx, minLat - fy]];
+  _bboxCache.set(sigla, bb);
+  return bb;
 }
 
 /* ============================================== GLOSSÁRIO ================ */

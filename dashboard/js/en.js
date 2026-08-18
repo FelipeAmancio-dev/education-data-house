@@ -920,4 +920,93 @@ registrarEN({
   'Modalidade, rede e organização': 'Delivery mode, sector and institution type',
   'Grupos e competição': 'Groups and competition',
   'Curso e geografia': 'Programs and geography',
+
+  /* --------------------------------------------- Mensalidades: coluna Spread */
+  'Spread (mais caro ÷ mais barato)': 'Spread (priciest ÷ cheapest)',
+  '<strong>Spread</strong> é quanto a instituição mais cara cobra a mais que a mais barata no mesmo curso — {c}, por exemplo: de {min} a {max}, ou seja, {v} a mais. Mede prêmio de marca; spread baixo é curso em que o preço já convergiu entre os players. ':
+    '<strong>Spread</strong> is how much more the priciest institution charges than the cheapest '
+    + 'for the same programme — {c}, for instance: from {min} to {max}, that is {v} more. It '
+    + 'measures brand premium; a low spread means a programme where prices have already '
+    + 'converged across players. ',
+
+  /* --------------------------------------- Geografia: mapa interativo (18/08) */
+  'Onde cada player realmente está': 'Where each player actually is',
+  'Mapa': 'Map',
+  'Quem está em cada praça': 'Who is in each location',
+  'Escolha o estado para aproximar, clique numa bolha para abrir o município. A cor diz quantos dos grupos selecionados dividem aquela praça.':
+    'Pick a state to zoom in, click a bubble to open the city. Colour shows how many of the ' +
+    'selected groups share that location.',
+  'Brasil — todas as UFs': 'Brazil — all states',
+  'Nenhum — ver a UF inteira': 'None — show the whole state',
+  'Brasil': 'Brazil',
+  'IES na praça': 'Institutions here',
+  'alunos na praça': 'students here',
+  'dos selecionados': 'of those selected',
+  'clique para abrir a praça': 'click to open this location',
+  'Arraste para navegar e use a roda para aproximar; escolher a UF enquadra o estado e liga os nomes dos municípios. Clique numa bolha para abrir a praça no painel ao lado. A bolha é o número de ALUNOS dos grupos selecionados no município, dimensionada pela raiz — em escala linear São Paulo apagaria todo o interior, que é o que interessa aqui. A posição é o centroide do município ({q} dos {t} têm coordenada), não o endereço de nenhuma unidade: o Censo dá o município de oferta, não a rua. No presencial é onde o curso é dado; no EAD, onde está o polo.':
+    'Drag to pan and scroll to zoom; picking a state frames it and turns on city names. Click a ' +
+    'bubble to open that location in the panel beside it. The bubble is the number of STUDENTS ' +
+    'the selected groups have in the city, sized by the square root — on a linear scale São ' +
+    'Paulo would erase the whole interior, which is what matters here. The position is the ' +
+    "city's centroid ({q} of {t} have coordinates), not any campus address: the Census gives the " +
+    'city of delivery, not the street. On campus it is where the course is taught; in distance ' +
+    'learning, where the hub is.',
+  'Denominador: as {t} matrículas de {m} em {a}. Linha apagada é grupo sem aluno aqui — fica na lista de propósito, porque ausência numa praça é informação competitiva. <strong>IES na praça</strong> é o número de instituições distintas do grupo com aluno no recorte, e é PISO de unidades: o Censo não tem identificador de campus, então dois campi da mesma IES na mesma cidade contam como um. A cor da bolha no mapa é quantos dos grupos selecionados dividem aquele município.':
+    'Denominator: the {t} enrollments of {m} in {a}. A dimmed row is a group with no students ' +
+    'here — it stays on the list on purpose, because absence from a location is competitive ' +
+    'information. <strong>Institutions here</strong> is how many distinct institutions of the ' +
+    'group have students in the selection, and it is a FLOOR for campuses: the Census has no ' +
+    'campus identifier, so two campuses of the same institution in one city count as one. The ' +
+    'bubble colour on the map is how many of the selected groups share that city.',
+
+  /* ------------------------------------- Geografia: densidade e exclusividade */
+  'Alunos por município': 'Students per city',
+  'Quantos alunos cabem numa praça de cada modalidade — o campus concentra, o polo espalha':
+    'How many students fit in one location under each delivery mode — the campus concentrates, ' +
+    'the hub spreads',
+  'Alunos por município — presencial': 'Students per city — on-campus',
+  'Alunos por município — EAD': 'Students per city — distance',
+  'Alunos ÷ municípios em que o grupo tem aquela modalidade — densidade por praça, não total. É a diferença econômica entre as duas operações: o campus concentra muitos alunos em poucas cidades e o polo espalha poucos por muitas. As barras não se somam: são duas médias independentes, cada uma com o próprio denominador. Estes dois mapas e este gráfico ignoram o filtro de modalidade de propósito — com "EAD" selecionado, o mapa do presencial ficaria vazio e pareceria que o grupo não tem campus.':
+    'Students ÷ cities where the group offers that delivery mode — density per location, not the ' +
+    'total. It is the economic difference between the two operations: a campus concentrates many ' +
+    'students in few cities and a hub spreads few across many. The bars do not add up: they are ' +
+    'two independent averages, each with its own denominator. These two maps and this chart ' +
+    'ignore the delivery-mode filter on purpose — with "distance" selected, the on-campus map ' +
+    'would go blank and it would look as if the group had no campuses.',
+  'Dos {t} municípios alcançados por pelo menos um dos selecionados, {d} têm mais de um deles presente — {p} do território coberto. Presença é ter ao menos um aluno no município, em qualquer modalidade: não mede quem é mais forte, mede onde há disputa. Praça exclusiva não é sinônimo de praça boa — costuma ser cidade pequena, e o número de alunos por município no gráfico acima é o contraponto.':
+    'Of the {t} cities reached by at least one of the selected groups, {d} have more than one of ' +
+    'them present — {p} of the covered territory. Presence means having at least one student in ' +
+    'the city, in any delivery mode: it does not measure who is stronger, it measures where there ' +
+    'is competition. An exclusive location is not the same as a good one — it tends to be a small ' +
+    'town, and the students-per-city chart above is the counterpoint.',
+
+  /* ------------------------------------------ Geografia: qualidade do e-MEC */
+  'Qualidade da operação (e-MEC)': 'Operating quality (e-MEC)',
+  'IGC por grupo — a média das IES e a nota do aluno médio':
+    'IGC by group — the average across institutions and the score of the average student',
+  'IGC médio das IES': 'IGC — average across institutions',
+  'IGC do aluno médio': 'IGC — the average student',
+  'IGC médio': 'Average IGC',
+  '% da base em IES 4 ou 5': '% of base in institutions rated 4 or 5',
+  'Painel': 'Panel',
+  'Qualidade e avaliação de cada grupo': 'Quality and assessment of each group',
+  'Qualidade e-MEC por grupo': 'e-MEC quality by group',
+  'IGC simples e ponderado pela base, fatia de alunos em IES bem avaliada, e os conceitos institucionais — inclusive o específico de EaD':
+    'IGC plain and weighted by the student base, share of students in well-rated institutions, ' +
+    'and the institutional scores — including the distance-learning one',
+  'IGC do e-MEC, de 1 a 5, processado em {d}. As médias são só entre as IES COM nota — IES sem avaliação publicada não entra como zero, que seria lê-la como péssima. Base casada: {c} IES, cobrindo 99,9% das matrículas de 2024.':
+    'e-MEC IGC, from 1 to 5, processed on {d}. The averages cover only institutions WITH a score ' +
+    '— an institution with no published assessment does not enter as a zero, which would read as ' +
+    'terrible. Matched base: {c} institutions, covering 99.9% of 2024 enrollments.',
+  '<strong>IGC médio</strong> trata cada IES igual, do braço de 300 alunos ao de 300 mil. <strong>IGC do aluno médio</strong> pondera pela matrícula de {a} e é a nota que a base do grupo de fato recebe — quando ele fica abaixo do IGC médio, a base está concentrada nas mantidas pior avaliadas, que é risco regulatório e não detalhe de vaidade. <strong>% da base em IES 4 ou 5</strong> é a fatia de alunos em instituição bem avaliada. <strong>CI</strong> é o Conceito Institucional (avaliação in loco da instituição) e <strong>CI-EaD</strong> o equivalente para a oferta a distância — este último importa mais aqui do que o próprio IGC para quem opera metade da base em EAD. Todas as colunas ignoram IES sem nota, e a última mostra quantas ficaram de fora.':
+    '<strong>Average IGC</strong> treats every institution alike, from the 300-student arm to the ' +
+    '300,000-student one. <strong>IGC — the average student</strong> weights by {a} enrollments ' +
+    'and is the score the group base actually receives; when it sits below the plain average, the ' +
+    'base is concentrated in the worse-rated entities, which is regulatory risk rather than a ' +
+    'vanity detail. <strong>% of base in institutions rated 4 or 5</strong> is the share of ' +
+    'students at a well-rated institution. <strong>CI</strong> is the Institutional Score (on-site ' +
+    'assessment) and <strong>CI-EaD</strong> its distance-learning counterpart — the latter ' +
+    'matters more here than IGC itself for anyone running half the base in distance learning. ' +
+    'Every column ignores institutions without a score, and the last one shows how many were left ' +
+    'out.',
 });

@@ -31,7 +31,10 @@ const FILTROS = {
   overview: ['ano', 'uf', 'mod', 'rede'],
   grupos: ['ano', 'uf', 'mod'],              // sem 'rede': grupo economico e privado
   cursos: ['ano', 'uf', 'mod'],              // sem 'rede': a disputa aqui e entre grupos
-  geografia: ['ano', 'mod', 'rede'],          // a UF tem seletor proprio dentro da view
+  // sem 'rede' desde 18/08/2026 (pedido do usuário): o bloco compara grupos econômicos,
+  // que são privados por definição — o mesmo motivo de Key Players e Cursos não terem.
+  // A UF tem seletor próprio dentro da view, ligado ao mapa interativo.
+  geografia: ['ano', 'mod'],
   glossario: ['ano'],                         // a composição por grupo é de um ano
 };
 

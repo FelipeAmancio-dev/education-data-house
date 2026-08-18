@@ -138,7 +138,10 @@ function matriz(MZ) {
     { k: 'curso', t: TX('Curso'), tipo: 'txt', fmt: v => esc(TXcurso(v)) },
     ...ies.map(i => ({ k: i, t: i + (soNacional[i] ? ' *' : ''), tipo: 'num',
                        fmt: v => v == null ? '—' : brl(v) })),
-    { k: 'spread', t: TX('Spread'), tipo: 'pct',
+    /* ⚠️ O cabeçalho carrega a CONTA, não só o nome. Em 18/08/2026 o usuário perguntou o
+     * que era "Spread" — e uma coluna cuja definição só existe no texto acima da tabela é
+     * uma coluna que vai ser lida errado por quem chegar direto nela. */
+    { k: 'spread', t: TX('Spread (mais caro ÷ mais barato)'), tipo: 'pct',
       fmt: v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(0) + '%' },
   ];
   tabela(el, cols, dados, {
@@ -146,11 +149,21 @@ function matriz(MZ) {
     csv: { bloco: 'mensalidades', nome: TX('Curso × instituição') + ' — ' + TX(ROT_MOD[modalidade]) },
   });
 
+  /* Exemplo concreto na nota: definição abstrata não gruda, e a linha com o maior spread
+   * da tela ensina a coluna inteira de uma vez. */
+  const pior = dados.filter(o => o.spread != null).sort((a, b) => b.spread - a.spread)[0];
+  const exemplo = pior ? TX(
+    '<strong>Spread</strong> é quanto a instituição mais cara cobra a mais que a mais barata ' +
+    'no mesmo curso — {c}, por exemplo: de {min} a {max}, ou seja, {v} a mais. Mede prêmio de ' +
+    'marca; spread baixo é curso em que o preço já convergiu entre os players. ',
+    { c: TXcurso(pior.curso), min: brl(pior._min), max: brl(pior._max),
+      v: pior.spread.toFixed(0) + '%' }) : '';
+
   const marcadas = ies.filter(i => soNacional[i]);
-  $('#me-matriz-nota').textContent = marcadas.length ? TX(
+  $('#me-matriz-nota').innerHTML = exemplo + (marcadas.length ? TX(
     '* {l} publicam apenas um "a partir de" nacional, sem preço por unidade. O valor é um ' +
     'piso, não a média das praças — o spread contra as demais tende a ficar exagerado.',
-    { l: marcadas.sort().join(', ') }) : '';
+    { l: marcadas.sort().join(', ') }) : '');
 }
 
 /* ------------------------------------------------------ dispersao por unidade */

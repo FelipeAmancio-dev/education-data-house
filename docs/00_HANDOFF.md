@@ -59,6 +59,7 @@ python scripts/08_build_regulatorio.py              # valida e publica a base re
 python scripts/08_build_regulatorio.py --so-verificar   # só valida, não escreve
 python scripts/09_fetch_dou.py                      # varre o DOU e lista candidatos p/ curadoria
 python scripts/10_ingest_emec.py                    # Dados_GEO.xlsx (e-MEC) → de-para + emec.json
+python scripts/audita_mensalidades.py               # confere curso × URL coletada (--limpar remove e reexporta)
 python scripts/11_fetch_dou_diario.py               # feed diário do DOU, triado por relevância
 python scripts/11_fetch_dou_diario.py --autoteste   # triagem contra os casos conhecidos (sem rede)
 python scripts/11_fetch_dou_diario.py --reclassificar  # reaplica a regra ao feed já coletado
@@ -425,7 +426,7 @@ A home é uma grade de cards, um por bloco.
 | `#/overview` | Overview | tamanho e trajetória do setor, por UF e por curso — **sem filtro de grupo** |
 | `#/grupos` | Key Players | seleção livre (chips) → comparativo, composição da base e mix de modalidade. **As três camadas seguem os chips** |
 | `#/cursos` | Cursos | ranking CINE com o **maior grupo de cada curso**, concorrência no curso escolhido com seleção de grupos e pizza de share |
-| `#/geografia` | Geografia | **capilaridade**: um mapa por grupo na mesma escala, pegada física × digital, sobreposição competitiva e qualidade (IGC do e-MEC) — mais a liderança por praça |
+| `#/geografia` | Geografia | **capilaridade**: um mapa interativo em que se escolhe UF e município e se lê o overlap na praça, pegada física × digital, exclusividade e qualidade do e-MEC |
 | `#/mensalidades` | Mensalidades | **quanto cada player consegue cobrar**: mensalidade mediana por IES, matriz curso × IES com o *spread*, e a faixa da unidade mais barata à mais cara |
 | `#/regulatorio` | Ambiente Regulatório | **o que está valendo em EaD & Polos, Medicina e Fies**, com "como era → o que mudou → hoje", timeline de marcos e o feed das decisões do MEC com fonte oficial |
 | `#/precos` | Price Action | **fechamento diário**: preço dia a dia, retorno por janela (WTD/MTD/YTD/desde-data), comparação entre papéis e basket vs IBOV/SMLL |
@@ -600,6 +601,71 @@ Sintoma sutil, fácil de não notar.
   plano (`--intervalo`, `--sem-precos`), mas a tela não reconsulta mais o arquivo sozinha:
   com fechamento diário, repintar de 5 em 5 minutos não muda nada. Rode o script quando
   quiser avançar a série.
+
+### O bloco Geografia — reescrito em 18/08/2026
+
+O bloco tinha dez seções e o usuário cortou seis. O que ficou gira em torno de **um mapa
+interativo**, que é a peça que ele pediu: *"que o investidor consiga tirar praticamente todas
+as informações que ele quer, selecionando UF, município, e vendo quantas unidades/alunos cada
+grupo tem naquela praça, para entender o overlap de forma direta mais no início da página"*.
+
+**O que saiu, e não deve voltar:** o filtro global de **Rede** (`FILTROS.geografia` agora é
+`['ano', 'mod']`); o filtro de **modalidade do mapa** (os dois mapas de pegada logo abaixo já
+separam presencial de EAD — era um controle para responder o que a seção seguinte já
+responde); a barra de **"alcance comparado"** ao lado do mapa; o mapa da **sobreposição
+competitiva** (a tabela de exclusividade ficou); **"restrições vigentes"**; **"quem lidera cada
+estado"** (mapa + tabela); **"abrir uma praça"** (virou o painel do mapa); **"competição
+local"**; **"municípios"**; **"maiores praças do país"**; **"composição regional"** e
+**"estados"**.
+
+**O mapa interativo** (`#ge-mapa-int`) faz o que as seções removidas faziam, junto:
+
+- `roam` ligado — arrastar e dar zoom com a roda;
+- seletor de **UF** que enquadra o estado, e seletor de **município**, que se conversam;
+- **clicar numa bolha** abre a praça no painel ao lado;
+- a **cor da bolha é o overlap**: quantos dos grupos selecionados dividem aquele município —
+  é a leitura que antes exigia um mapa próprio três seções abaixo;
+- o painel traz, por grupo, **IES na praça**, presencial, EAD, alunos e share.
+
+⚠️ **"IES na praça" é um proxy de unidades e é PISO.** São instituições distintas do grupo com
+aluno no recorte. O Censo não tem identificador de campus (§3.4), então dois campi da mesma IES
+na mesma cidade contam como um. A nota da tela diz isso.
+
+⚠️ **Dois defeitos de mapa que custaram tempo e valem para qualquer mapa novo:**
+
+1. **`aspectScale` do ECharts é 0.75 por padrão, e isso ESTICA o mapa.** Foi a queixa do
+   usuário ("parece que o mapa está esticado"). O Brasil tem 39,2° de largura por 39,0° de
+   altura — quase quadrado —, e o padrão comprime a longitude, deixando o país espremido e
+   alto. `aspectScale: 1` em todos os mapas, inclusive nos de bolha do `mapaBolhas()`.
+2. **`boundingCoords` CORTA quando a proporção da caixa não é a do quadro.** Pernambuco
+   mostrou os dois lados do problema: (a) Fernando de Noronha é município de PE e fica a 9° da
+   costa, então a caixa ingênua do estado abria meio Nordeste, com Fortaleza no quadro e
+   Recife no canto — hoje `bboxUF()` usa **só a maior massa contínua** do estado, o que
+   resolve junto Atol das Rocas (RN) e Trindade (ES) sem listar nenhum deles; (b) a faixa
+   continental de PE é 3:1 e o cartão é 1,36:1, e o ECharts ajustou pela altura, deixando
+   Recife **fora** do quadro — hoje `enquadra()` iguala a proporção da caixa à do elemento
+   antes de passá-la adiante, então sobra margem em vez de corte.
+
+⚠️ **Rótulo de município só do estado escolhido.** Enquadrar uma UF deixa vizinhos no quadro —
+é mapa, não recorte — e rotular todo mundo fazia "Fortaleza" aparecer com destaque numa tela
+cujo título dizia PE.
+
+**"Alunos por município"** substituiu a tabela de contagens da antiga seção "Leitura": é
+densidade — alunos ÷ municípios com aquela modalidade —, com presencial e EAD **lado a lado, não
+empilhados**, porque são duas médias independentes com denominadores diferentes. É a diferença
+econômica entre as operações: o campus concentra muitos alunos em poucas cidades, o polo
+espalha poucos por muitas.
+
+**No lugar de "restrições vigentes" entrou um painel de qualidade**, a pedido do usuário ("se
+tiver qualquer outra ideia de métrica para verificar a qualidade de cada cia, pode incluir").
+A métrica que ele acrescenta de verdade é o **IGC ponderado pela matrícula**:
+
+⚠️ **IGC médio trata uma mantida de 300 alunos igual a uma de 300 mil.** O ponderado é a nota
+que o aluno médio do grupo de fato recebe, e **a distância entre os dois é a informação**:
+grupo cujo ponderado fica abaixo do simples tem a base concentrada nas mantidas pior avaliadas,
+que é risco regulatório. O gráfico mostra as duas barras juntas por isso. Entram também **% da
+base em IES 4 ou 5**, **CI** e **CI-EaD** — este último importa mais que o próprio IGC para quem
+opera metade da base em EAD.
 
 ### O módulo Ambiente Regulatório
 
@@ -989,6 +1055,56 @@ O casamento de curso é por **nome exato**, de propósito: por prefixo, "Medicin
 faculdade, o lugar de resolver é a coluna `SINONIMOS` — foi assim que "Gestão de Pessoas" passou
 a achar "Gestão de Recursos Humanos".
 
+### ⚠️ Substring não casa nome de curso — o preço de Medicina esteve errado
+
+Achado em 18/08/2026 **pelo usuário**, que estranhou "Medicina por R$ 840 na São Judas". Não era
+erro de leitura de preço: `anima_url_do_curso` escolhia o link assim —
+
+```python
+chave = M.sem_acento(termo).split()[0]          # "medicina"
+exatos = [h for h in alvos if chave in M.sem_acento(h)]
+escolhido = exatos[0] if exatos else alvos[0]
+```
+
+— e `"medicina" in "biomedicina-bacharelado"` é **True**. O motor abria a página de Biomedicina
+e gravava aquele preço como Medicina: **13 observações em 2 faculdades**, com min, max e número
+de unidades idênticos aos de Biomedicina — que foi a impressão digital do defeito.
+
+**A observação carregava a prova**: o campo `url` dizia `.../graduacao/biomedicina-bacharelado/`
+numa linha de curso "Medicina". Daí saiu `scripts/audita_mensalidades.py`, que transforma essa
+prova em teste: confere o slug da URL contra o curso gravado (e contra os sinônimos declarados),
+e com `--limpar` remove as divergentes e reexporta. Rodou: **203 conferem, 13 divergem**.
+
+Duas correções no motor, e a segunda importa tanto quanto a primeira:
+
+1. `anima_escolhe_link()` compara a **lista inteira de palavras** do slug com a do termo.
+   "medicina" bate só com `medicina-bacharelado`: não bate com `biomedicina` (palavra diferente)
+   nem com `medicina-veterinaria` (palavra a mais). ⚠️ **Igualdade, nunca subconjunto** — aceitar
+   subconjunto reintroduz pelo outro lado o mesmo defeito, e é a armadilha que o motor da
+   Estácio já documenta.
+2. **Sem `alvos[0]` de consolo.** O fallback pegava o primeiro resultado da busca fosse ele
+   qual fosse: bastava a faculdade **não ter** o curso para o motor gravar o preço de outro.
+   Recusar é o comportamento certo, e é o mesmo que o motor da Cogna já faz com card de
+   modalidade ambígua.
+
+**Recoletado com o motor corrigido: "Medicina — não encontrado" na Anhembi.** O portal não
+devolve página de Medicina, e Biomedicina e Veterinária vieram idênticas ao que já estava lá —
+ou seja, a correção não mexeu nos casos bons. Na tela, Medicina agora tem só a Anhanguera
+(R$ 9.099 nacional), que sempre esteve certa.
+
+⚠️ **A recoleta gravou uma segunda data parcial e ela foi REMOVIDA de propósito.** Só a Anhembi,
+só presencial, 3 cursos. Publicada, o gráfico de evolução — que existe justamente a partir da
+segunda coleta — compararia 73 linhas de 6 IES com 2 linhas de 1 IES e desenharia uma queda que
+é buraco de amostra. Backup em `data_processed/mensalidades.jsonl.*.diag.bak`. **A segunda
+coleta que destrava a série tem que ser completa.**
+
+### A coluna "Spread" agora se explica sozinha
+
+O usuário perguntou o que era. Uma coluna cuja definição só existe no texto acima da tabela vai
+ser lida errado por quem chega direto nela — então o cabeçalho passou a ser **"Spread (mais caro
+÷ mais barato)"** e a nota traz um exemplo real, tirado da própria tela: a linha de maior spread,
+com o menor e o maior preço. Definição abstrata não gruda; o exemplo ensina a coluna inteira.
+
 ### A Cogna é nacional e o card mistura modalidade
 
 Anhanguera e Unopar rodam o mesmo portal. A busca é **por URL** (`?search_texts=Pedagogia`),
@@ -1162,6 +1278,10 @@ objetos.
    "quem está sendo comparado", isso é o oposto do necessário. Use `legendaTodos()` de
    `grupos.js`, que quebra em linhas e devolve o `topo` que o grid precisa — a legenda do
    ECharts não empurra o grid sozinha e deita por cima das barras se ninguém reservar o espaço.
+
+11. **`aspectScale` e `boundingCoords` do ECharts** — ver o ⚠️ de "O bloco Geografia". Mapa
+   novo nasce com `aspectScale: 1`, e enquadramento por caixa exige igualar a proporção da
+   caixa à do elemento, senão o ECharts corta em vez de sobrar margem.
 
 ### Regra editorial da interface
 

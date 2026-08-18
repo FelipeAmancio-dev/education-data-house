@@ -145,6 +145,70 @@ def preco_da_tela(pg):
 TURNOS_PREF = ["Manhã", "Manha", "Noite", "Noturno", "Tarde", "Integral"]
 
 
+# ⚠️ SUBSTRING NAO SERVE PARA CASAR NOME DE CURSO, e este bug chegou a ser publicado.
+#
+# Achado em 18/08/2026 pelo usuario, que estranhou "Medicina por R$ 840 na Sao Judas".
+# O codigo anterior era:
+#
+#     chave = M.sem_acento(termo).split()[0]          # "medicina"
+#     exatos = [h for h in alvos if chave in M.sem_acento(h)]
+#     escolhido = exatos[0] if exatos else alvos[0]
+#
+# e `"medicina" in "biomedicina-bacharelado"` e **True**. O motor abria a pagina de
+# Biomedicina e gravava aquele preco como Medicina — 13 observacoes em 2 faculdades, com
+# min, max e numero de unidades identicos aos de Biomedicina, que foi a impressao digital
+# do defeito. A URL coletada provava o erro sozinha: `.../graduacao/biomedicina-bacharelado/`
+# numa linha de curso "Medicina".
+#
+# Duas correcoes, e a segunda importa tanto quanto a primeira:
+#
+# 1. compara o SLUG inteiro, por palavra, com o termo — "biomedicina" nao contem a palavra
+#    "medicina", contem uma palavra que termina assim, que e outra coisa;
+# 2. **sem `alvos[0]` de consolo.** O fallback pegava o primeiro resultado da busca fosse
+#    ele qual fosse: bastava a faculdade NAO ter o curso para o motor gravar o preco de
+#    outro. Recusar e o comportamento certo, e e o mesmo que o motor da Cogna ja faz com
+#    card de modalidade ambigua — "sem card exclusivo desta modalidade" e recusa
+#    deliberada, nao falha.
+#
+# O nome que muda de faculdade para faculdade continua sendo resolvido onde sempre foi:
+# na coluna SINONIMOS de `config/mensalidades_cursos.csv` — foi assim que "Gestao de
+# Pessoas" passou a achar "Gestao de Recursos Humanos", e esse caminho segue funcionando
+# porque o sinonimo entra como termo de busca, nao como casamento frouxo.
+_SUFIXOS_SLUG = ("bacharelado", "licenciatura", "graduacao", "tecnologica", "tecnologo",
+                 "superior", "de", "tecnologia", "em", "curso", "ead", "presencial",
+                 "semipresencial", "digital", "flex")
+
+
+def anima_palavras(txt):
+    """Palavras significativas de um nome de curso ou de um slug de URL.
+
+    Os DOIS lados passam por aqui, e é isso que faz a comparação funcionar: o slug traz
+    grau e modalidade coladas no nome (`gestao-de-recursos-humanos-graduacao-tecnologica`)
+    e o termo traz preposições que o slug às vezes não tem. Normalizados igual, os dois
+    viram a mesma lista.
+    """
+    t = M.sem_acento(txt).replace("-", " ").replace("/", " ")
+    return [w for w in t.split() if w and w not in _SUFIXOS_SLUG]
+
+
+def anima_escolhe_link(alvos, termo):
+    """O link cujo slug É o curso procurado — ou None.
+
+    ⚠️ Igualdade da lista inteira de palavras, nunca subconjunto. "medicina" bate só com
+    `medicina-bacharelado`: não bate com `biomedicina` (palavra diferente) nem com
+    `medicina-veterinaria` (palavra a mais). Aceitar subconjunto reintroduziria, pelo outro
+    lado, o mesmo defeito que o substring causou — é a armadilha que o motor da Estácio já
+    documenta ("Medicina" casaria com "Medicina Veterinária").
+    """
+    alvo = anima_palavras(termo)
+    if not alvo:
+        return None
+    for h in alvos:
+        if anima_palavras(h.rstrip("/").split("/")[-1]) == alvo:
+            return h
+    return None
+
+
 def anima_url_do_curso(pg, base, modalidade, sinonimos):
     """Busca o curso no portal e devolve a URL da pagina dele."""
     aba = {"presencial": "Presencial", "semipresencial": "Semipresencial", "ead": "EAD"}[modalidade]
@@ -170,9 +234,9 @@ def anima_url_do_curso(pg, base, modalidade, sinonimos):
         alvos = [h for h in dict.fromkeys(links) if h.rstrip("/").count("/") >= 3]
         if not alvos:
             continue
-        chave = M.sem_acento(termo).split()[0]
-        exatos = [h for h in alvos if chave in M.sem_acento(h)]
-        escolhido = exatos[0] if exatos else alvos[0]
+        escolhido = anima_escolhe_link(alvos, termo)
+        if not escolhido:
+            continue
         if escolhido.startswith("/"):
             escolhido = base.split("/cursos")[0] + escolhido
         return escolhido
