@@ -271,10 +271,10 @@ Aqui está o que precisa ficar registrado, porque é o limite honesto da ferrame
 |---|---:|---:|---:|---|
 | **Ânima** | 324.800 | 332.310 | **+2,3%** | reconcilia |
 | **Cruzeiro do Sul** | 491.000 | 512.500 | **+4,4%** | reconcilia |
-| **YDUQS** | 779.200 | 823.886 | **+5,7%** | total ok, mas **presencial −21,8% e EAD +22,4%**: a empresa chama de "Presencial" um segmento que o Censo classifica como EAD. Os dois erros se cancelam no total |
-| **Afya** | 76.988 | 93.566 | **+21,5%** | 23.194 matrículas EAD que a companhia não menciona (§6.2). Sem elas, −8,6% |
-| **Ser Educacional** | 307.830 | 375.541 | **+22,0%** | perímetro conferido IES a IES e correto (vem do `Suporte IES.xlsx`). **Sem explicação fechada** |
-| **Vitru** | 764.500 | 1.080.339 | **+41,3%** | o próprio release exclui alunos *unengaged* por critério adotado em 1T24. É ~30% da base formal |
+| **YDUQS** | 779.200 | 823.886 | **+5,7%** | mesma régua de engajamento da Vitru, e mais uma diferença de classificação: **presencial −21,8% e EAD +22,4%** — a empresa chama de "Presencial" um segmento que o Censo classifica como EAD |
+| **Afya** | 76.988 | 93.566 | **+21,5%** | as 23.194 matrículas EAD vieram com a **Unigranrio**, adquirida com operação de EAD. Sem elas, −8,6%. Explicação do usuário em 18/08/2026; resolve o §6.2 |
+| **Ser Educacional** | 307.830 | 375.541 | **+22,0%** | **é um evento de 2024**: em 2023 o mesmo perímetro reconciliava em −0,2%. Ver §4c |
+| **Vitru** | 764.500 | 1.080.339 | **+41,3%** | aluno **engajado × não engajado**: o release conta só quem está ativo academicamente, o Censo conta o vínculo formal. ~30% da base |
 | **Cogna** | — | 1.124.318 | — | release de 4T24 não obtido |
 
 ⚠️ **Testei a ponte mais óbvia e ela NÃO existe.** `QT_MAT` conta "cursando **e/ou formado**",
@@ -302,6 +302,74 @@ Nassau +30,9 mil, UNAMA +10,7 mil, FAEL +9,2 mil), **não é IES nova entrando n
 tabela de reconciliação **foi removida da tela por decisão do usuário** em rodada anterior, e
 o dado continua em `meta.reportado` dentro do payload. Se ela voltar, o lugar é a
 Methodology — e é a peça que falta para a ferramenta poder ser entregue a investidor.
+
+---
+
+## 4c. O gap da Ser Educacional é um evento de 2024
+
+O usuário pediu hipóteses para o +22% da Ser, e perguntou se podia haver IES duplicada.
+A resposta veio de comparar **dois anos** em vez de um.
+
+**A Ser reportou 279,1 mil alunos de graduação em 31/12/2023** — 149,8 mil Híbrida + 129,3
+mil Digital, do release de 4T23. O Censo de 2023, no **mesmo perímetro pró-forma** e com a
+**mesma definição** de `QT_MAT`, traz **278.416**.
+
+| Ano | Censo | Reportado | Gap | Presencial | EAD |
+|---|---:|---:|---:|---:|---:|
+| **2023** | 278.416 | 279.100 | **−0,2%** | +3,2% | −4,3% |
+| **2024** | 375.541 | 307.830 | **+22,0%** | +18,9% | +25,6% |
+
+⚠️ **Isso descarta de uma vez as três explicações estruturais.** Perímetro errado, IES
+duplicada e diferença de definição estariam presentes em 2023 também — o perímetro é o mesmo
+conjunto de 50 IES nos dois anos, porque é pró-forma. **O que mudou está no dado de 2024, não
+na nossa construção.**
+
+E o salto é anômalo contra o mercado: o Brasil cresceu **+2,5%** em 2024 (EAD +5,6%) e a Ser,
+**+34,9%** — enquanto a própria companhia reportou **+10,3%**. O Censo cresceu **3,4× o que
+ela divulgou**.
+
+**De onde vieram os +97 mil:**
+
+| CO_IES | IES | 2023 | 2024 | Δ presencial | Δ EAD |
+|---:|---|---:|---:|---:|---:|
+| 2835 | Maurício de Nassau (Recife) | 73.501 | 104.403 | +3.808 | **+27.094** |
+| 4153 | Maurício de Nassau Derby (Recife) | 3.250 | 14.744 | **+1** | **+11.493** |
+| 383 | Universidade da Amazônia | 28.922 | 39.644 | +4.592 | +6.130 |
+| 1205 | FAEL | 46.200 | 55.428 | 0 | +9.228 |
+
+**Hipóteses, em ordem de sustentação:**
+
+1. **Mudança no critério de declaração ao Censo em 2024.** É a que sobra depois de eliminar
+   as estruturais: mesmo perímetro, mesma definição, e o gap aparece de um ano para o outro
+   nas duas modalidades ao mesmo tempo. Compatível com passar a declarar como "cursando"
+   vínculo que a companhia já não conta como base ativa.
+2. **Matrícula que a Ser não reporta como graduação.** O caso do **Derby** é o mais
+   sugestivo: um segundo código em Recife, da mesma mantenedora do principal, sai de ~zero
+   para **14,6 mil alunos de EAD** com **+1 aluno presencial**. Tem cara de balde novo —
+   convênio, segunda graduação ou formação pedagógica — que o Censo registra como graduação
+   e o release põe noutro lugar.
+3. **Unificação de mantidas em curso.** **11 das 50 IES da Ser** têm a sinalização
+   *Unificação de Mantidas* no e-MEC, e há três pares mesma-mantenedora/mesma-cidade
+   (Recife, Belém, Teresina — este com dois "Maurício de Nassau" de ~4 mil alunos cada).
+   Migração de vínculo entre códigos durante a transição pode gerar dupla contagem.
+   ⚠️ **Evidência contra:** nos pares os dois códigos cresceram **juntos**, em vez de um
+   esvaziar e o outro encher — o padrão de migração não aparece.
+4. ~~**IES duplicada no nosso mapeamento**~~ — **descartada**. Nenhuma IES aparece em dois
+   grupos (conferido nos 3.400 códigos), cada par tem código, sede e alunos próprios, e o
+   mesmo perímetro reconciliou em 2023.
+
+**O que fecharia a questão:** o release de 4T24 da Ser abre a base por marca? Se abrir, dá
+para ver se Nassau Recife e Derby somam os 119 mil do Censo. E a nota metodológica do
+Censo/INEP da Ser — o que ela declarou em 2024 e não declarava em 2023.
+
+📌 **Enquanto isso, na tela:** o número da Ser em 2024 **está certo como Censo** e é o que o
+INEP publicou. O que ele não é, em 2024, é comparável ao que a companhia reporta — e em 2023
+era. Quem usar a série de share da Ser precisa saber disso.
+
+⚠️ Os números de 2023 acima vieram de **síntese de imprensa do release de 4T23**, não do PDF.
+Por isso **não** entraram em `config/reportado_companhias.csv`, que alimenta o gate de
+reconciliação e só aceita fonte primária. Com o PDF, viram uma linha nova e o
+`valida_reconciliacao.py` passa a checar dois anos.
 
 ---
 
