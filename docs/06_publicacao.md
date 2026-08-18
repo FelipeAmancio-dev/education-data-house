@@ -1,7 +1,10 @@
-# Publicar o dashboard e automatizar a coleta de preços
+# Publicação e coleta automática — JÁ ESTÁ NO AR
 
-Como deixar o dashboard acessível por um link e os preços se atualizando sozinhos, com o
-notebook desligado.
+> **Repositório:** https://github.com/FelipeAmancio-dev/education-data-house (público)
+> **Site:** https://felipeamancio-dev.github.io/education-data-house/
+>
+> Ligado e funcionando desde 17/08/2026. Este documento explica como funciona e onde
+> mexer — não é mais um passo a passo de instalação.
 
 ---
 
@@ -59,40 +62,30 @@ cai para peso igual, o que a própria tela explica.
 
 ---
 
-## ⚠️ Antes de ligar o Pages: o site fica público
+## O site é público — decisão tomada
 
-No GitHub, site do Pages é **público** — inclusive a partir de repositório privado, exceto
-em plano Enterprise. Ligar o `publicar.yml` deixa o dashboard e os e-mails do time no
-cabeçalho acessíveis a quem tiver a URL.
+O repositório e o Pages são **públicos**, por decisão do usuário em 17/08/2026: "estou
+trabalhando apenas com dados públicos". Censo, DOU e e-MEC são de fato públicos.
 
-Os **dados** são públicos (Censo, DOU, e-MEC), mas o **produto** é trabalho interno. Se
-isso não puder ser exposto, não ligue o workflow: a pasta `dashboard/` é estática e roda em
-qualquer servidor de arquivos, então o mesmo resultado sai num host do banco. O
-`precos.yml` continua útil de todo jeito — ver a última seção.
+⚠️ O que também ficou público, e não é dado: os **e-mails dos três integrantes do time** no
+cabeçalho. Foi levantado três vezes antes do push e o usuário confirmou que está tranquilo.
+Registrado aqui para que ninguém descubra por acidente. Se um dia for preciso remover, o
+site para de exibi-los na hora, mas o histórico do git guarda.
 
 ---
 
-## Passo a passo
+## Configuração — já feita, registrada para referência
 
-O repositório **já foi inicializado e commitado** em 17/08/2026 — 161 arquivos, 17,7 MB.
-Falta criar o repositório no GitHub e conectar.
+No site do GitHub, três coisas foram ligadas e **sem elas nada funciona**:
 
-⚠️ O `.gitignore` deixou `data_raw/` de fora — são **1,1 GB** de zips do Censo que
-estourariam o limite do GitHub e ficariam no histórico para sempre. Confirmado no commit:
-zero arquivos de `data_raw`.
+1. **Settings → Actions → General → Workflow permissions** = *Read and write permissions*.
+   Sem isso os coletores rodam e não conseguem commitar.
+2. **Settings → Pages → Source** = *GitHub Actions*.
+3. Primeiro `Run workflow` na mão, para confirmar que o Yahoo responde a partir do GitHub.
 
-```bash
-git remote add origin https://github.com/<usuario>/<repo>.git
-git push -u origin main
-```
-
-Por fim, no site do GitHub:
-
-1. **Settings → Actions → General → Workflow permissions**: marque *Read and write
-   permissions*. Sem isso o `precos.yml` não consegue commitar de volta.
-2. **Settings → Pages → Source**: escolha *GitHub Actions*. (Só se você decidiu publicar.)
-3. **Actions → Preços do setor → Run workflow**: rode uma vez na mão para confirmar que o
-   Yahoo responde a partir do GitHub antes de confiar no cron.
+⚠️ O `.gitignore` mantém `data_raw/` fora do repositório — são **1,1 GB** de zips do Censo
+que estourariam o limite do GitHub e ficariam no histórico para sempre. **Não o remova.**
+O repositório tem 17,7 MB.
 
 ---
 
@@ -110,9 +103,16 @@ uns 4 minutos. Irrelevante no público; some ~85 min/mês no privado.
 
 ⚠️ **5 minutos é o mínimo que o GitHub aceita** — cron mais curto é recusado.
 
-Vale saber que o cron do GitHub **não é pontual**: em horário de pico ele atrasa, às vezes
-bastante. Para preço de fechamento isso é irrelevante; para intraday, o carimbo na tela
-mostra a hora real da coleta.
+⚠️ **MEDIDO NA PRÁTICA, e a diferença é grande.** O cron de `*/5` NÃO entrega uma execução
+a cada 5 minutos. Nas primeiras 2,5 horas de janela após ligar, saíram **3 execuções**, não
+as ~30 que o cron pediria — e uma delas às 22:47 UTC, fora da janela 13–21, ou seja,
+atrasada em quase uma hora.
+
+O GitHub **pula execuções agendadas** quando a fila está carregada, e agendamento curto é
+o primeiro a ser descartado. Isso é da plataforma, não da nossa configuração. Consequência
+prática: **trate o feed de preços como "algumas vezes por hora", não como intraday.** A
+tela carimba a hora real da coleta, então dá para ver o atraso. Se a cadência importar de
+verdade, o caminho não é apertar o cron — é um runner próprio ou outro agendador.
 
 ---
 

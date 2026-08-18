@@ -2,7 +2,7 @@
 
 > Documento de transferência de sessão. Escrito para que outra sessão continue o projeto
 > sem redescobrir o que já foi apurado e **sem repetir os erros que já foram corrigidos**.
-> Última atualização: 14/08/2026.
+> Última atualização: 18/08/2026.
 
 ---
 
@@ -30,7 +30,25 @@ Roda **localmente**, sem build step. Diretório do projeto: `C:\education`.
 | 5 | **Price Action, bilíngue PT/EN, CSV em tudo, Glossário** | ✅ |
 | 6 | **Bloco Mensalidades** + motores Ânima, Estácio, Cogna e Uniasselvi | ✅ |
 | 7 | **Módulo Ambiente Regulatório** (EaD & Polos, Medicina, Fies + feed do MEC) | ✅ |
-| 8 | Investor Snapshot, Key Insights, IES individual, Campus Explorer | ⬜ **próximo** |
+| 8 | **e-MEC ingerido** + Geografia reconstruída (capilaridade, físico×digital, IGC) | ✅ |
+| 9 | **Feed diário do DOU** com triagem de relevância para equity | ✅ |
+| 10 | **Publicação no GitHub Pages** + coleta automática por Actions | ✅ |
+| 11 | Investor Snapshot, Key Insights, IES individual, Campus Explorer | ⬜ **próximo** |
+
+## 🔗 O projeto está NO AR
+
+| | |
+|---|---|
+| **Site (atualiza sozinho)** | https://felipeamancio-dev.github.io/education-data-house/ |
+| **Repositório** | https://github.com/FelipeAmancio-dev/education-data-house (público) |
+| **Artifact** | https://claude.ai/code/artifact/91a062c8-7e5c-49da-b1e2-bb11947af321 |
+
+⚠️ **O site e o artifact NÃO são a mesma coisa.** O Pages se reconstrói a cada coleta; o
+artifact é um retrato congelado e só muda quando alguém republica. Para o dia a dia, use o
+Pages. Detalhe em `docs/06_publicacao.md`.
+
+⚠️ **Antes de mexer, `git pull`.** Os workflows commitam sozinhos e o remoto costuma estar
+à frente. Ver §"Coleta automática" para as armadilhas.
 
 ```bash
 python run_dashboard.py            # abre o dashboard (versão completa)
@@ -1118,6 +1136,43 @@ Cores por grupo ficam em `config/grupos.csv`, coluna `COR`.
 
 ---
 
+## 9b. Coleta automática (GitHub Actions) — LIGADA
+
+Três workflows em `.github/workflows/`. Detalhe completo em `docs/06_publicacao.md`.
+
+| Workflow | Faz | Quando |
+|---|---|---|
+| `precos.yml` | `06_fetch_precos.py` → commita `precos.json` | `*/5 13-21 * * 1-5` (pregão) |
+| `dou_diario.yml` | `11_fetch_dou_diario.py` → commita o feed | `0 10 * * 1-5` = 7h BRT |
+| `publicar.yml` | publica `dashboard/` no Pages | ao fim dos dois acima |
+
+⚠️ **`workflow_run` não é redundante com `push`, e sem ele a automação falha em silêncio.**
+Push feito com o `GITHUB_TOKEN` **não dispara outros workflows** — proteção do GitHub contra
+laço infinito. Sem esse gancho, os coletores atualizariam os dados e a página nunca seria
+reconstruída: **site congelado enquanto o repositório avança**, que é o pior caso porque
+parece funcionar. O `publicar.yml` também faz `checkout` com `ref: main`, porque
+`workflow_run` roda no commit ANTERIOR por padrão e publicaria os dados de antes da coleta.
+
+⚠️ **O cron do GitHub PULA execuções, e muito.** Medido nas primeiras 2,5 h após ligar:
+saíram **3 execuções de preço, não ~30**, e uma delas às 22:47 UTC — fora da janela 13–21,
+quase uma hora atrasada. Agendamento curto é o primeiro a ser descartado quando a fila
+aperta. **Trate o feed de preços como "algumas vezes por hora", não como intraday.** Não
+adianta apertar o cron; se a cadência importar, o caminho é runner próprio.
+
+⚠️ **`git pull` ANTES de qualquer coisa.** Os workflows commitam sozinhos várias vezes por
+dia. Em 17/08 o rebase deu conflito em `precos.json` — a resolução certa é **ficar com a
+versão do remoto** (`git checkout --ours` durante rebase), porque é a coleta mais recente e
+a próxima rodada sobrescreve de qualquer jeito.
+
+⚠️ **Cuidado com `precos.json` corrompido na área de trabalho.** Achado em 18/08: o arquivo
+local estava com **1 KB** — uma coleta que falhou por falta de rede
+(`URLError: getaddrinfo failed`), com zero papéis e zero séries, gravada por alguma rodada
+em ambiente sem internet. Os commits estavam íntegros. **Confira o tamanho (≈234 KB) antes
+de commitar**; um `precos.json` vazio publicado deixa o Price Action em branco. Para
+restaurar: `git checkout origin/main -- dashboard/data/precos.json`.
+
+---
+
 ## 10. O que vem a seguir
 
 ### Mensalidades: escopo CONGELADO em 14/08/2026 — não reabrir
@@ -1229,7 +1284,8 @@ virar métricas de eficiência operacional e dependência de funding.
 | `docs/03_arquitetura.md` | Arquitetura, dimensionamento dos cubos, sequência de entrega |
 | `docs/04_reconciliacao_companhias.md` | **Censo × releases das 7 abertas**, com fontes |
 | `docs/05_serie_historica.md` | Série 2015–2024, comparabilidade e armadilhas |
-| `docs/06_publicacao.md` | **GitHub Actions + Pages**: coleta automática de preços e link público |
+| `docs/06_publicacao.md` | **GitHub Actions + Pages**: como a automação funciona e onde mexer |
+| `docs/HANDOFF_SESSAO_2026-08-17.md` | Resumo da sessão que pôs o projeto no ar |
 | `outputs/validation_report.md` | Relatório de validação (gerado) |
 | `outputs/audit_grupos_2024.md` | Auditoria do mapeamento (gerado) |
 | `outputs/grupos_composicao_2024.md` | IES por IES dentro de cada grupo (gerado) |
