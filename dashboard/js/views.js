@@ -819,7 +819,7 @@ async function secaoEmec(f, selG) {
   tabela($('#ge-qual'), [
     { k: 'grupo', t: TX('Grupo'), tipo: 'txt', fmt: (v, r) =>
         `<span style="display:inline-flex;align-items:center;gap:7px"><span style="width:8px;
-         height:8px;border-radius:2px;background:${corGrupoK(r._raw)}"></span>${esc(v)}</span>` },
+         height:8px;border-radius:2px;flex:0 0 auto;background:${corGrupoK(r._raw)}"></span>${esc(v)}</span>` },
     { k: 'igc', t: TX('IGC médio'), tipo: 'num', fmt: v => nota2(v) },
     { k: 'igcPond', t: TX('IGC do aluno médio'), tipo: 'num',
       fmt: v => nota2(v) },
@@ -1003,16 +1003,31 @@ export async function geography(f) {
     $('#ge-mun-sel').value = String(geoMun);
   }
 
-  /* Bolhas: uma por município alcançado pelos selecionados, colorida por QUANTOS deles
-   * estão ali. É a sobreposição competitiva lida direto no mapa — o que antes era um mapa
-   * separado três seções abaixo. */
-  const FAIXAS = [
-    { rot: TX('Só um grupo'), cor: '#8FB4D9', teste: q => q === 1 },
-    { rot: TX('Dois grupos'), cor: '#EC7000', teste: q => q === 2 },
-    { rot: TX('Três ou mais'), cor: '#A34B00', teste: q => q >= 3 },
-  ];
+  /* Bolhas: UMA por município, na cor do grupo que lidera a praça entre os selecionados.
+   *
+   * ⚠️ A versão anterior pintava por QUANTOS grupos dividiam o município — três faixas em
+   * tons de azul e marrom. O usuário achou o mapa poluído em 18/08/2026, e ele estava
+   * certo por dois motivos: a escala de contagem não é a linguagem de cor do resto do
+   * dashboard (onde cor = grupo, sempre), e a informação de sobreposição já aparece duas
+   * vezes na mesma tela — no tooltip, que lista grupo a grupo, e na tabela de
+   * exclusividade logo abaixo. Hoje a cor responde "de quem é esta praça", que é a
+   * pergunta do bloco, e usa as cores de `config/grupos.csv`.
+   *
+   * Uma série por grupo, não uma bolha por grupo: o município entra na série do LÍDER, e
+   * por isso não há empilhamento. Sobrepor todos os grupos já foi tentado nesta tela e deu
+   * ~9.000 bolhas translúcidas — ilegível. A série por grupo também devolve a legenda
+   * clicável, que liga e desliga um player do mapa. */
+  const liderNoMun = mx => {
+    let melhor = null, melhorV = 0;
+    for (const k of selG) {
+      const v = porGrupoMun.get(k)?.get(mx)?.mat || 0;
+      if (v > melhorV) { melhorV = v; melhor = k; }
+    }
+    return melhor;
+  };
+  const FAIXAS = selG.map(k => ({ rot: nomeGrupo(k), cor: corGrupoK(k, D.gruposLista.indexOf(k)), _k: k }));
   const ptsPorFaixa = FAIXAS.map(fx => [...presencaPorMun.entries()]
-    .filter(([mx, s]) => fx.teste(s.size) && temGeo(mx))
+    .filter(([mx]) => temGeo(mx) && liderNoMun(mx) === fx._k)
     .map(([mx, s]) => {
       const [lon, lat] = latlon(mx);
       const alunos = selG.reduce((acc, k) => acc + (porGrupoMun.get(k)?.get(mx)?.mat || 0), 0);
@@ -1025,8 +1040,10 @@ export async function geography(f) {
 
   const mapaInt = chart($('#ge-mapa-int'), {
     textStyle: { fontFamily: '-apple-system, "Segoe UI", Roboto, sans-serif' },
-    legend: { type: 'plain', top: 0, left: 0, itemWidth: 10, itemHeight: 10, itemGap: 16,
-              icon: 'circle', data: FAIXAS.map(x => x.rot),
+    /* Legenda por extenso e clicável: num bloco cujo assunto é "quem está onde", esconder
+     * nome de player atrás de setinha de rolagem é o oposto do necessário. */
+    legend: { type: 'plain', top: 0, left: 0, width: '92%', itemWidth: 10, itemHeight: 10,
+              itemGap: 14, icon: 'circle', data: FAIXAS.map(x => x.rot),
               textStyle: { fontSize: 11.5, color: '#4A4A4A' } },
     tooltip: {
       trigger: 'item', backgroundColor: '#fff', borderColor: '#D2D4D8', borderWidth: 1,
@@ -1043,7 +1060,7 @@ export async function geography(f) {
         }).filter(Boolean);
         return `<strong>${esc(p.data[3])} — ${esc(ufMun(mx))}</strong><br>` +
                `<span style="color:#8C8C8C">${n(mun.get(mx)?.mat || 0)} ${TX('alunos na praça')} · ` +
-               `${p.data[5]} ${TX('dos selecionados')}</span><br>${linhas.join('<br>')}` +
+               `${p.data[5]} ${TX('dos selecionados presentes')}</span><br>${linhas.join('<br>')}` +
                `<br><span style="color:#8C8C8C;font-size:11.5px">${TX('clique para abrir a praça')}</span>`;
       },
     },
@@ -1150,7 +1167,7 @@ export async function geography(f) {
   const colsPraca = [
     { k: 'grupo', t: TX('Grupo'), tipo: 'txt', fmt: (v, r) =>
         `<span style="display:inline-flex;align-items:center;gap:7px;${r.mat ? '' : 'opacity:.45'}">
-           <span style="width:8px;height:8px;border-radius:2px;background:${corGrupoK(r._raw)}"></span>
+           <span style="width:8px;height:8px;border-radius:2px;flex:0 0 auto;background:${corGrupoK(r._raw)}"></span>
            ${esc(v)}</span>` },
     { k: 'ies', t: TX('IES na praça'), tipo: 'num', fmt: v => v ? n(v) : '—' },
     ...(geoMun == null ? [{ k: 'munic', t: TX('Municípios'), tipo: 'num', fmt: v => v ? n(v) : '—' }] : []),
@@ -1167,8 +1184,8 @@ export async function geography(f) {
     'fica na lista de propósito, porque ausência numa praça é informação competitiva. ' +
     '<strong>IES na praça</strong> é o número de instituições distintas do grupo com aluno ' +
     'no recorte, e é PISO de unidades: o Censo não tem identificador de campus, então dois ' +
-    'campi da mesma IES na mesma cidade contam como um. A cor da bolha no mapa é quantos dos ' +
-    'grupos selecionados dividem aquele município.',
+    'campi da mesma IES na mesma cidade contam como um. No mapa, a cor da bolha é o grupo ' +
+    'que lidera aquele município entre os selecionados, e a legenda liga e desliga cada um.',
     { t: n(matEscopo), m: nomeEscopo, a: ano });
 
   $('#ge-mapa-nota').textContent = TX(
@@ -1204,57 +1221,6 @@ export async function geography(f) {
   mapaBolhas($('#ge-dig'), [{ nome: TX('EAD'), cor: COR_EAD, pontos: ptsDig }],
              { max: maxFD });
 
-  /* ⚠️ Densidade, não contagem. O gráfico responde "quantos alunos cabem numa praça de
-   * cada modalidade", que é a diferença econômica entre as duas operações: um campus
-   * concentra milhares de alunos numa cidade, um polo de EAD atende dezenas ou centenas em
-   * muitas. Barras lado a lado, não empilhadas — são duas médias independentes, e somá-las
-   * não significaria nada. */
-  const dens = selG.map(k => {
-    const g = porGrupoMun.get(k) || new Map();
-    let mPres = 0, mEad = 0, aPres = 0, aEad = 0, munic = 0, mat = 0;
-    for (const o of g.values()) {
-      if (o.mat <= 0) continue;
-      munic++; mat += o.mat;
-      if (o.pres > 0) { mPres++; aPres += o.pres; }
-      if (o.ead > 0) { mEad++; aEad += o.ead; }
-    }
-    return { grupo: nomeGrupo(k), _raw: k, munic, mat,
-             porPres: mPres ? aPres / mPres : 0, porEad: mEad ? aEad / mEad : 0,
-             munPres: mPres, munEad: mEad };
-  }).sort((a, b) => b.porPres - a.porPres);
-
-  chart($('#ge-dens'), {
-    ...baseChart(),
-    legend: { ...baseChart().legend, data: [T_PRES(), T_EAD()] },
-    grid: { left: 8, right: 16, top: 30, bottom: 6, containLabel: true },
-    xAxis: { ...baseChart().xAxis, data: dens.map(r => r.grupo),
-             axisLabel: { fontSize: 10.5, color: '#8C8C8C', rotate: 28, interval: 0 } },
-    yAxis: { ...baseChart().yAxis,
-             axisLabel: { fontSize: 11.5, color: '#8C8C8C', formatter: v => compacto(v) } },
-    series: [
-      { name: T_PRES(), type: 'bar', barMaxWidth: 22, itemStyle: { color: COR_PRES },
-        data: dens.map(r => Math.round(r.porPres)) },
-      { name: T_EAD(), type: 'bar', barMaxWidth: 22, itemStyle: { color: COR_EAD },
-        data: dens.map(r => Math.round(r.porEad)) },
-    ],
-    tooltip: { ...baseChart().tooltip, valueFormatter: v => n(v) },
-  });
-  registrarCSV('geografia', TX('Alunos por município'),
-    [{ k: 'grupo', t: TX('Grupo') }, { k: 'munic', t: TX('Municípios') },
-     { k: 'munPres', t: TX('Com presencial') }, { k: 'munEad', t: TX('Com EAD') },
-     { k: 'porPres', t: TX('Alunos por município — presencial') },
-     { k: 'porEad', t: TX('Alunos por município — EAD') }],
-    dens.map(r => ({ grupo: r.grupo, munic: r.munic, munPres: r.munPres, munEad: r.munEad,
-                     porPres: Math.round(r.porPres), porEad: Math.round(r.porEad) })));
-
-  $('#ge-dens-nota').textContent = TX(
-    'Alunos ÷ municípios em que o grupo tem aquela modalidade — densidade por praça, não ' +
-    'total. É a diferença econômica entre as duas operações: o campus concentra muitos alunos ' +
-    'em poucas cidades e o polo espalha poucos por muitas. As barras não se somam: são duas ' +
-    'médias independentes, cada uma com o próprio denominador. Estes dois mapas e este ' +
-    'gráfico ignoram o filtro de modalidade de propósito — com "EAD" selecionado, o mapa do ' +
-    'presencial ficaria vazio e pareceria que o grupo não tem campus.');
-
   /* ═════════════════════════════ SOBREPOSIÇÃO COMPETITIVA ═══════════════ */
   const disputados = [...presencaPorMun.values()].filter(s => s.size > 1).length;
   const exclLinhas = selG.map(k => {
@@ -1268,7 +1234,7 @@ export async function geography(f) {
   tabela($('#ge-excl'), [
     { k: 'grupo', t: TX('Grupo'), tipo: 'txt', fmt: (v, r) =>
         `<span style="display:inline-flex;align-items:center;gap:7px"><span style="width:8px;
-         height:8px;border-radius:2px;background:${corGrupoK(r._raw)}"></span>${esc(v)}</span>` },
+         height:8px;border-radius:2px;flex:0 0 auto;background:${corGrupoK(r._raw)}"></span>${esc(v)}</span>` },
     { k: 'munic', t: TX('Municípios'), tipo: 'num' },
     { k: 'exclusivo', t: TX('Só ele'), tipo: 'num' },
     { k: 'dividido', t: TX('Divide'), tipo: 'num' },
