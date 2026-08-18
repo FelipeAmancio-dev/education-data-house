@@ -337,26 +337,69 @@ ela divulgou**.
 | 383 | Universidade da Amazônia | 28.922 | 39.644 | +4.592 | +6.130 |
 | 1205 | FAEL | 46.200 | 55.428 | 0 | +9.228 |
 
-**Hipóteses, em ordem de sustentação:**
+**A hipótese principal, e ela tem confirmação aritmética: vínculo que não foi baixado.**
 
-1. **Mudança no critério de declaração ao Censo em 2024.** É a que sobra depois de eliminar
-   as estruturais: mesmo perímetro, mesma definição, e o gap aparece de um ano para o outro
-   nas duas modalidades ao mesmo tempo. Compatível com passar a declarar como "cursando"
-   vínculo que a companhia já não conta como base ativa.
-2. **Matrícula que a Ser não reporta como graduação.** O caso do **Derby** é o mais
-   sugestivo: um segundo código em Recife, da mesma mantenedora do principal, sai de ~zero
-   para **14,6 mil alunos de EAD** com **+1 aluno presencial**. Tem cara de balde novo —
-   convênio, segunda graduação ou formação pedagógica — que o Censo registra como graduação
-   e o release põe noutro lugar.
-3. **Unificação de mantidas em curso.** **11 das 50 IES da Ser** têm a sinalização
-   *Unificação de Mantidas* no e-MEC, e há três pares mesma-mantenedora/mesma-cidade
-   (Recife, Belém, Teresina — este com dois "Maurício de Nassau" de ~4 mil alunos cada).
-   Migração de vínculo entre códigos durante a transição pode gerar dupla contagem.
-   ⚠️ **Evidência contra:** nos pares os dois códigos cresceram **juntos**, em vez de um
-   esvaziar e o outro encher — o padrão de migração não aparece.
-4. ~~**IES duplicada no nosso mapeamento**~~ — **descartada**. Nenhuma IES aparece em dois
-   grupos (conferido nos 3.400 códigos), cada par tem código, sede e alunos próprios, e o
-   mesmo perímetro reconciliou em 2023.
+A base de alunos de um ano é a do ano anterior, mais quem entrou, menos quem formou, menos
+quem saiu. Isolando o "quem saiu" — tudo com dado do próprio Censo, sem número de release:
+
+```
+evasão implícita(t) = base(t−1) + ingressantes(t) − concluintes(t) − base(t)
+```
+
+| Grupo | 2020 | 2021 | 2022 | 2023 | **2024** |
+|---|---:|---:|---:|---:|---:|
+| **Ser Educacional** | 19,6% | 12,1% | 47,5% | 24,8% | **2,4%** |
+| Ânima | 13,8% | 23,3% | 19,7% | 35,4% | 27,7% |
+| Cruzeiro do Sul | 38,0% | 40,7% | 41,6% | 39,0% | 37,6% |
+| YDUQS | 17,1% | 23,2% | 21,2% | 21,7% | 39,0% |
+| Vitru | 26,0% | 35,8% | 47,6% | 57,4% | 65,5% |
+| Cogna | 39,1% | 47,3% | 62,4% | 45,1% | 47,2% |
+
+⚠️ **A Ser declarou 2024 com evasão implícita de 2,4%.** O menor valor dela em uma década
+era 10,7%; no ano anterior foi 24,8%; os pares em 2024 vão de 27,7% a 65,5%. E a própria
+companhia divulgou, no release de 4T23, evasão de **12,4% no híbrido e 27,8% no digital**.
+Uma base que cresce 35% com 2,4% de saída é aritmeticamente incompatível com o que a
+empresa diz sobre a própria operação.
+
+**A conta que fecha:** aplicando a 2024 a evasão que a Ser teve em 2023 —
+
+| | |
+|---|---:|
+| base 2023 (matrículas + trancados) | 302.216 |
+| + ingressantes 2024 | 159.938 |
+| − concluintes 2024 | 42.387 |
+| = base se ninguém evadisse | 419.767 |
+| − evasão a 24,8% (a taxa de 2023) | 74.950 |
+| = base simulada | 344.817 |
+| − trancados declarados | 37.117 |
+| **= `QT_MAT` simulado** | **307.700** |
+| **reportado pela Ser no 4T24** | **307.830** |
+
+**Diferença: 0,04%.** Ou seja: a base declarada ao Censo em 2024 é exatamente a de 2023
+somada às entradas, **sem baixar quem saiu**. Ingressantes explicam só 39% do salto de
+matrículas; o resto é gente que ficou na base.
+
+Isso também explica por que o gap aparece nas duas modalidades e espalhado por uma dúzia de
+campi ao mesmo tempo, sem nenhuma queda compensatória em lugar nenhum: **aluno não aparece
+em todo lugar de uma vez; regra de declaração, sim.**
+
+**As outras hipóteses, e por que ficaram atrás:**
+
+- **Balde novo de matrícula que a Ser não reporta como graduação** — o Derby, segundo código
+  em Recife, sai de ~zero para 14,6 mil de EAD com **+1 aluno presencial**. Explica bem
+  aquele código, mas não os +41 mil de presencial espalhados por doze campi.
+- **Unificação de mantidas** — 11 das 50 IES da Ser têm essa sinalização no e-MEC e há três
+  pares mesma-mantenedora/mesma-cidade. ⚠️ Mas nos pares os **dois códigos cresceram
+  juntos**, em vez de um esvaziar e o outro encher: o padrão de migração de vínculo não
+  aparece.
+- ~~**IES duplicada no nosso mapeamento**~~ — **descartada**: nenhuma IES em dois grupos
+  (3.400 códigos conferidos), cada par com código, sede e alunos próprios, e o mesmo
+  perímetro reconciliando em 2023.
+
+⚠️ **O que isto NÃO é:** acesso aos registros da Ser. É um argumento de consistência, e a
+força dele está em três coisas convergirem — o ano anterior reconciliar, a evasão implícita
+desabar e a simulação cair a 0,04% do reportado. A confirmação seria a nota metodológica da
+companhia ao INEP.
 
 **O que fecharia a questão:** o release de 4T24 da Ser abre a base por marca? Se abrir, dá
 para ver se Nassau Recife e Derby somam os 119 mil do Censo. E a nota metodológica do
