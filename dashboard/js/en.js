@@ -920,4 +920,97 @@ registrarEN({
   'Modalidade, rede e organização': 'Delivery mode, sector and institution type',
   'Grupos e competição': 'Groups and competition',
   'Curso e geografia': 'Programs and geography',
+
+  /* ----------------------------------------------------- Investor Snapshot */
+  'Investor Snapshot': 'Investor Snapshot',
+  'Resumo': 'Summary',
+  'A página de abertura: o setor na década, de onde vieram os alunos que entraram, quem ganhou e quem perdeu share, e o que cresce em curso e em praça.':
+    'The opening page: the sector over the decade, where the incoming students came from, who ' +
+    'gained and who lost share, and what is growing by program and by state.',
+
+  'O setor na década': 'The sector over the decade',
+  'CAGR {i}–{f}': 'CAGR {i}–{f}',
+  'ao ano, em matrículas': 'per year, in enrollments',
+  'era {v} em {a}': 'was {v} in {a}',
+  'Alunos a mais desde {a}': 'Students added since {a}',
+  '{p} em {n} anos': '{p} over {n} years',
+  'EAD — variação': 'Distance learning — change',
+  'Presencial — variação': 'On-campus — change',
+  'alunos desde {a}': 'students since {a}',
+  'IES ativas': 'Active institutions',
+  'Indicadores do setor': 'Sector indicators',
+  'Indicador': 'Indicator',
+
+  'De onde veio o crescimento': 'Where the growth came from',
+  'Atribuição': 'Attribution',
+  'De onde vieram os alunos — {i} a {f}': 'Where the students came from — {i} to {f}',
+  'O total esconde a troca de composição: o EAD privado entregou mais alunos do que o setor inteiro ganhou':
+    'The total hides the shift in mix: private distance learning added more students than the ' +
+    'whole sector gained',
+  'Privada · EAD': 'Private · distance',
+  'Privada · presencial': 'Private · on-campus',
+  'Pública · EAD': 'Public · distance',
+  'Pública · presencial': 'Public · on-campus',
+  'Segmento': 'Segment',
+  'Variação': 'Change',
+  'CAGR (%)': 'CAGR (%)',
+  'Crescimento por segmento': 'Growth by segment',
+  'Variação absoluta de matrículas por segmento entre {i} e {f}. O setor ganhou <strong>{t}</strong> alunos no período, mas o EAD privado sozinho entregou <strong>{e}</strong> enquanto o presencial privado devolveu <strong>{p}</strong> — quem lê só o total não vê a troca de composição, que é onde está a tese. Denominador: matrículas do Brasil, todas as redes ({d} em {f}).':
+    'Absolute change in enrollments by segment between {i} and {f}. The sector gained ' +
+    '<strong>{t}</strong> students over the period, but private distance learning alone added ' +
+    '<strong>{e}</strong> while private on-campus gave back <strong>{p}</strong> — reading the ' +
+    'total alone misses the shift in mix, which is where the thesis is. Denominator: Brazilian ' +
+    'enrollments, all sectors ({d} in {f}).',
+
+  'Movimento entre os players': 'Movement among the players',
+  'Quem ganhou e quem perdeu share — {p} a {a}': 'Who gained and who lost share — {p} to {a}',
+  'Movimento em pontos percentuais contra o ano anterior — não é o ranking de tamanho':
+    'Movement in percentage points against the prior year — this is not the size ranking',
+  'Grupos econômicos — share e as duas séries de crescimento':
+    'Economic groups — share and both growth series',
+  'Matrículas e base de alunos lado a lado: quando as duas divergem, o movimento é reclassificação de vínculo, não aluno entrando ou saindo':
+    'Enrollments and student base side by side: when the two diverge, the move is a ' +
+    'reclassification of enrollment status, not students joining or leaving',
+  'YoY matrículas': 'YoY enrollments',
+  'YoY base de alunos': 'YoY student base',
+  'Movimento de market share': 'Market share movement',
+  'QT_MAT e base de alunos divergem mais de {v} p.p. neste ano':
+    'QT_MAT and the student base diverge by more than {v} pp in this year',
+  'Denominador: matrículas do Brasil em {a} — {t}. Consolidação por grupo econômico em perímetro <strong>pro-forma</strong>: uma IES adquirida em 2022 conta no grupo comprador desde {i}, o que permite ler share sem degrau de M&amp;A — mas não é o que cada empresa reportava à época. <em>Base de alunos</em> = matrículas + trancados, que é a definição que as companhias divulgam; as duas colunas aparecem juntas de propósito. Fora do ranking, {p} do mercado ({m} matrículas) está em instituições não mapeadas em grupo — bucket residual, não um player. Os 15 maiores na tela, todos os {q} grupos no Excel — ordene por qualquer coluna.':
+    'Denominator: Brazilian enrollments in {a} — {t}. Consolidated by economic group on a ' +
+    '<strong>pro-forma</strong> perimeter: an institution acquired in 2022 counts in the buying ' +
+    'group since {i}, which lets share be read without M&amp;A steps — but it is not what each ' +
+    'company reported at the time. <em>Student base</em> = enrollments + suspended enrollments, ' +
+    'which is the definition companies disclose; the two columns appear together on purpose. ' +
+    'Outside the ranking, {p} of the market ({m} enrollments) sits in institutions not mapped to ' +
+    'a group — a residual bucket, not a player. The 15 largest on screen, all {q} groups in '
+    + 'the Excel file — sort by any column.',
+  '<strong>{g}</strong>: matrículas e base de alunos divergem mais de {v} p.p. em {a}. O movimento aí é <strong>reclassificação de vínculo</strong> — trancado que virou ativo, ou o contrário —, não aluno entrando ou saindo. Leia as duas colunas juntas.':
+    '<strong>{g}</strong>: enrollments and student base diverge by more than {v} pp in {a}. The ' +
+    'move there is a <strong>reclassification of enrollment status</strong> — suspended turning ' +
+    'active, or the reverse — not students joining or leaving. Read both columns together.',
+
+  'O que cresce': 'What is growing',
+  'Cursos que mais crescem — {i} a {f}': 'Fastest-growing programs — {i} to {f}',
+  'Rótulos CINE acima do piso de base, ordenados por CAGR':
+    'CINE labels above the size floor, ranked by CAGR',
+  'Crescimento por curso': 'Growth by program',
+  'Rótulos CINE com pelo menos <strong>{piso}</strong> matrículas em {a} — {q} cursos, {cob} do total do país. O piso é o que impede o topo do ranking de virar curso pequeno que dobrou de tamanho: matematicamente correto e analiticamente inútil. 15 na tela, todos os {q} no Excel. Ordene por qualquer coluna.':
+    'CINE labels with at least <strong>{piso}</strong> enrollments in {a} — {q} programs, {cob} ' +
+    'of the national total. The floor is what stops the top of the ranking from becoming a tiny ' +
+    'program that doubled: mathematically correct and analytically useless. 15 on screen, all ' +
+    '{q} in the Excel file. Sort by any column.',
+
+  'Onde o setor cresce — {i} a {f}': 'Where the sector is growing — {i} to {f}',
+  'Praça': 'Location',
+  'UF de oferta — onde o aluno está, não onde fica a sede da IES':
+    'State of delivery — where the student is, not where the institution is registered',
+  'Crescimento por UF': 'Growth by state',
+  'UF de <strong>oferta</strong> — onde o aluno está —, do cubo por município (dimensões 1 e 2 do Censo). <strong>Não confunda com a UF da sede da IES</strong>, que é o que os demais blocos usam: no EAD a matrícula é lançada na sede, e por isso a Unopar aparece 100% no Paraná com polo no país inteiro. UFs com pelo menos {piso} matrículas em {a}; 15 na tela, todas no Excel. Denominador: {t} matrículas com município identificado.':
+    'State of <strong>delivery</strong> — where the student is — from the city-level cube ' +
+    '(Census dimensions 1 and 2). <strong>Do not confuse it with the state where the institution ' +
+    'is registered</strong>, which is what the other blocks use: in distance learning the ' +
+    'enrollment is booked at the head office, which is why Unopar shows up 100% in Paraná while ' +
+    'running hubs across the country. States with at least {piso} enrollments in {a}; 15 on ' +
+    'screen, all of them in the Excel file. Denominator: {t} enrollments with an identified city.',
 });

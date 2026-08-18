@@ -64,6 +64,7 @@
 <!-- ═══════════════════════════════════════════════ navegação dos dashboards -->
 <nav id="nav" hidden>
   <a class="volta" href="#/">← Dashboards</a>
+  <button data-v="snapshot">Investor Snapshot</button>
   <button data-v="overview">Overview</button>
   <button data-v="grupos">Key Players</button>
   <button data-v="cursos">Cursos</button>
@@ -93,6 +94,27 @@
   <!-- ================================================================ HOME -->
   <section class="view on" id="v-home">
     <div class="card-grid">
+
+      <a class="bloco" href="#/snapshot">
+        <div class="ilus">
+          <svg viewBox="0 0 160 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="4" y1="62" x2="156" y2="62" stroke="#E8E8E8" stroke-width="1"/>
+            <rect x="10" y="30" width="30" height="32" rx="3" fill="#003C7D"/>
+            <rect x="46" y="22" width="30" height="40" rx="3" fill="#4A7FB5"/>
+            <rect x="82" y="14" width="30" height="48" rx="3" fill="#EC7000"/>
+            <rect x="118" y="34" width="30" height="28" rx="3" fill="#F2A25C"/>
+            <path d="M18 22 L54 14 L90 6" stroke="#EC7000" stroke-width="2.4" fill="none"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="90" cy="6" r="3.4" fill="#EC7000"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <span class="cat">Resumo</span>
+          <h3>Investor Snapshot</h3>
+          <p>A página de abertura: o setor na década, de onde vieram os alunos que entraram,
+             quem ganhou e quem perdeu share, e o que cresce em curso e em praça.</p>
+        </div>
+      </a>
 
       <a class="bloco" href="#/overview">
         <div class="ilus">
@@ -539,6 +561,65 @@
   </section>
 
   <!-- ============================================================ OVERVIEW -->
+  <!-- ==================================================== INVESTOR SNAPSHOT -->
+  <section class="view" id="v-snapshot">
+    <div class="bloco-topo">
+      <h2>Investor Snapshot</h2>
+      <div class="acoes"></div>
+    </div>
+
+    <div class="secao-tit">O setor na década</div>
+    <div class="grid g4" id="sn-kpis"></div>
+    <div class="grid g4" id="sn-kpis2" style="margin-top:14px"></div>
+
+    <div class="secao-tit">De onde veio o crescimento</div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="eyebrow">Atribuição</div>
+        <h3 id="sn-cresc-tit" data-din>De onde vieram os alunos</h3>
+        <p class="hint">O total esconde a troca de composição: o EAD privado entregou mais
+           alunos do que o setor inteiro ganhou</p>
+        <div class="chart" id="sn-cresc"></div>
+        <div class="nota" id="sn-cresc-nota"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Competição</div>
+        <h3 id="sn-share-tit" data-din>Quem ganhou e quem perdeu share</h3>
+        <p class="hint">Movimento em pontos percentuais contra o ano anterior — não é o
+           ranking de tamanho</p>
+        <div class="chart" id="sn-share"></div>
+      </div>
+    </div>
+
+    <div class="secao-tit">Movimento entre os players</div>
+    <div class="card">
+      <div class="eyebrow">Market share</div>
+      <h3>Grupos econômicos — share e as duas séries de crescimento</h3>
+      <p class="hint">Matrículas e base de alunos lado a lado: quando as duas divergem, o
+         movimento é reclassificação de vínculo, não aluno entrando ou saindo</p>
+      <div id="sn-share-tab"></div>
+      <div class="nota" id="sn-share-nota"></div>
+    </div>
+
+    <div class="secao-tit">O que cresce</div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="eyebrow">Demanda</div>
+        <h3 id="sn-cursos-tit" data-din>Cursos que mais crescem</h3>
+        <p class="hint">Rótulos CINE acima do piso de base, ordenados por CAGR</p>
+        <div id="sn-cursos"></div>
+        <div class="nota" id="sn-cursos-nota"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Praça</div>
+        <h3 id="sn-uf-tit" data-din>Onde o setor cresce</h3>
+        <p class="hint">UF de oferta — onde o aluno está, não onde fica a sede da IES</p>
+        <div id="sn-uf"></div>
+        <div class="nota" id="sn-uf-nota"></div>
+      </div>
+    </div>
+  </section>
+
   <section class="view" id="v-overview">
     <div class="bloco-topo">
       <h2>Overview</h2>

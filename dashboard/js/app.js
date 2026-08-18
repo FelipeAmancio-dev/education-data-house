@@ -10,12 +10,14 @@ import { baixarXLSX } from './xlsx.js';
 import { TX, setIdioma, idiomaSalvo, idioma, capturarEstaticos, aplicarEstaticos } from './i18n.js';
 import './en.js';
 import { overview, courses, geography, glossario } from './views.js';
+import { snapshot } from './snapshot.js';
 import { grupos } from './grupos.js';
 import { precos } from './precos.js';
 import { mensalidades } from './mensalidades.js';
 import { regulatorio } from './regulatorio.js';
 
 const VIEWS = {
+  snapshot,
   precos, regulatorio, mensalidades, overview, grupos, cursos: courses,
   geografia: geography,
   glossario,   // as definições são estáticas, mas a composição por grupo é renderizada
@@ -25,6 +27,9 @@ const VIEWS = {
  * ao sair de uma view que o usava, o valor volta para vazio — senao o usuario carregaria
  * um recorte invisivel de uma tela para outra. */
 const FILTROS = {
+  // Só o ano: o Snapshot é o retrato nacional do setor, e recorte de UF ou rede
+  // transformaria a página de abertura numa análise — que é o papel dos outros blocos.
+  snapshot: ['ano'],
   precos: [],                                 // tem controles próprios de período
   regulatorio: [],                            // tem tema, período, relevância e órgão próprios
   mensalidades: [],                           // preço de hoje, não série do Censo: sem ano/UF
