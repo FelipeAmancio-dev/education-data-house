@@ -603,6 +603,33 @@ não só do Price Action, e passou despercebido porque só aparece depois de mex
 `dashboard/data/precos.json` (~234 KB): fechamento **ajustado** de 5 anos para os 7 papéis,
 IBOV, SMAL11 e USDBRL. `config/tickers.csv` mapeia grupo → papel.
 
+### Frescor da coleta — e o fuso que estava errado
+
+O bloco ganhou em 18/08/2026 uma bolinha com "há X min" ao lado do carimbo, a pedido do
+usuário. Ela existe porque o dado passou a ser alimentado por robô: **sem sinal de idade na
+tela, uma coleta que parou de rodar é indistinguível de um mercado parado** — os dois deixam
+o número igual ao de antes.
+
+⚠️ **Consertar o fuso veio antes, e o defeito era silencioso.** `06_fetch_precos.py` gravava
+`atualizado_em` com `datetime.now()` **sem fuso**: no runner do GitHub isso é UTC, na máquina
+do usuário é BRT. O mesmo campo significava coisas diferentes conforme a origem. E o
+front-end fazia `new Date('2026-08-18 17:02'.replace(' ','T'))`, que o JavaScript lê como
+hora **LOCAL** — então o arquivo do CI virava um instante **3 horas no futuro** e a idade dava
+negativa. Consequência prática: o aviso de "snapshot com mais de 24h", que existe desde a
+Etapa 5, **nunca disparava para arquivo publicado**. Ninguém notou porque um aviso que não
+aparece parece um aviso que não precisou aparecer.
+
+Hoje o coletor grava `atualizado_utc` em ISO 8601 com Z — instante autoritativo — e a tela
+converte para o fuso de quem está olhando. `atualizado_em` continua no arquivo por
+compatibilidade, agora também em UTC. **Data sem fuso em arquivo que dois relógios diferentes
+escrevem é bug esperando acontecer.**
+
+As faixas da bolinha são deliberadamente largas — verde até 90 min, âmbar até 24 h, cinza
+depois: o cron do GitHub pula execuções, e **fora do pregão o dado é velho e está certo
+assim**. Bolinha vermelha no domingo seria alarme falso, e alarme falso treina o leitor a
+ignorar o indicador. O texto carrega o número junto da cor, porque cor sozinha não serve a
+quem não distingue verde de âmbar.
+
 ⚠️ **O bloco virou de FECHAMENTO DIÁRIO em 14/08/2026, a pedido do usuário — não tente
 ressuscitar o tempo real.** Saíram: a coleta de intraday (era uma chamada extra por papel, 9 a
 mais por rodada, e só aumentava o risco de o Yahoo limitar o IP), o chip *Intraday*, a coluna

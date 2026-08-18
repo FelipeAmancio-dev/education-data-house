@@ -675,3 +675,15 @@ a.rg-fonte:hover { color: var(--laranja-escuro); text-decoration: underline; }
 /* feed enxuto: data, tags e o ato. O resumo mora no painel de detalhe. */
 .rg-dec-doc { font-size: 14.5px; }
 .rg-dec { padding: 11px 0; }
+
+/* Frescor da coleta (Price Action). A bolinha carrega o sinal e o texto carrega o número:
+   cor sozinha não serve a quem não distingue verde de âmbar. */
+.frescor {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--ink-2); white-space: nowrap; cursor: default;
+}
+.frescor i { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; background: #B9BDC3; }
+.frescor.ok i { background: #2E9E5B; }
+.frescor.meio i { background: #EC7000; }
+.frescor.velho i { background: #B9BDC3; }
+.frescor.ok { color: #2E7D46; }

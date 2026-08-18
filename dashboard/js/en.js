@@ -60,9 +60,9 @@ registrarEN({
     'What exactly does each number mean? Every term defined, what each metric does and does not include, and why Census data can differ from what a company reports.',
 
   /* --------------------------------------------------------------- comuns */
-  'Matrículas': 'Enrollments', 'Matrículas': 'Enrollments', 'matrículas': 'enrollments',
+  'Matrículas': 'Enrollments',  'matrículas': 'enrollments',
   'Ingressantes': 'New entrants', 'Concluintes': 'Graduates', 'Trancados': 'On leave',
-  'Base de alunos': 'Student base', 'Cursos': 'Programs', 'Vagas': 'Seats',
+  'Base de alunos': 'Student base',  'Vagas': 'Seats',
   'IES': 'Institutions', 'Instituição': 'Institution', 'Mantenedora': 'Legal entity',
   'Organização': 'Type', 'Unidades': 'Units', 'Unid.': 'Units',
   'Share': 'Share', 'Δ Share': 'Δ Share', 'Δ Share vs {a}': 'Δ Share vs {a}',
@@ -86,7 +86,7 @@ registrarEN({
   /* -------------------------------------------------------------- overview */
   'Panorama do setor': 'Sector overview', 'Evolução': 'Trend',
   'Onde estão os alunos': 'Where the students are', 'Composição': 'Composition',
-  'Modalidade': 'Delivery mode', 'Demanda': 'Demand',
+   'Demanda': 'Demand',
   'Matrículas · recorte': 'Enrollments · selection',
   'Brasil — total': 'Brazil — total', 'todas as modalidades': 'all delivery modes',
   'Participação do recorte': 'Share of selection', 'do mercado nacional': 'of the national market',
@@ -319,7 +319,7 @@ registrarEN({
   'líder': 'leader', 'Líder': 'Leader', 'Vice': 'Runner-up',
   'Alunos do líder': 'Students of the leader', 'Share do líder': 'Leader share',
   'Share vice': 'Runner-up share', '% não mapeado': '% unmapped',
-  'Grupos mapeados': 'Mapped groups', 'Alunos na UF': 'Students in the state',
+   'Alunos na UF': 'Students in the state',
   'Share na UF': 'Share of the state', '{v} matrículas na UF': '{v} enrollments in the state',
   '{p}% das matrículas do estado': '{p}% of the state enrollments',
   'Liderança por UF': 'Leadership by state', 'Matriz player × UF': 'Player × state matrix',
@@ -393,7 +393,7 @@ registrarEN({
   'Retornos por janela': 'Returns by window',
   'Série de preços (fechamento ajustado)': 'Price series (adjusted close)',
   'Fechamento': 'Close', 'Retorno acumulado (base 100)': 'Cumulative return (base 100)',
-  'Composição': 'Composition',
+
   'Os preços ainda não foram coletados. Rode <code>python scripts/06_fetch_precos.py</code> e recarregue esta página.':
     'Prices have not been collected yet. Run <code>python scripts/06_fetch_precos.py</code> and reload this page.',
   'Este snapshot de preços tem {h}h. Rode <code>python scripts/06_fetch_precos.py</code> para atualizar.':
@@ -537,7 +537,7 @@ registrarEN({
   'sem coleta nesta modalidade': 'not collected for this delivery mode',
   'curso': 'program', 'cursos': 'programs',
   'instituição': 'institution', 'instituições': 'institutions',
-  'Mediana': 'Median', 'Mínimo': 'Minimum', 'Máximo': 'Maximum',
+  'Mediana': 'Median', 'Mínimo': 'Minimum', 
   'Cobertura da coleta': 'Collection coverage',
   'preços por unidade · coleta de {d}': 'unit-level prices · collected {d}',
   'Coleta de {d} · {o} preços por unidade': 'Collected {d} · {o} unit-level prices',
@@ -640,7 +640,7 @@ registrarEN({
   'Alcance comparado': 'Reach compared',
   'Municípios com aluno, por grupo — o grupo no mapa fica destacado':
     'Cities with students, by group — the group on the map is highlighted',
-  'Municípios': 'Cities',
+
   'Presencial — {q} municípios com campus': 'On campus — {q} cities with a campus',
   'EAD — {q} municípios com polo': 'Distance learning — {q} cities with a hub',
   'A bolha é o número de ALUNOS no município — não o número de campi nem de polos —, dimensionada pela raiz, porque em escala linear São Paulo apagaria todo o interior, que é o que interessa aqui. A posição é o centroide do município ({q} dos {t} têm coordenada), não o endereço de nenhuma unidade: o Censo dá o município de oferta, e não a rua. No presencial o município é onde o curso é dado; no EAD, onde está o polo.':
@@ -809,7 +809,6 @@ registrarEN({
     'The dot is the published tuition (simple average of the cheapest price at each campus). ' +
     'The band runs from the cheapest campus to the priciest: {t} campuses/hubs observed.',
 
-  'Evolução': 'Trend',
   'Série': 'Series',
   'Mensalidade mediana ao longo do tempo': 'Median monthly tuition over time',
   'Cada ponto é uma coleta. A série começa a existir a partir da segunda rodada — antes disso não há movimento a mostrar.':
@@ -920,6 +919,16 @@ registrarEN({
   'Grupos e competição': 'Groups and competition',
   'Curso e geografia': 'Programs and geography',
 
+  /* -------------------------------------- Price Action: frescor da coleta (18/08) */
+  'agora': 'just now',
+  'há {n} min': '{n} min ago',
+  'há {n} h': '{n} h ago',
+  'há {n} dias': '{n} days ago',
+  'Sem carimbo de coleta neste arquivo': 'This file carries no collection timestamp',
+  'Última coleta: {q} (seu fuso). Durante o pregão o robô coleta algumas vezes por hora; fora dele o dado fica parado, e isso é o esperado.':
+    'Last collected: {q} (your time zone). During market hours the robot collects a few times ' +
+    'an hour; outside them the data sits still, and that is expected.',
+
   /* --------------------------------------------- Mensalidades: coluna Spread */
   'Spread (mais caro ÷ mais barato)': 'Spread (priciest ÷ cheapest)',
   '<strong>Spread</strong> é quanto a instituição mais cara cobra a mais que a mais barata no mesmo curso — {c}, por exemplo: de {min} a {max}, ou seja, {v} a mais. Mede prêmio de marca; spread baixo é curso em que o preço já convergiu entre os players. ':
@@ -930,14 +939,14 @@ registrarEN({
 
   /* --------------------------------------- Geografia: mapa interativo (18/08) */
   'Onde cada player realmente está': 'Where each player actually is',
-  'Mapa': 'Map',
+
   'Quem está em cada praça': 'Who is in each location',
   'Escolha o estado para aproximar, clique numa bolha para abrir o município. A cor diz quantos dos grupos selecionados dividem aquela praça.':
     'Pick a state to zoom in, click a bubble to open the city. Colour shows how many of the ' +
     'selected groups share that location.',
   'Brasil — todas as UFs': 'Brazil — all states',
   'Nenhum — ver a UF inteira': 'None — show the whole state',
-  'Brasil': 'Brazil',
+
   'IES na praça': 'Institutions here',
   'alunos na praça': 'students here',
     'clique para abrir a praça': 'click to open this location',
@@ -960,230 +969,24 @@ registrarEN({
 
   /* ------------------------------------------- Geografia: exclusividade */
   'dos selecionados presentes': 'of those selected are here',
-    'Dos {t} municípios alcançados por pelo menos um dos selecionados, {d} têm mais de um deles presente — {p} do território coberto. Presença aqui é ter ao menos um aluno no município, em qualquer modalidade; não mede quem é mais forte, mede onde há disputa.':
-    'Of the {t} cities reached by at least one of the selected groups, {d} have more than one ' +
-    'of them present — {p} of the covered territory. Presence here means having at least ' +
-    'one student in the city, in any delivery mode; it does not measure who is stronger, it ' +
-    'measures where there is a contest.',
-  'Exclusividade': 'Exclusivity',
-  'Praça exclusiva × disputada': 'Exclusive × contested markets',
-  'Quantos municípios cada grupo tem só para si': 'How many cities each group has to itself',
-  'Só ele': 'Alone',
-  'Divide': 'Shares',
-  '% exclusivo': '% exclusive',
-  'Exclusividade por município': 'Exclusivity by city',
 
   /* -------------------------------------------------- geografia: e-MEC (14/08/2026) */
-  'Qualidade e situação regulatória': 'Quality and regulatory standing',
-  'e-MEC': 'e-MEC',
-  'IGC médio por grupo': 'Average IGC by group',
-  'IGC por grupo': 'IGC by group',
-  'Índice Geral de Cursos, de 1 a 5. Só entram IES com nota publicada':
-    'General Programme Index, 1 to 5. Only institutions with a published score are included',
-  'IES com nota': 'institutions with a score',
-  'IES no grupo': 'Institutions in the group',
-  'de': 'of',
-  'Restrições vigentes': 'Restrictions in force',
-  'IES com sinalização no e-MEC': 'Institutions flagged in e-MEC',
-  'Suspensão de ingresso, de FIES ou de ProUni, e procedimentos de supervisão':
-    'Suspension of intake, of FIES or of ProUni, and supervisory proceedings',
-  'Sinalização': 'Flag',
-  'Os dados do e-MEC não estão nesta cópia. Rode <code>python scripts/10_ingest_emec.py</code> para gerar <code>data/emec.json</code> a partir de <code>Dados_GEO.xlsx</code>.':
-    'The e-MEC data is not in this build. Run <code>python scripts/10_ingest_emec.py</code> ' +
-    'to generate <code>data/emec.json</code> from <code>Dados_GEO.xlsx</code>.',
-  'IGC do e-MEC, de 1 a 5, processado em {d}. A média é só entre as IES COM nota — IES sem avaliação publicada não entra como zero, que seria lê-la como péssima. A coluna do tooltip mostra quantas das IES do grupo têm nota. Base casada: {c} IES, cobrindo 99,9% das matrículas de 2024.':
-    'e-MEC IGC, 1 to 5, processed on {d}. The average covers only institutions WITH a score ' +
-    '— one without a published assessment does not enter as zero, which would read as ' +
-    'terrible. The tooltip shows how many of the group institutions carry a score. Matched ' +
-    'base: {c} institutions, covering 99.9% of 2024 enrollments.',
-  '{t} IES com restrição vigente, das quais {g} pertencem a algum grupo mapeado — as 15 primeiras na tela, todas no Excel. Ficam de fora as sinalizações que não são restrição, como "Unificação de Mantidas" e "Credenciamento Prévio", que são as duas mais numerosas e listá-las aqui faria o quadro parecer pior do que é.':
-    '{t} institutions under a restriction in force, {g} of them inside a mapped group — the ' +
-    'first 15 on screen, all of them in the Excel file. Flags that are not restrictions are ' +
-    'left out, such as "Unification of Maintained Entities" and "Prior Accreditation", which ' +
-    'are the two most numerous and would make the picture look worse than it is.',
-  /* ------------------------------- price action: fechamento diario (14/08/2026) */
-  'Preço de fechamento': 'Closing price',
-  'Fechamento por dia': 'Close by day',
-  'Preços': 'Prices',
-  'Pregão': 'Session',
-  'Preço de fechamento, dia a dia': 'Closing price, day by day',
-  'Preço de fechamento, dia a dia — {p}': 'Closing price, day by day — {p}',
-  'Uma linha por pregão, do mais recente para o mais antigo, com o fechamento ajustado de cada papel selecionado. A série inteira sai no Excel.':
-    'One row per trading session, most recent first, with the adjusted close of each selected ' +
-    'ticker. The full series comes out in the Excel file.',
-  'Os 60 pregões mais recentes do período na tela; o Excel traz os {q} do período inteiro. Fechamento AJUSTADO — incorpora proventos e desdobramentos, então um valor antigo pode não bater com a cotação exibida naquele dia; é a série correta para retorno. Célula vazia é pregão sem negócio para aquele papel, ou papel ainda não listado. Moeda: {m}.':
-    'The 60 most recent sessions of the period on screen; the Excel file carries all {q} of ' +
-    'the period. ADJUSTED close — it incorporates dividends and splits, so an old value may ' +
-    'not match the quote shown on that day; it is the correct series for returns. An empty ' +
-    'cell is a session with no trade for that ticker, or a ticker not yet listed. Currency: {m}.',
-  'Fechamento AJUSTADO: incorpora proventos e desdobramentos, então é a série que serve para calcular retorno — e por isso o valor de um dia antigo pode não bater com a cotação que o papel exibia naquele pregão. Papéis não se comparam em nível aqui; para comparar, use base 100. Moeda: {m}.':
-    'ADJUSTED close: it incorporates dividends and splits, so it is the series to compute ' +
-    'returns from — and that is why an old value may not match the quote the ticker showed on ' +
-    'that session. Tickers do not compare in level here; to compare, use base 100. ' +
-    'Currency: {m}.',
-  'Fechamento ajustado por proventos e desdobramentos. WTD parte do fechamento da última sexta; MTD, do último pregão do mês anterior; YTD, do último pregão do ano anterior. Preços coletados em {q}.':
-    'Close adjusted for dividends and splits. WTD starts from last Friday\u2019s close; MTD, ' +
-    'from the last session of the previous month; YTD, from the last session of the previous ' +
-    'year. Prices collected on {q}.',
-  'Mais barata': 'Cheapest',
-  'Mais cara': 'Priciest',
-  'unidades/polos': 'campuses/hubs',
-  'Unidades/polos': 'Campuses/hubs',
-  'O ponto é a mensalidade publicada (média simples do menor preço de cada unidade). A faixa vai da unidade mais barata à mais cara: {t} unidades/polos observados.':
-    'The dot is the published tuition (simple average of the cheapest price at each campus). ' +
-    'The band runs from the cheapest campus to the priciest: {t} campuses/hubs observed.',
 
-  'Evolução': 'Trend',
-  'Série': 'Series',
-  'Mensalidade mediana ao longo do tempo': 'Median monthly tuition over time',
-  'Cada ponto é uma coleta. A série começa a existir a partir da segunda rodada — antes disso não há movimento a mostrar.':
-    'Each dot is one collection run. The series only exists from the second run onwards — before ' +
-    'that there is no movement to show.',
-  'Série de mensalidade': 'Tuition series',
-  'A coleta de mensalidades ainda não rodou nesta cópia. Rode <code>python scripts/07_fetch_mensalidades.py</code> para preencher este bloco.':
-    'The tuition collection has not run in this copy yet. Run ' +
-    '<code>python scripts/07_fetch_mensalidades.py</code> to fill this block.',
+  /* ------------------------------- price action: fechamento diario (14/08/2026) */
 
   /* ------------------------------------------------ ambiente regulatório
    * "Regulatório" vira "Regulatory landscape": em inglês de equity research o termo
    * usual é o ambiente, não a regulação em si. Nome de norma NÃO se traduz — "Decreto
    * nº 12.456/2025" é identificador, e traduzir atrapalharia quem for buscar a fonte. */
-  'Alta': 'High', 'Média': 'Medium', 'Baixa': 'Low', 'Relevância': 'Relevance',
-  'Definições': 'Definitions',
-  'Quem ganhou e quem perdeu terreno': 'Who gained and who lost ground',
-  'Ganho e perda de market share — {a} vs {b}': 'Market share gains and losses — {a} vs {b}',
-  'bloco:gr-share-hint':
-    `Who advanced and who fell back against the previous year. The denominator is the whole
-     market for the year, and the ranking deliberately ignores the group filter — share only
-     means something against the total. "Independents" is left out because it is a residual
-     bucket, not a player.`,
-  'bloco:rg-feed-hint':
-    `Ordinances, decrees, resolutions and public notices relevant to private higher education,
-     newest first. Click <em>Details</em> to open the panel without leaving the page, or go
-     straight to the official document.`,
-
-  'Ambiente Regulatório': 'Regulatory Landscape',
-  'Regulatório': 'Regulatory',
-  'Regulação': 'Regulation',
-  'O que está valendo, o que mudou e o que vem pela frente em EaD & Polos, Medicina e Fies — mais o feed das últimas decisões do MEC, com resumo, relevância e link para o documento oficial.':
-    'What is in force, what changed and what is coming next in Distance Learning & Hubs, ' +
-    'Medicine and Fies — plus a feed of the latest MEC decisions, with a summary, a relevance ' +
-    'rating and a link to the official document.',
-
-  'EaD & Polos': 'Distance Learning & Hubs',
-  'Medicina': 'Medicine',
-  'Fies': 'Fies',
-  'Tema': 'Topic', 'Órgão': 'Body', 'Situação': 'Status', 'Conferência': 'Verification',
-  'Vigente': 'In force', 'Em transição': 'In transition', 'Em discussão': 'Under discussion',
-  'Revogada': 'Revoked',
-  'Relevância {r}': '{r} relevance',
-  'Regra hoje': 'Rule today', 'O que mudou': 'What changed',
-  'Próximo prazo': 'Next deadline',
-  'Como era': 'How it was', 'Como funciona hoje': 'How it works today', 'Hoje': 'Today',
-  'Buscar': 'Search', 'Limpar': 'Clear',
-  'Buscar no ambiente regulatório': 'Search the regulatory landscape',
-  'Todo o histórico': 'Full history', 'Últimos 30 dias': 'Last 30 days',
-  'Últimos 3 meses': 'Last 3 months', 'Últimos 6 meses': 'Last 6 months',
-  'Último ano': 'Last year',
-  'O que está acontecendo agora': 'What is happening now',
-  'Onde estamos em cada tema': 'Where each topic stands',
-  'Onde estamos neste tema': 'Where this topic stands',
-  'Últimas decisões do MEC': 'Latest MEC decisions',
-  'Feed cronológico': 'Chronological feed',
-  '{n} de {t} publicações': '{n} of {t} publications',
-  'Publicações': 'Publications',
-  'Detalhes': 'Details', 'Fechar': 'Close',
-  'Abrir documento': 'Open document', 'Abrir documento oficial': 'Open official document',
-  'O que foi publicado': 'What was published', 'Quem é afetado': 'Who is affected',
-  'Datas importantes': 'Key dates', 'Publicação': 'Published',
-  'Vigência': 'Effective from', 'Inscrições': 'Registration',
-  'Inscrições 2026.1': 'Registration 2026.1', 'Aplicação da prova': 'Exam date',
-  'a confirmar': 'to confirm',
-  'Não conferida no Diário Oficial': 'Not yet checked against the Official Gazette',
-  'Compilada a partir de fonte secundária: confira o número e a data no documento oficial antes de citar.':
-    'Compiled from a secondary source: check the number and date in the official document ' +
-    'before citing it.',
-  '{q} das {t} publicações ainda não foram conferidas no Diário Oficial e estão marcadas como "a confirmar". Confira o documento oficial antes de citar qualquer uma delas.':
-    '{q} of the {t} publications have not yet been checked against the Official Gazette and are ' +
-    'flagged "to confirm". Check the official document before citing any of them.',
-  'Base atualizada em {d} · {n} publicações': 'Base updated {d} · {n} publications',
-  'Nenhuma publicação para os filtros escolhidos.': 'No publication matches the selected filters.',
-  'Sem resumo para este tema.': 'No summary for this topic.',
-  'Fontes': 'Sources', 'Fontes oficiais': 'Official sources',
-  'Onde isto é apurado': 'Where this comes from',
-  'Toda publicação tem link para o documento original. Notícia não entra como fonte primária quando o ato oficial existe.':
-    'Every publication links to the original document. News reporting is not used as a primary ' +
-    'source when the official act exists.',
-  'Decisões regulatórias': 'Regulatory decisions',
-  'Documento': 'Document', 'Resumo': 'Summary', 'Fonte oficial': 'Official source',
-  'A base regulatória ainda não foi gerada nesta cópia. Rode <code>python scripts/08_build_regulatorio.py</code>.':
-    'The regulatory base has not been generated in this copy. Run ' +
-    '<code>python scripts/08_build_regulatorio.py</code>.',
 
   /* nomes próprios e siglas: mesmos nos dois idiomas */
-  'Data House': 'Data House', 'PT': 'PT', 'EN': 'EN', 'INEP': 'INEP', 'HHI': 'HHI',
-  'WTD': 'WTD', 'MTD': 'MTD', 'YTD': 'YTD', 'IBOV': 'IBOV', 'SMLL': 'SMLL',
-  'Education': 'Education', 'Instituições': 'Institutions',
-  'Vinicius Figueiredo': 'Vinicius Figueiredo', 'Lucca Marquezini': 'Lucca Marquezini',
-  'Felipe Amancio': 'Felipe Amancio',
-
-  'Antes de tudo': 'First things first',
-  'De onde vêm os dados e por que eles podem divergir do release da companhia':
-    'Where the data comes from and why it can differ from a company’s release',
-  'Leia esta parte antes de confrontar qualquer número com o que a empresa divulga.':
-    'Read this before checking any number against what a company reports.',
-  '{l} concentra(m) {p} da base do grupo, e {q} dessas matrículas são EAD. Isso é registro, não geografia: o Censo lança a matrícula de EAD na IES <strong>sede</strong>, não no polo onde o aluno estuda — a UF da linha é o endereço da mantida, e não onde estão os alunos. Para saber onde eles realmente estão, use o bloco Geografia, que distribui por município de oferta.':
-    '{l} hold(s) {p} of the group base, and {q} of those enrollments are distance learning. That ' +
-    'is a registration artefact, not geography: the Census books a distance-learning enrollment ' +
-    'at the <strong>head-office</strong> institution, not at the hub where the student studies — ' +
-    "the state on the row is the entity's registered address, not where the students are. To see " +
-    'where they actually are, use the Geography block, which spreads them by city of delivery.',
-  'O detalhe que o quadro acima não cabe': 'The detail the panel above cannot hold',
-  'Métricas de aluno': 'Student metrics',
-  'Modalidade, rede e organização': 'Delivery mode, sector and institution type',
-  'Grupos e competição': 'Groups and competition',
-  'Curso e geografia': 'Programs and geography',
 
   /* --------------------------------------------- Mensalidades: coluna Spread */
-  'Spread (mais caro ÷ mais barato)': 'Spread (priciest ÷ cheapest)',
-  '<strong>Spread</strong> é quanto a instituição mais cara cobra a mais que a mais barata no mesmo curso — {c}, por exemplo: de {min} a {max}, ou seja, {v} a mais. Mede prêmio de marca; spread baixo é curso em que o preço já convergiu entre os players. ':
-    '<strong>Spread</strong> is how much more the priciest institution charges than the cheapest '
-    + 'for the same programme — {c}, for instance: from {min} to {max}, that is {v} more. It '
-    + 'measures brand premium; a low spread means a programme where prices have already '
-    + 'converged across players. ',
 
   /* --------------------------------------- Geografia: mapa interativo (18/08) */
-  'Onde cada player realmente está': 'Where each player actually is',
-  'Mapa': 'Map',
-  'Quem está em cada praça': 'Who is in each location',
-  'Escolha o estado para aproximar, clique numa bolha para abrir o município. A cor diz quantos dos grupos selecionados dividem aquela praça.':
-    'Pick a state to zoom in, click a bubble to open the city. Colour shows how many of the ' +
-    'selected groups share that location.',
-  'Brasil — todas as UFs': 'Brazil — all states',
-  'Nenhum — ver a UF inteira': 'None — show the whole state',
-  'Brasil': 'Brazil',
-  'IES na praça': 'Institutions here',
-  'alunos na praça': 'students here',
-    'clique para abrir a praça': 'click to open this location',
-  'Arraste para navegar e use a roda para aproximar; escolher a UF enquadra o estado e liga os nomes dos municípios. Clique numa bolha para abrir a praça no painel ao lado. A bolha é o número de ALUNOS dos grupos selecionados no município, dimensionada pela raiz — em escala linear São Paulo apagaria todo o interior, que é o que interessa aqui. A posição é o centroide do município ({q} dos {t} têm coordenada), não o endereço de nenhuma unidade: o Censo dá o município de oferta, não a rua. No presencial é onde o curso é dado; no EAD, onde está o polo.':
-    'Drag to pan and scroll to zoom; picking a state frames it and turns on city names. Click a ' +
-    'bubble to open that location in the panel beside it. The bubble is the number of STUDENTS ' +
-    'the selected groups have in the city, sized by the square root — on a linear scale São ' +
-    'Paulo would erase the whole interior, which is what matters here. The position is the ' +
-    "city's centroid ({q} of {t} have coordinates), not any campus address: the Census gives the " +
-    'city of delivery, not the street. On campus it is where the course is taught; in distance ' +
-    'learning, where the hub is.',
-  'Denominador: as {t} matrículas de {m} em {a}. Linha apagada é grupo sem aluno aqui — fica na lista de propósito, porque ausência numa praça é informação competitiva. <strong>IES na praça</strong> é o número de instituições distintas do grupo com aluno no recorte, e é PISO de unidades: o Censo não tem identificador de campus, então dois campi da mesma IES na mesma cidade contam como um. No mapa, a cor da bolha é o grupo que lidera aquele município entre os selecionados, e a legenda liga e desliga cada um.':
-    'Denominator: the {t} enrollments of {m} in {a}. A dimmed row is a group with no students ' +
-    'here — it stays on the list on purpose, because absence from a location is competitive ' +
-    'information. <strong>Institutions here</strong> is how many distinct institutions of the ' +
-    'group have students in the selection, and it is a FLOOR for campuses: the Census has no ' +
-    'campus identifier, so two campuses of the same institution in one city count as one. On the ' +
-    'map, the bubble colour is the group leading that city among those selected, and the legend ' +
-    'switches each one on and off.',
 
   /* ------------------------------------------- Geografia: exclusividade */
-  'dos selecionados presentes': 'of those selected are here',
+
     'Quantos alunos cabem numa praça de cada modalidade — o campus concentra, o polo espalha':
     'How many students fit in one location under each delivery mode — the campus concentrates, ' +
     'the hub spreads',

@@ -11,13 +11,14 @@
  */
 import { D, carregarPrecos, porIES, gr, pct, n } from './dados.js';
 import { $, $$, esc, kpi, tabela, chart, baseChart, registrarCSV, PALETA } from './ui.js';
-import { TX, idioma } from './i18n.js';
+import { TX, idioma, locale } from './i18n.js';
 
 let selPapeis = null;           // Set de tickers selecionados
 let periodo = 'ytd';
 let ate = '';                   // data final; vazio = até o último pregão coletado
 let peso = 'mcap';
 let timerAuto = null;
+let timerFrescor = null;
 
 const COR_POS = '#1B7A4B', COR_NEG = '#C4322B';
 const CORES_IDX = { IBOV: '#4A4A4A', SMAL11: '#8C8C8C' };
@@ -210,8 +211,17 @@ export async function precos() {
     ? TX('{p} até {d}', { p: rotuloPeriodo, d: dataLegivel(ate) })
     : rotuloPeriodo;
 
-  $('#pa-carimbo').textContent = TX('Preços de {q} · fonte {f}', { q: P.atualizado_em, f: P.fonte });
-  const horas = (Date.now() - new Date(P.atualizado_em.replace(' ', 'T')).getTime()) / 36e5;
+  /* O carimbo mostra a hora NO FUSO DE QUEM ESTÁ OLHANDO, derivada do instante UTC —
+   * antes exibia a string crua do arquivo, que vinha em UTC do robô e fazia o usuário em
+   * Brasília ler "17:02" às 14h. */
+  const quando = instanteColeta(P);
+  $('#pa-carimbo').textContent = TX('Preços de {q} · fonte {f}', {
+    q: quando ? quando.toLocaleString(locale(), { dateStyle: 'short', timeStyle: 'short' })
+              : P.atualizado_em,
+    f: P.fonte });
+  pintaFrescor($('#pa-frescor'));
+  ligaFrescor();
+  const horas = quando ? (Date.now() - quando.getTime()) / 36e5 : 0;
   alvo.innerHTML = horas > 24
     ? `<div class="aviso">${TX('Este snapshot de preços tem {h}h. Rode <code>python ' +
         'scripts/06_fetch_precos.py</code> para atualizar.', { h: Math.round(horas) })}</div>` : '';
@@ -468,6 +478,67 @@ function autoAtualizar() {
       await precos();
     } catch (e) { /* offline ou sem servidor: mantém o snapshot */ }
   }, 5 * 60 * 1000);
+}
+
+/* ─────────────────────────────────────────────────── frescor da coleta ─────
+ * "Coletado há 4 min", com bolinha. Existe porque o bloco passou a ser alimentado por
+ * robô: sem um sinal de idade na tela, uma coleta que parou de rodar é indistinguível de
+ * um mercado parado — os dois deixam o número igual ao de antes.
+ *
+ * ⚠️ O instante vem de `atualizado_utc`, e isso não é preciosismo. `atualizado_em` é uma
+ * string SEM FUSO ("2026-08-18 17:02"), e `new Date()` a interpreta como hora LOCAL: o
+ * arquivo que o GitHub Actions grava em UTC era lido como se fosse BRT e a idade dava
+ * ~3 horas NEGATIVA. Era por isso que o aviso de "snapshot com mais de 24h" nunca
+ * aparecia. Arquivo antigo, sem o campo novo, cai no fallback de ler como UTC — que é o
+ * que todo arquivo publicado sempre foi.
+ */
+function instanteColeta(P) {
+  if (!P) return null;
+  if (P.atualizado_utc) {
+    const d = new Date(P.atualizado_utc);
+    if (!isNaN(d)) return d;
+  }
+  if (!P.atualizado_em) return null;
+  const d = new Date(P.atualizado_em.replace(' ', 'T') + 'Z');
+  return isNaN(d) ? null : d;
+}
+
+/* Faixas deliberadamente largas. O cron do GitHub PULA execuções — medido: 3 rodadas em
+ * 2,5 h, não ~30 — e fora do pregão o dado É velho e está certo assim. Bolinha vermelha
+ * num domingo seria alarme falso, que treina o leitor a ignorar o indicador. */
+function frescor(P) {
+  const d = instanteColeta(P);
+  if (!d) return { cor: 'nd', txt: '—', titulo: TX('Sem carimbo de coleta neste arquivo') };
+  const min = Math.max(0, Math.round((Date.now() - d.getTime()) / 60000));
+  const txt = min < 1 ? TX('agora')
+    : min < 60 ? TX('há {n} min', { n: min })
+    : min < 60 * 36 ? TX('há {n} h', { n: Math.round(min / 60) })
+    : TX('há {n} dias', { n: Math.round(min / 1440) });
+  const cor = min <= 90 ? 'ok' : min <= 60 * 24 ? 'meio' : 'velho';
+  return {
+    cor, txt, min,
+    titulo: TX('Última coleta: {q} (seu fuso). Durante o pregão o robô coleta algumas ' +
+               'vezes por hora; fora dele o dado fica parado, e isso é o esperado.',
+              { q: d.toLocaleString(locale()) }),
+  };
+}
+
+/* Reescreve SÓ a bolinha, de 30 em 30 segundos. Não pode chamar a view: um re-render a
+ * cada meio minuto perderia a ordenação da tabela e o scroll de quem está lendo. */
+function ligaFrescor() {
+  if (timerFrescor) return;
+  timerFrescor = setInterval(() => {
+    const el = $('#pa-frescor');
+    if (!el || !document.querySelector('#v-precos')?.classList.contains('on')) return;
+    pintaFrescor(el);
+  }, 30000);
+}
+
+function pintaFrescor(el) {
+  const f = frescor(D.precos);
+  el.className = `frescor ${f.cor}`;
+  el.title = f.titulo;
+  el.innerHTML = `<i></i>${esc(f.txt)}`;
 }
 
 /* Formata retorno com sinal explícito — sem o "+" o investidor precisa procurar a cor. */

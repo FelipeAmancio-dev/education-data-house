@@ -146,8 +146,19 @@ def main():
     args = ap.parse_args()
     log = (lambda *a: None) if args.quieto else print
 
+    # ⚠️ UM RELÓGIO SÓ, e em UTC. `datetime.now()` sem fuso escrevia a hora LOCAL de quem
+    # rodasse: no runner do GitHub isso é UTC, na máquina do usuário é BRT (UTC−3). O mesmo
+    # campo significava coisas diferentes conforme a origem, e o front-end — que lê a string
+    # sem fuso como hora LOCAL — calculava idade negativa para arquivo vindo do CI. O aviso
+    # de "snapshot com mais de 24h" nunca disparava por isso, silenciosamente.
+    #
+    # `atualizado_utc` é o instante autoritativo, em ISO 8601 com Z. `atualizado_em` fica
+    # para compatibilidade e passa a ser a mesma hora UTC — a tela converte para o fuso de
+    # quem está olhando.
+    agora = dt.datetime.now(dt.timezone.utc)
     saida = {
-        "atualizado_em": dt.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "atualizado_em": agora.strftime("%Y-%m-%d %H:%M"),
+        "atualizado_utc": agora.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "fonte": "Yahoo Finance",
         "papeis": [], "series": {}, "falhas": [],
     }
