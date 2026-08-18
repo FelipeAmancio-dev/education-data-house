@@ -33,7 +33,7 @@ SAIDA = os.path.join(ROOT, "outputs", "dashboard_standalone.html")
 # ordem de dependencia dos modulos
 # i18n vem primeiro: dados.js depende dele para formatar numero no locale certo
 MODULOS = ["i18n.js", "en.js", "dados.js", "ui.js", "xlsx.js", "views.js", "grupos.js",
-           "snapshot.js", "precos.js", "mensalidades.js", "regulatorio.js", "app.js"]
+           "precos.js", "mensalidades.js", "regulatorio.js", "app.js"]
 
 # arquivos de dados sempre embutidos (cubos historicos + dimensoes + precos + mensalidades).
 # ⚠️ Estas duas listas sao explicitas: bloco novo que nao entre aqui simplesmente nao existe

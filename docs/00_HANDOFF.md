@@ -33,8 +33,7 @@ Roda **localmente**, sem build step. Diretório do projeto: `C:\education`.
 | 8 | **e-MEC ingerido** + Geografia reconstruída (capilaridade, físico×digital, IGC) | ✅ |
 | 9 | **Feed diário do DOU** com triagem de relevância para equity | ✅ |
 | 10 | **Publicação no GitHub Pages** + coleta automática por Actions | ✅ |
-| 11a | **Investor Snapshot** — a página de abertura | ✅ |
-| 11b | Key Insights, IES individual, Campus Explorer | ⬜ **próximo** |
+| 11 | Investor Snapshot, Key Insights, IES individual, Campus Explorer | ⬜ **próximo** |
 
 ## 🔗 O projeto está NO AR
 
@@ -423,7 +422,6 @@ A home é uma grade de cards, um por bloco.
 | Rota | Bloco | O que responde |
 |---|---|---|
 | `#/` | Home | **só a porta de entrada**: a grade de cards. Sem KPI e sem filtro, por pedido do usuário |
-| `#/snapshot` | Investor Snapshot | **a década em uma página**: o setor no período, de onde vieram os alunos, quem ganhou e perdeu share, e o que cresce em curso e em praça |
 | `#/overview` | Overview | tamanho e trajetória do setor, por UF e por curso — **sem filtro de grupo** |
 | `#/grupos` | Key Players | seleção livre (chips) → comparativo, composição da base e mix de modalidade. **As três camadas seguem os chips** |
 | `#/cursos` | Cursos | ranking CINE com o **maior grupo de cada curso**, concorrência no curso escolhido com seleção de grupos e pizza de share |
@@ -602,72 +600,6 @@ Sintoma sutil, fácil de não notar.
   plano (`--intervalo`, `--sem-precos`), mas a tela não reconsulta mais o arquivo sozinha:
   com fechamento diário, repintar de 5 em 5 minutos não muda nada. Rode o script quando
   quiser avançar a série.
-
-### O bloco Investor Snapshot
-
-`js/snapshot.js` + a seção `#v-snapshot`. Construído em 18/08/2026. É a **primeira posição**
-do `<nav>` e da grade de cards — as duas listas que precisam andar juntas.
-
-⚠️ **A ordem dos blocos foi definida pelo usuário em 14/08/2026 e o Snapshot entrou na
-frente por decisão desta sessão**, por ser a página de abertura. Se ele preferir noutro
-lugar, é mover em dois pontos do `index.html`; nada no código depende da posição.
-
-⚠️ **A regra que desenhou o bloco: não repetir gráfico que já existe.** O Overview já
-responde "qual o tamanho do mercado" com KPIs de YoY, a série por modalidade e a tabela dos
-maiores grupos; o Key Players já compara players escolhidos a dedo. Um Snapshot que
-repetisse essas peças seria uma cópia com outro nome — e **duas telas com o mesmo número são
-duas telas que podem discordar**. Por isso o recorte daqui é outro:
-
-| Seção | A pergunta | Por que não é repetição |
-|---|---|---|
-| **O setor na década** | o que aconteceu no período | KPIs contra {ano-base}, não YoY — o YoY é o Overview |
-| **De onde vieram os alunos** | qual segmento entregou o crescimento | atribuição por rede × modalidade; não existe em outro bloco |
-| **Quem ganhou e perdeu share** | quem se moveu | movimento em p.p., não ranking de tamanho |
-| **O que cresce** | qual curso e qual praça | crescimento com piso de base declarado |
-
-**A leitura que o bloco existe para entregar:** o setor ganhou **2,19 milhões** de alunos de
-2015 a 2024, mas o **EAD privado sozinho entregou 3,71 milhões** enquanto o **presencial
-privado devolveu 1,64 milhão**. Quem lê só o total conclui "o setor cresce 2,7% ao ano" e
-perde a troca de composição, que é onde está a tese.
-
-⚠️ **A tabela de grupos mostra as DUAS séries de crescimento** — `QT_MAT` e base de alunos
-(matrículas + trancados) — lado a lado, sempre, e não só nos anos contaminados. É a §3.3
-implementada na tela: quando as duas andam em direções diferentes, o movimento é
-reclassificação de vínculo. Divergência acima de **12 p.p.** marca a linha com ⚠ e entra na
-nota com o nome do grupo. **O limiar é o mesmo de `03_validate.py` §5b, de propósito**: a
-ferramenta não pode marcar na tela um ano que o validador deixa passar. Em 2024 dispara em
-Unipar, Veiga de Almeida, UNIFATECIE e Celso Lisboa.
-
-⚠️ **A UF do Snapshot é a de OFERTA, e é a única do dashboard que é.** Vem do cubo por
-município (dimensões 1 e 2), não do endereço da sede — que é o que os demais blocos usam e o
-que põe 836 mil alunos da Unopar no Paraná (§3.3b). A nota da tabela diz isso com todas as
-letras: duas definições diferentes com o mesmo rótulo "UF" é exatamente o que faz um leitor
-concluir errado sem perceber.
-
-Outras decisões que não são óbvias lendo o código:
-
-- **Nenhuma seção usa o detalhe por ano.** Tudo sai de `c_ies_mod`, `c_cine_mod` e
-  `c_mun_mod`, que estão no `CORE` com os 10 anos. É o que faz o bloco funcionar **inteiro**
-  no arquivo único e no artifact — as duas versões que ninguém testa por hábito (§6.5).
-  Conferido: standalone e servidor entregam os mesmos números, com os dois gráficos pintados
-  e zero erro de console.
-- **Piso de base declarado nas duas tabelas de crescimento** (50 mil matrículas em curso, 40
-  mil em UF). Sem piso, o topo do ranking vira curso pequeno que dobrou — correto e inútil.
-  A nota diz o piso **e quanto do mercado ele cobre** (41 cursos, 80,4% do país).
-- **A tabela de share ordena por TAMANHO e corta em 15.** Por Δ share, os 15 primeiros
-  seriam só ganhadores e o leitor concluiria que ninguém perdeu praça; quem mais se moveu já
-  está no gráfico ao lado, nas duas pontas. O corte é só de exibição (`opt.limite`): o Excel
-  leva os 43 grupos.
-- **"Independentes" fica fora do ranking** e aparece só na nota com o peso — bucket residual,
-  não player (armadilha 3 do front-end).
-- **Filtro: só o ano** (`FILTROS.snapshot = ['ano']`). Recorte de UF ou rede transformaria a
-  página de abertura numa análise, que é o papel dos outros blocos.
-
-📌 **Observação de dado, não do bloco:** a Ser Educacional aparece com **+34,9% de matrículas
-em 2024** (presencial +27%, EAD +45%), e a base de alunos cresce junto (+36,5%) — ou seja,
-não é reclassificação. Num perímetro pro-forma, salto desse tamanho costuma ser aquisição já
-mapeada ou IES que entrou no grupo. **Vale conferir contra o release antes de usar o número
-numa apresentação.** O mesmo YoY já aparecia no Key Players; o Snapshot só o deixou visível.
 
 ### O módulo Ambiente Regulatório
 
@@ -1369,10 +1301,9 @@ interface usa essa coluna em três lugares:
 (matrícula × base, pro-forma, polo EAD, proxy de campus, denominador), mas não substituem uma
 página completa.
 
-- ~~**Investor Snapshot**~~ — **construído em 18/08/2026.** Ver §"O bloco Investor
-  Snapshot". Entregou tamanho, crescimento, EAD, quem ganha share, cursos e regiões
-  crescendo; a "exposição dos grupos" ficou de fora por já existir em Key Players (mix
-  presencial × EAD), que é a regra de não repetir gráfico.
+- **Investor Snapshot** — página objetiva: tamanho, crescimento, EAD, maiores players, quem
+  ganha share, cursos e regiões crescendo, exposição dos grupos. Pensada para virar material de
+  apresentação.
 - **Key Insights** — insights automáticos por **regras determinísticas**, cada um carregando o
   número, o denominador e o período que o sustentam. Sem interpretação sem respaldo. Deve
   respeitar §3.3: nada de insight de crescimento em ano contaminado por reclassificação.
