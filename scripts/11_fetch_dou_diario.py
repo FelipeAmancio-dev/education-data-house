@@ -5,11 +5,15 @@ para quem investe em equities.
 
 DE ONDE VEM
 -----------
-    https://www.in.gov.br/leiturajornal?org=Ministerio%20da%20Educacao&data=DD-MM-AAAA
+    https://www.in.gov.br/consulta/-/buscar/dou?q=&s=do1&exactDate=personalizado...
 
-E a mesma pagina que se le no navegador. Traz a Secao 1 do dia inteiro do MEC — Gabinete
-do Ministro, SERES, SESu, CNE, Inep, FNDE e tambem as universidades e institutos federais.
-O parametro `data` navega para tras; sem ele, vem o dia corrente.
+A BUSCA do DOU com `q=` vazio e intervalo de um dia, filtrada por orgao principal
+"Ministerio da Educacao". Traz a Secao 1 do dia inteiro do MEC — Gabinete do Ministro,
+SERES, SESu, CNE, Inep, FNDE e tambem as universidades e institutos federais.
+
+⚠️ **NAO use `leiturajornal`**, que era a fonte da primeira versao e esta descrita como
+tal em documento antigo: ela mostra no maximo 10 atos por dia, sem paginacao. Ver o aviso
+em cima da constante URL.
 
 ⚠️ Playwright com `channel="chrome"` e obrigatorio: `WebFetch` no in.gov.br derruba a
 conexao ("socket hang up") e o Chromium do Playwright e barrado.
@@ -66,6 +70,8 @@ import sys
 import unicodedata
 from datetime import date, timedelta
 
+sys.stdout.reconfigure(encoding="utf-8")
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MARCAS = os.path.join(ROOT, "config", "grupos_marcas.json")
 SAIDA = os.path.join(ROOT, "dashboard", "data", "dou_diario.json")
@@ -110,6 +116,10 @@ BASICA = re.compile(
     r"("
     r"cne/ceb|camara de educacao basica|"
     r"educacao basica|ensino fundamental|ensino medio|educacao infantil|"
+    # ⚠️ 18/08/2026: "primeira infancia" entrou depois de a Portaria nº 725/2026 — GT
+    # sobre saude ocupacional do magisterio na primeira infancia — sair como ALTA. E
+    # educacao basica escrita com outras palavras.
+    r"primeira infancia|magisterio da educacao basica|"
     r"calendario escolar|creche|pre-escola|alfabetizacao"
     r")", re.I)
 
@@ -121,7 +131,14 @@ BAIXA = re.compile(
     r"campi avancados|campus avancado|"
     r"pro-reitoria|departamento de desenvolvimento de pessoas|"
     r"nomea|exonera|designa|aposentadoria|remocao|substitut|"
-    r"redistribuicao de cargos|avocacao|delegacao de competencia|"
+    # ⚠️ 18/08/2026: tres atos de pessoal/administracao passaram por aqui e viraram ALTA
+    # no teste de grupo de trabalho. Cada termo abaixo saiu de um deles:
+    #   Port. 707 — GT sobre "mecanismos de afastamento" de servidor
+    #   Port. 706 — GT "Saude do Trabalhador" das instituicoes federais
+    #   Port. 646 — "delega competencia aos titulares de unidades do MEC"
+    r"afastamento|saude ocupacional|saude do trabalhador|"
+    r"instituicoes federais|instituicao federal|"
+    r"redistribuicao de cargos|avocacao|delega\w* de competencia|delega competencia|"
     r"concurso publico|homologacao do resultado|resultado final do concurso|"
     r"regimento interno|estrutura (organizacional|regimental)|"
     r"orcamentari|empenho|dotacao|"
@@ -171,12 +188,32 @@ EFEITO_DIRETO = re.compile(
 # Os tres primeiros sao sinal de que a REGRA vai mudar — grupo de trabalho e o passo que
 # antecede norma nova, e por isso vale mais do que o volume dele sugere. Vagas e curso de
 # medicina sao oferta entrando no mercado, que e o lado da receita.
-ALTA_EXPLICITA = re.compile(
+# ⚠️ DIVIDIDO EM DOIS em 18/08/2026, e a divisao e a regra.
+#
+# A primeira coleta depois de a automacao entrar no ar devolveu **5 altas, e as 5 eram
+# falso positivo**: GT sobre saude ocupacional de professor da primeira infancia, GT
+# sobre afastamento de servidor, GT de saude do trabalhador da rede federal e uma
+# portaria que delega competencia interna do MEC. Todas casavam por "grupo de trabalho"
+# ou "altera a portaria" — gatilhos que nao dizem NADA sobre o assunto do ato.
+#
+# E o mesmo defeito que ja tinha tirado "dispoe sobre" e "regulamenta" daqui, e a
+# correcao e a mesma: gatilho generico so vira alta **com tema do setor junto**. O que
+# separa "GT do novo marco do EaD" de "GT de saude do trabalhador" nao e a forma do ato,
+# e o assunto.
+#
+# ALTA_SEMPRE: o gatilho JA descreve oferta entrando no mercado — nao precisa de tema.
+ALTA_SEMPRE = re.compile(
     r"("
-    r"institui (o )?grupo de trabalho|grupo de trabalho|comissao especial|"
     r"aumento de vagas|ampliacao de vagas|novas vagas|aditamento de vagas|"
     r"autoriza o funcionamento do curso de medicina|"
-    r"autorizacao (de|do) curso de medicina|curso de medicina.{0,40}autoriza|"
+    r"autorizacao (de|do) curso de medicina|curso de medicina.{0,40}autoriza"
+    r")", re.I)
+
+# ALTA_COM_TEMA: forma de ato que ANTECEDE mudanca de regra — vale muito quando o
+# assunto e do setor, e nao vale nada quando nao e. Exige QUENTE junto.
+ALTA_COM_TEMA = re.compile(
+    r"("
+    r"institui (o )?grupo de trabalho|grupo de trabalho|comissao especial|"
     r"altera a portaria|altera o decreto|altera a resolucao|"
     r"revoga a portaria|revoga o decreto"
     # ⚠️ "dispoe sobre" e "regulamenta" SAIRAM daqui: sao genericos demais e pegavam ato
@@ -184,6 +221,19 @@ ALTA_EXPLICITA = re.compile(
     # a avocacao de competencia" entraram como alta na primeira rodada. Os dois continuam
     # alcancaveis pelo teste de norma la embaixo, que exige tema do setor junto.
     r")", re.I)
+
+# ⚠️ Ato que NOMEIA uma IES pelo codigo nao e norma, ainda que saia do Gabinete do
+# Ministro e fale de "oferta de cursos superiores".
+#
+# 18/08/2026: a Retificacao da Portaria MEC nº 901 — "Fica credenciada a Faculdade
+# Republica de Sao Paulo - Faresp (Cod. 28570)" — saiu como ALTA pelo teste de norma,
+# porque o orgao da peso e a ementa casa "oferta de cursos superiores". E credenciamento
+# de UMA faculdade independente: media, que e onde o projeto ja poe ato individual.
+#
+# Aceita as duas grafias vistas no DOU — "(Cod. e-MEC 20)" e "(Cod. 28570)". Isto NAO
+# desliga a promocao por codigo: `normaliza()` roda depois e devolve o ato para alta
+# quando o codigo aponta um grupo aberto, que e o caso que interessa.
+IES_NOMEADA = re.compile(r"\(\s*cod\.?\s*(e-mec\s*)?:?\s*\d{1,6}\s*\)", re.I)
 
 # MEDIA por definicao do usuario: "aprovacao de polos, temas como Fies e ProUni".
 # Sao atos do mercado privado que interessam ao setor, mas nao mudam a regra do jogo.
@@ -298,7 +348,7 @@ def casa_nome(nome, idx):
     """(nome da IES na nossa base, grupo) ou (None, None).
 
     ⚠️ Exato primeiro; prefixo de 22 caracteres só como segunda tentativa. O prefixo é
-    o que resolve "Organização Mogiana de Educação e Cultura Sociedade Simples Ltda" →
+    o que resolve "Organização Mogiana de Educação e Cultura Sociedade Simples Ltda" ->
     "ORGANIZACAO MOGIANA DE EDUCACAO E CULTURA", mas é também por onde entraria falso
     positivo, então precisa dos dois lados começando igual e de tamanho mínimo.
     """
@@ -334,8 +384,8 @@ def instituicao_citada(ementa, emec_por_codigo):
         cod = mc.group(1)
 
     # duas formas de o DOU nomear quem o ato trata, e as duas aparecem:
-    #   portaria da SERES  -> "a IES Universidade de Passo Fundo - UPF (Cód. e-MEC 20)"
-    #   súmula do CNE      -> "Interessado: Fasipe Centro Educacional Ltda. - Sinop/MT"
+    #   portaria da SERES  → "a IES Universidade de Passo Fundo - UPF (Cód. e-MEC 20)"
+    #   súmula do CNE      → "Interessado: Fasipe Centro Educacional Ltda. - Sinop/MT"
     nome = None
     mn = re.search(r"IES\s+([A-ZÁÂÃÉÊÍÓÔÕÚÇ][^(.;]{6,70})", e)
     if mn:
@@ -391,10 +441,19 @@ def classifica(titulo, orgao, ementa, marcas):
     if m:
         return "baixa", f"rede federal ou ato interno ({m.group(0).strip()})", []
 
-    # 5) o que o usuario chamou de ALTA, explicitamente
-    a = ALTA_EXPLICITA.search(txt)
+    # 5) o que o usuario chamou de ALTA, explicitamente e sem depender do assunto
+    a = ALTA_SEMPRE.search(txt)
     if a:
         return "alta", f"mudança regulatória ou nova oferta: {a.group(0).strip()}", []
+
+    # 5b) gatilho generico (GT, altera/revoga portaria): so e alta COM tema do setor.
+    # Sem tema, cai adiante e termina em media — nao volta a ser alta por acidente.
+    a = ALTA_COM_TEMA.search(txt)
+    if a:
+        qa = QUENTE.search(txt)
+        if qa:
+            return "alta", (f"mudança regulatória ou nova oferta: {a.group(0).strip()} "
+                            f"({qa.group(0).strip()})"), []
 
     # 6) medida com efeito comercial direto sobre quem opera no setor privado
     e = EFEITO_DIRETO.search(txt)
@@ -406,6 +465,10 @@ def classifica(titulo, orgao, ementa, marcas):
     # que enterraria o ato que de fato importa.
     if re.match(r"^\s*sumula", t):
         return "media", "súmula do CNE — lote de decisões sobre instituições", []
+
+    # 8) ato sobre uma IES nomeada pelo codigo: individual, nao norma
+    if IES_NOMEADA.search(txt):
+        return "media", "ato sobre instituição específica (código na ementa)", []
 
     # 9) tema do setor com alcance de norma.
     #
@@ -472,6 +535,26 @@ JS_EXTRAI = r"""
 RE_ED = re.compile(r"Edição Nº\s*([\w-]+)\s*de\s*(\d{2})/(\d{2})/(\d{4})\s*-\s*Pág\.\s*(\d+)")
 
 
+def triagem(titulo, orgao, ementa, marcas, emec):
+    """classifica() + a promocao por codigo e-MEC, que e o passo seguinte dela.
+
+    Separado de `normaliza()` para que `--reclassificar` possa reprocessar o payload que
+    ja esta em disco sem raspar o DOU de novo — e para que os dois caminhos nunca possam
+    divergir na regra.
+    """
+    rel, motivo, grupos = classifica(titulo, orgao, ementa, marcas)
+    nome_ies, cod_ies, grupo_cod = instituicao_citada(ementa, emec)
+    # o codigo e-MEC e identificador: se ele aponta um grupo, o ato fala daquele grupo,
+    # e isso vale mais do que a coincidencia de token de marca
+    # ⚠️ "Independentes" e bucket residual de IES nao mapeada, nao e player: identificar a
+    # instituicao e util para o leitor, mas nao torna o ato relevante para uma tese.
+    if grupo_cod and grupo_cod != "Independentes" and grupo_cod not in grupos:
+        grupos = sorted(set(grupos) | {grupo_cod})
+        if rel != "alta":
+            rel, motivo = "alta", f"cita {grupo_cod}"
+    return rel, motivo, grupos, nome_ies, cod_ies
+
+
 def normaliza(item, marcas, emec):
     m = RE_ED.search(item.get("ed", "") or "")
     edicao = pagina = data_iso = None
@@ -484,16 +567,8 @@ def normaliza(item, marcas, emec):
     url = item.get("url") or ""
     if url.startswith("/"):
         url = "https://www.in.gov.br" + url
-    rel, motivo, grupos = classifica(item["titulo"], orgao, item.get("ementa", ""), marcas)
-    nome_ies, cod_ies, grupo_cod = instituicao_citada(item.get("ementa", ""), emec)
-    # o codigo e-MEC e identificador: se ele aponta um grupo, o ato fala daquele grupo,
-    # e isso vale mais do que a coincidencia de token de marca
-    # ⚠️ "Independentes" e bucket residual de IES nao mapeada, nao e player: identificar a
-    # instituicao e util para o leitor, mas nao torna o ato relevante para uma tese.
-    if grupo_cod and grupo_cod != "Independentes" and grupo_cod not in grupos:
-        grupos = sorted(set(grupos) | {grupo_cod})
-        if rel != "alta":
-            rel, motivo = "alta", f"cita {grupo_cod}"
+    rel, motivo, grupos, nome_ies, cod_ies = triagem(
+        item["titulo"], orgao, item.get("ementa", ""), marcas, emec)
     return {
         "data": data_iso, "titulo": item["titulo"], "url": url,
         "orgao": orgao, "suborgao": sub, "edicao": edicao, "pagina": pagina,
@@ -504,11 +579,158 @@ def normaliza(item, marcas, emec):
     }
 
 
+# ------------------------------------------------------------------ autoteste
+
+# ⚠️ O hand-off manda "rodar o teste de novo ao mexer nos padroes" desde 17/08/2026, mas
+# o teste so existia como conta feita a mao numa sessao. Aqui ele vira codigo: sao os
+# mesmos casos, e agora falham sozinhos.
+#
+# Os orgaos de `config/regulatorio.json` sao apelidos ("MEC", "Inep"); o DOU publica o
+# nome por extenso, que e o que a triagem le. Este de-para e so do teste.
+ORGAO_TESTE = {
+    "MEC": "Gabinete do Ministro",
+    "Inep": "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira",
+    "FNDE": "Fundo Nacional de Desenvolvimento da Educação",
+}
+
+# Casos observados no DOU, com o rotulo que o usuario definiu em 17/08/2026.
+CASOS = [
+    # os dois exemplos de BAIXA que ele deu, e que definiram a regra
+    ("baixa", "PORTARIA MEC nº 666, DE 30 DE JULHO DE 2025", "Gabinete do Ministro",
+     "Altera a tipologia dos Campi Avançados dos Institutos Federais e autoriza o "
+     "funcionamento do Campus Realengo III do Colégio Pedro II."),
+    ("baixa", "PORTARIA Nº 1.097, DE 5 DE AGOSTO DE 2026", "Universidade Federal da Bahia",
+     "Retificação de homologação de resultado final de concurso público."),
+
+    # ⚠️ os 5 falsos positivos da primeira coleta com a automacao no ar (18/08/2026).
+    # Todos casavam gatilho generico de ALTA sem tema do setor junto.
+    ("baixa", "PORTARIA Nº 725, DE 13 DE AGOSTO DE 2026", "Secretaria Executiva",
+     "Institui o Grupo de Trabalho Nacional sobre Condições de Trabalho e Saúde "
+     "Ocupacional do Magistério na Primeira Infância."),
+    ("baixa", "PORTARIA Nº 707, DE 6 DE AGOSTO DE 2026", "Secretaria Executiva",
+     "Institui Grupo de Trabalho - GT Formação Complementar de Pós-Graduação, com o "
+     "objetivo de elaborar subsídios para o aprimoramento de mecanismos de afastamento "
+     "para capacitação dos servidores."),
+    ("baixa", "PORTARIA Nº 706, DE 6 DE AGOSTO DE 2026", "Secretaria Executiva",
+     "Institui Grupo de Trabalho - GT Saúde do Trabalhador, com o objetivo de elaborar "
+     "subsídios para o aprimoramento da saúde dos trabalhadores das Instituições "
+     "Federais de Ensino."),
+    ("baixa", "PORTARIA MEC Nº 646, DE 30 DE JULHO DE 2026", "Gabinete do Ministro",
+     "Altera a Portaria MEC nº 1.819, de 11 de setembro de 2023, que delega competência "
+     "aos titulares de unidades do Ministério da Educação e aos Dirigentes Máximos das "
+     "entidades vinculadas."),
+    ("media", "RETIFICAÇÃO", "Gabinete do Ministro",
+     "A Portaria MEC nº 901, de 23 de dezembro de 2025, passa a vigorar com a seguinte "
+     "redação: Art. 2º Fica credenciada a Faculdade República de São Paulo - Faresp "
+     "(Cód. 28570), para oferta de cursos superiores no formato semipresencial."),
+
+    # ⚠️ o outro lado do mesmo corte: com TEMA DO SETOR junto, o gatilho generico continua
+    # sendo alta. Sem estes dois casos, a correcao de 18/08 poderia ser "consertada" para
+    # o outro extremo — matando o sinal que o usuario pediu — sem nada acusar.
+    ("alta", "PORTARIA Nº 900, DE 1º DE AGOSTO DE 2026", "Gabinete do Ministro",
+     "Institui Grupo de Trabalho para revisão do marco regulatório da educação a "
+     "distância e dos polos de apoio presencial."),
+    ("alta", "PORTARIA MEC Nº 910, DE 1º DE AGOSTO DE 2026", "Gabinete do Ministro",
+     "Altera a Portaria MEC nº 378, de 19 de maio de 2025, que dispõe sobre os formatos "
+     "de oferta de cursos superiores."),
+]
+
+
+def autoteste():
+    """Roda a triagem contra os casos conhecidos. Sai 1 se algum divergir."""
+    global IDX_NOMES
+    IDX_NOMES = {}
+    marcas = carrega_marcas()
+    falhas = []
+
+    print("— casos observados no DOU —")
+    for esperado, titulo, orgao, ementa in CASOS:
+        rel, motivo, _ = classifica(titulo, orgao, ementa, marcas)
+        ok = rel == esperado
+        if not ok:
+            falhas.append((titulo, esperado, rel, motivo))
+        print("  {} {:5} → {:5}  {:44} {}".format(
+            "ok   " if ok else "FALHA", esperado, rel, titulo[:44], motivo[:44]))
+
+    # as decisoes ja curadas: sao de alto impacto por definicao — entraram no
+    # `config/regulatorio.json` porque alguem leu o documento e decidiu que valem.
+    reg = os.path.join(ROOT, "config", "regulatorio.json")
+    print("— decisões curadas em config/regulatorio.json (esperado: alta) —")
+    with open(reg, encoding="utf-8") as f:
+        decisoes = json.load(f).get("decisoes", [])
+    for d in decisoes:
+        org = d.get("orgao", "")
+        if org not in ORGAO_TESTE:
+            # ⚠️ Lei e Decreto saem sob a Presidência da República, fora do recorte deste
+            # feed (que busca `orgPrin=Ministério da Educação`). Ficam de fora do teste
+            # por alcance da COLETA, nao por duvida sobre a classificacao.
+            print("  --    (fora do feed: órgão {}) {}".format(org, d["documento"][:40]))
+            continue
+        rel, motivo, _ = classifica(d["documento"], ORGAO_TESTE[org], d.get("resumo", ""), marcas)
+        ok = rel == "alta"
+        if not ok:
+            falhas.append((d["documento"], "alta", rel, motivo))
+        print("  {} alta  → {:5}  {:44} {}".format(
+            "ok   " if ok else "FALHA", rel, d["documento"][:44], motivo[:44]))
+
+    if falhas:
+        print("\n{} FALHA(S):".format(len(falhas)))
+        for t, esp, got, mot in falhas:
+            print("  {} — esperado {}, veio {} ({})".format(t[:60], esp, got, mot))
+        return 1
+    print("\nTodos os casos passaram.")
+    return 0
+
+
+def reclassifica():
+    """Recalcula a relevância do payload que já está em disco, sem raspar o DOU.
+
+    Existe porque a regra de triagem muda mais rápido do que o dado: quando um falso
+    positivo é corrigido, o feed publicado continua errado até a próxima coleta. Como
+    título, órgão e ementa estão gravados, a reclassificação é offline e imediata.
+    """
+    global IDX_NOMES
+    IDX_NOMES = indice_nomes()
+    marcas, emec = carrega_marcas(), carrega_emec()
+    with open(SAIDA, encoding="utf-8") as f:
+        payload = json.load(f)
+
+    mudou, porRel = [], {}
+    for p in payload.get("publicacoes", []):
+        antes = p.get("relevancia")
+        rel, motivo, grupos, nome_ies, cod_ies = triagem(
+            p.get("titulo", ""), p.get("orgao", ""), p.get("ementa", ""), marcas, emec)
+        if rel != antes:
+            mudou.append((antes, rel, p.get("titulo", ""), motivo))
+        p.update({"relevancia": rel, "motivo": motivo, "grupos": grupos,
+                  "ies_citada": nome_ies or "", "cod_ies": cod_ies or ""})
+        porRel[rel] = porRel.get(rel, 0) + 1
+
+    payload["por_relevancia"] = porRel
+    with open(SAIDA, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, separators=(",", ":"))
+
+    print("{} atos · {} reclassificados".format(len(payload.get("publicacoes", [])), len(mudou)))
+    for antes, dep, tit, mot in mudou:
+        print("  {:5} → {:5}  {:52} {}".format(antes, dep, tit[:52], mot[:50]))
+    print("por relevância: {}".format(porRel))
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--dias", type=int, default=15, help="dias úteis para trás (padrão 15)")
+    ap.add_argument("--autoteste", action="store_true",
+                    help="roda a triagem contra os casos conhecidos e sai (sem rede)")
+    ap.add_argument("--reclassificar", action="store_true",
+                    help="recalcula a relevância do payload em disco, sem raspar o DOU")
     args = ap.parse_args()
+
+    if args.autoteste:
+        return autoteste()
+    if args.reclassificar:
+        return reclassifica()
 
     try:
         from playwright.sync_api import sync_playwright

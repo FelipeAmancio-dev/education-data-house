@@ -60,6 +60,8 @@ python scripts/08_build_regulatorio.py --so-verificar   # só valida, não escre
 python scripts/09_fetch_dou.py                      # varre o DOU e lista candidatos p/ curadoria
 python scripts/10_ingest_emec.py                    # Dados_GEO.xlsx (e-MEC) → de-para + emec.json
 python scripts/11_fetch_dou_diario.py               # feed diário do DOU, triado por relevância
+python scripts/11_fetch_dou_diario.py --autoteste   # triagem contra os casos conhecidos (sem rede)
+python scripts/11_fetch_dou_diario.py --reclassificar  # reaplica a regra ao feed já coletado
 ```
 
 Reconstrução completa a partir dos zips:
@@ -689,9 +691,38 @@ instituição de grupos de trabalho, aprovação de novas vagas e de novos curso
 3. **Assunto de rede federal, pessoal ou administração** → BAIXA.
 4. **Medida com efeito comercial direto** (suspensão de ingresso/Fies/ProUni,
    descredenciamento, medida cautelar, chamamento) → ALTA.
-5. **Tema do setor com peso de norma** → ALTA. "Peso de norma" inclui Portaria do Gabinete
+5. **Gatilho explícito de alta**, em dois grupos:
+   **5a — vale sozinho**, porque o próprio gatilho já descreve oferta entrando no mercado:
+   aumento/ampliação/aditamento de vagas, autorização de curso de medicina.
+   **5b — só com tema do setor junto**: grupo de trabalho, comissão especial, "altera a
+   portaria/decreto/resolução", "revoga a portaria/decreto". Sem tema, o ato segue adiante
+   e termina em média ou baixa.
+6. **Ato que nomeia uma IES pelo código** (`(Cód. 28570)`, `(Cód. e-MEC 20)`) → MÉDIA. É
+   credenciamento individual, não norma. Não desliga a promoção por código: `normaliza()`
+   roda depois e devolve o ato a alta quando o código aponta um grupo aberto.
+7. **Tema do setor com peso de norma** → ALTA. "Peso de norma" inclui Portaria do Gabinete
    do Ministro, do CNE e do Inep — não só título que diga "normativa".
-6. Resto → MÉDIA.
+8. Resto → MÉDIA.
+
+⚠️ **A divisão do teste 5 é de 18/08/2026 e nasceu do primeiro dia de automação no ar.**
+A coleta das 7h devolveu **5 altas, e as 5 eram falso positivo**: GT sobre saúde ocupacional
+do magistério na primeira infância, GT sobre afastamento de servidor, GT de saúde do
+trabalhador da rede federal, uma portaria que delega competência interna do MEC e o
+credenciamento da Faculdade República de São Paulo. Todas casavam por "grupo de trabalho" ou
+"altera a portaria" — gatilhos que **não dizem nada sobre o assunto do ato**.
+
+É o mesmo defeito que já tinha tirado "dispõe sobre" e "regulamenta" da lista, e a correção é
+a mesma: gatilho genérico só vira alta **com tema do setor junto**. O que separa "GT do novo
+marco do EaD" de "GT de saúde do trabalhador" não é a forma do ato, é o assunto. Entraram
+também `primeira infância` em educação básica e `afastamento`, `saúde do trabalhador`,
+`instituições federais` e `delega competência` em rede federal/pessoal — cada um recortado de
+um dos cinco.
+
+⚠️ **O sinal continua ligado, e o autoteste guarda os dois lados.** Dois casos do teste são
+justamente gatilho genérico **com** tema ("GT para revisão do marco regulatório da EaD",
+"altera a Portaria 378, que dispõe sobre formatos de oferta") e continuam alta. Sem eles, a
+correção poderia ser levada ao outro extremo — matando o sinal que o usuário pediu — sem nada
+acusar.
 
 ⚠️ **A ORDEM entre "média" e "norma" custou dois acertos para ser descoberta.** O teste de
 polos/Fies/ProUni posto antes do teste de norma engolia a **Lei nº 15.388/2026** — a reforma
@@ -723,14 +754,28 @@ um bloco de código existir:
 - **SÚMULA DE PARECERES do CNE não é norma**, é a ata de decisões sobre instituições uma a
   uma. Sem a exceção, 9 dos 10 primeiros "alta" eram súmula, o que enterraria o ato real.
 
-**Validação nos dois sentidos**, e é ela que dá confiança na regra: contra as 11 decisões já
-curadas em `config/regulatorio.json` — de alto impacto por definição — o classificador acerta
-**11 de 11**. E os dois exemplos que o usuário deu como baixa (Portaria MEC 666 dos Institutos
-Federais; Portaria 1.097 da UFBA) caem em baixa pelo motivo certo. **Ao mexer nos padrões,
-rode esse teste de novo.**
+**Validação nos dois sentidos, e agora ela é CÓDIGO:** `--autoteste`. O hand-off mandava
+"rodar o teste de novo ao mexer nos padrões" desde 17/08, mas o teste só existia como conta
+feita à mão numa sessão — e a regressão de 18/08 passou justamente por isso. Hoje são 18
+casos que falham sozinhos, sem rede e em menos de um segundo:
 
-Resultado de 17/08/2026: 244 atos em 20 dias úteis — 1 alta, 115 média, 128 baixa. Uma alta
-em 20 dias é realista: a base curada tem 11 atos em cerca de dois anos.
+- as **9 decisões curadas** de `config/regulatorio.json` publicadas pelo MEC, que são de alto
+  impacto por definição → todas alta. (A Lei nº 15.388 e o Decreto nº 12.456 saem sob a
+  Presidência da República, **fora do recorte deste feed**, que busca `orgPrin=Ministério da
+  Educação`. Ficam de fora por alcance da coleta, não por dúvida sobre a classificação.)
+- os **2 exemplos de baixa** que o usuário deu (Portaria MEC 666 dos Institutos Federais;
+  Portaria 1.097 da UFBA) → baixa, e pelo motivo certo.
+- os **5 falsos positivos** de 18/08 → baixa/média.
+- os **2 casos-espelho** de gatilho genérico com tema do setor → alta.
+
+**Ao mexer nos padrões, rode `--autoteste`.** E ao corrigir a regra, `--reclassificar` reaplica
+a triagem ao feed **já coletado**, sem raspar o DOU de novo: título, órgão e ementa estão
+gravados no payload. Sem isso o feed publicado continuaria errado até a coleta seguinte.
+
+Resultado de 17/08/2026: 244 atos em 20 dias úteis — 1 alta, 115 média, 128 baixa.
+Depois da correção de 18/08: **230 atos, 0 alta, 99 média, 131 baixa**. Zero alta numa janela
+de 15 dias é resultado plausível, não corte quebrado — a base curada tem 11 atos em cerca de
+dois anos, e o autoteste mostra a regra disparando quando o ato merece.
 
 ### 💡 O Diário Oficial ACEITA acesso automatizado (com Chrome real)
 
