@@ -725,6 +725,17 @@ estado"** (mapa + tabela); **"abrir uma praça"** (virou o painel do mapa); **"c
 local"**; **"municípios"**; **"maiores praças do país"**; **"composição regional"** e
 **"estados"**.
 
+⚠️ **O bloco abre com UM grupo selecionado, não com as sete abertas** — decisão do usuário
+em 18/08/2026, e é o oposto do padrão dos demais blocos de propósito. Aqui a tela é um mapa:
+sete players ligados de saída pintam o país inteiro e não dá para ver a forma do alcance de
+ninguém. Começando com um (a Cogna, primeira na ordem de `config/grupos.csv` e líder de
+mercado), o leitor acrescenta quem quiser comparar e vê a sobreposição aparecer.
+
+Consequência tratada: com um grupo só, a tabela de exclusividade mostraria 100% exclusivo, o
+que é aritmeticamente verdadeiro e analiticamente vazio. **A nota troca de texto** e diz que
+não há sobreposição a medir — sem isso, a leitura errada mais fácil de fazer ali seria "este
+grupo domina o país sozinho".
+
 **O mapa interativo** (`#ge-mapa-int`) faz o que as seções removidas faziam, junto:
 
 - `roam` ligado — arrastar e dar zoom com a roda;

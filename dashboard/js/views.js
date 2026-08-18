@@ -643,7 +643,13 @@ function chipsGeo(el, aoTrocar) {
   const listadas = D.gruposLista.filter(k => D.gruposOrd[k]?.tipo === 'listada');
   const outros = D.gruposLista.filter(k => k !== 'Independentes' &&
                                            D.gruposOrd[k]?.tipo !== 'listada');
-  if (selGeo === null) selGeo = new Set(listadas);
+  /* ⚠️ A Geografia abre com UM grupo, não com as sete — decisão do usuário em 18/08/2026,
+   * e é o oposto do padrão dos outros blocos de propósito. Aqui a tela é um mapa: sete
+   * players ligados de saída pintam o país inteiro e o leitor não consegue ver a forma do
+   * alcance de ninguém. Começando com um, ele acrescenta quem quiser comparar e vê a
+   * sobreposição aparecer. O primeiro da ordem de `config/grupos.csv` é a Cogna, que
+   * também é a líder de mercado. */
+  if (selGeo === null) selGeo = new Set(listadas.slice(0, 1));
   const chip = k => {
     const info = D.gruposOrd[k] || {};
     return `<button class="chip ${selGeo.has(k) ? 'on' : ''}" data-g="${esc(k)}">
@@ -1241,7 +1247,15 @@ export async function geography(f) {
     { k: 'pctExcl', t: TX('% exclusivo'), tipo: 'pct' },
   ], exclLinhas, { ordem: 'exclusivo',
     csv: { bloco: 'geografia', nome: TX('Exclusividade por município') } });
-  $('#ge-excl-nota').textContent = TX(
+  /* ⚠️ Com UM grupo selecionado não há sobreposição a medir: tudo vira "só ele" e 100%
+   * exclusivo, o que é aritmeticamente verdadeiro e analiticamente vazio. A tela diz isso
+   * em vez de deixar o leitor concluir que o grupo domina o país sozinho — que é a leitura
+   * errada mais fácil de fazer aqui, ainda mais agora que o bloco abre com um grupo só. */
+  $('#ge-excl-nota').textContent = selG.length < 2 ? TX(
+    'Com um único grupo selecionado não há sobreposição a medir — todos os {t} municípios ' +
+    'dele aparecem como exclusivos por falta de comparação, não por domínio. Acrescente ' +
+    'outro player nos chips lá em cima para a coluna "Divide" significar alguma coisa.',
+    { t: n(presencaPorMun.size) }) : TX(
     'Dos {t} municípios alcançados por pelo menos um dos selecionados, {d} têm mais de um ' +
     'deles presente — {p} do território coberto. Presença é ter ao menos um aluno no ' +
     'município, em qualquer modalidade: não mede quem é mais forte, mede onde há disputa. ' +

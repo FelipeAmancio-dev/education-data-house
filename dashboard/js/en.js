@@ -919,6 +919,11 @@ registrarEN({
   'Grupos e competição': 'Groups and competition',
   'Curso e geografia': 'Programs and geography',
 
+  'Com um único grupo selecionado não há sobreposição a medir — todos os {t} municípios dele aparecem como exclusivos por falta de comparação, não por domínio. Acrescente outro player nos chips lá em cima para a coluna "Divide" significar alguma coisa.':
+    'With a single group selected there is no overlap to measure — all {t} of its cities show as ' +
+    'exclusive for lack of comparison, not because it dominates them. Add another player in the ' +
+    'chips above for the "Shares" column to mean anything.',
+
   /* -------------------------------------- Price Action: frescor da coleta (18/08) */
   'agora': 'just now',
   'há {n} min': '{n} min ago',
