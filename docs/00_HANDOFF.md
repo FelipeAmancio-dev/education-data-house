@@ -956,6 +956,42 @@ relevância fora do domínio, data inválida, tema inexistente, fonte que não �
 duplicado** (mesmo documento e data — o mesmo ato costuma aparecer em mais de uma fonte). E
 avisa, sem derrubar, quando a fonte não parece oficial ou quando o item está `a_confirmar`.
 
+### A série do FIES (aba Fies)
+
+Entrou em 18/08/2026 a pedido do usuário: a evolução das matrículas com FIES, **2015–2024**,
+que é a série mais longa que a base do projeto alcança — `data_raw` começa em 2015.
+
+**O dado sempre esteve nos microdados e nunca tinha sido exposto.** `QT_MAT_FIES`,
+`QT_ING_FIES`, `QT_MAT_PROUNII` e `QT_MAT_PROUNIP` vêm na tabela de cursos desde 2015; o que
+faltava era levá-los ao payload. Entraram como colunas novas do **cubo de KPI por ano**
+(`02_build_cubes.py`), que é o lugar certo: são séries nacionais anuais, exatamente como as
+outras do `meta.kpi`. O `04_export_web.py` publica todas as colunas do cubo automaticamente,
+então não precisou de mudança lá.
+
+**A história que o gráfico conta:** o FIES financiava **1.344.379 matrículas em 2015, 21,9%
+da rede privada**, e financia **155.560 em 2024, 1,9%** — queda de **88,4%** enquanto o setor
+CRESCIA 27,3%. Não é o programa acompanhando o mercado; é o programa saindo dele.
+
+⚠️ **Duas séries e dois eixos, e as duas são necessárias.** O absoluto responde "quantos
+alunos"; a linha de % da rede privada responde "quanto o setor depende disso". Uma sozinha
+engana: em **2023 o absoluto SOBE** (169 mil → 178 mil) e a dependência continua caindo,
+porque a base privada cresceu mais rápido.
+
+⚠️ **O denominador é a rede PRIVADA, e o numerador também** (`mat_fies_privada` sobre
+`mat_privada`). O FIES existe para instituição privada; medi-lo contra o total do país
+subestimaria a dependência em cerca de um quinto.
+
+⚠️ **Só aparece na aba Fies**, como todo o resto do bloco — a página inteira depende do tema
+escolhido, e uma série de financiamento pendurada na aba de EaD seria ruído.
+
+Para contraste, a nota traz o ProUni integral: **408.278 → 380.193** no mesmo período. O
+recuo é do FIES, não do financiamento público em geral — e é isso que transforma o gráfico
+num argumento sobre **decisão regulatória**, que é o assunto do bloco.
+
+📌 **O que a base permite e não foi feito:** `QT_MAT_FIES` existe **por IES**, então dá para
+abrir a dependência de FIES por grupo econômico — quem tem mais receita exposta ao programa.
+Exigiria a coluna no cubo `ies_mod`, não no de KPI. É a evolução natural desta peça.
+
 ### O feed diário do DOU (aba "Últimas publicações")
 
 `scripts/11_fetch_dou_diario.py` → `dashboard/data/dou_diario.json`. É a **aba de entrada**
@@ -1470,6 +1506,20 @@ Formato dos cubos: **JSON colunar** (arrays por coluna, não array de objetos) c
 substituídas por índices para as dimensões. Reduz ~60% e evita parse de centenas de milhares de
 objetos.
 
+### ⚠️ O export APAGAVA o que não é dele
+
+`dashboard/data/` é escrita por **seis** scripts: `04_export_web.py` (cubos do Censo), o de
+preços, o de mensalidades, o do regulatório, o do e-MEC e o do feed do DOU. O export abria
+com `shutil.rmtree(WEB)` — e em 18/08/2026 bastou rodá-lo para `precos.json`,
+`mensalidades.json`, `regulatorio.json`, `emec.json` e `dou_diario.json` **sumirem de uma
+vez**. Só não virou site quebrado porque os cinco estão versionados: `git checkout` trouxe
+todos de volta.
+
+Hoje `limpa_o_que_e_meu()` remove apenas `meta.json`, `dim.json`, os `c_*.json` e as pastas
+`ano/` e `geo/`. **Arquivo de outro dono fica onde está.** Regra geral que vale para o
+próximo script que escrever nessa pasta: limpe por lista do que você produz, nunca por
+diretório.
+
 ### Seis armadilhas do front-end já corrigidas — não reintroduza
 
 1. **`totalAno()` vs `totalFiltrado()`.** A primeira é o **denominador de market share** e
@@ -1508,7 +1558,14 @@ objetos.
    `grupos.js`, que quebra em linhas e devolve o `topo` que o grid precisa — a legenda do
    ECharts não empurra o grid sozinha e deita por cima das barras se ninguém reservar o espaço.
 
-11. **`aspectScale` e `boundingCoords` do ECharts** — ver o ⚠️ de "O bloco Geografia". Mapa
+11. **O rótulo do botão de Excel mentia em bloco que se redesenha sozinho.** Ele era
+   montado só no `render()` do `app.js`, e todo bloco com controle próprio (aba do
+   Regulatório, período do Price Action, curso em Cursos, chips da Geografia) chama a
+   própria view direto. O arquivo baixado saía certo — o registro é lido no clique —, mas a
+   contagem "N abas · M linhas" era a da tela ANTERIOR. Hoje `registrarCSV()` dispara o
+   evento `csv-mudou` e o `app.js` remonta o botão. Evento, e não import, porque `app.js`
+   importa `ui.js`: o caminho de volta seria ciclo.
+12. **`aspectScale` e `boundingCoords` do ECharts** — ver o ⚠️ de "O bloco Geografia". Mapa
    novo nasce com `aspectScale: 1`, e enquadramento por caixa exige igualar a proporção da
    caixa à do elemento, senão o ECharts corta em vez de sobrar margem.
 

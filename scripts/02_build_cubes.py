@@ -224,6 +224,15 @@ def main():
             sum(QT_ING)  FILTER (WHERE TP_DIMENSAO IN ({lst(DIM_ALUNOS)}))                              AS INGRESSANTES,
             sum(QT_CONC) FILTER (WHERE TP_DIMENSAO IN ({lst(DIM_ALUNOS)}))                              AS CONCLUINTES,
             sum(QT_SIT_TRANCADA) FILTER (WHERE TP_DIMENSAO IN ({lst(DIM_ALUNOS)}))                      AS TRANCADOS,
+            -- Financiamento estudantil. Estava nos microdados desde sempre e nunca tinha
+            -- sido exposto; entrou em 18/08/2026 para o gráfico do FIES no bloco
+            -- Regulatório. FIES e ProUni sao politica publica, e a serie deles e a medida
+            -- do efeito que uma decisao regulatoria tem sobre a receita do setor privado.
+            sum(QT_MAT_FIES) FILTER (WHERE TP_DIMENSAO IN ({lst(DIM_ALUNOS)}))                          AS MAT_FIES,
+            sum(QT_MAT_FIES) FILTER (WHERE TP_DIMENSAO IN ({lst(DIM_ALUNOS)}) AND TP_REDE=2)            AS MAT_FIES_PRIVADA,
+            sum(QT_ING_FIES) FILTER (WHERE TP_DIMENSAO IN ({lst(DIM_ALUNOS)}))                          AS ING_FIES,
+            sum(QT_MAT_PROUNII) FILTER (WHERE TP_DIMENSAO IN ({lst(DIM_ALUNOS)}))                       AS MAT_PROUNI_INTEGRAL,
+            sum(QT_MAT_PROUNIP) FILTER (WHERE TP_DIMENSAO IN ({lst(DIM_ALUNOS)}))                       AS MAT_PROUNI_PARCIAL,
             sum(QT_CURSO) FILTER (WHERE TP_DIMENSAO IN ({lst(DIM_OFERTA)}))                             AS CURSOS,
             sum(QT_VG_TOTAL) FILTER (WHERE TP_DIMENSAO IN ({lst(DIM_OFERTA)}))                          AS VAGAS,
             count(DISTINCT CO_IES)                                                                      AS IES,

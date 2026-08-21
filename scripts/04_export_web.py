@@ -89,10 +89,34 @@ def le_reportado():
     return out
 
 
+# ⚠️ O export APAGAVA a pasta inteira, e isso levava junto o que ele não produz.
+#
+# `dashboard/data/` é escrita por seis scripts: este (cubos do Censo), o de preços, o de
+# mensalidades, o do regulatório, o do e-MEC e o do feed do DOU. Um `rmtree(WEB)` aqui
+# destruía os cinco outros payloads — em 18/08/2026 bastou rodar o export para
+# `precos.json`, `mensalidades.json`, `regulatorio.json`, `emec.json` e `dou_diario.json`
+# sumirem. Só não virou site quebrado porque os cinco estão versionados no git.
+#
+# Agora a limpeza é dos arquivos que ESTE script escreve, e nada mais. Arquivo de outro
+# dono fica onde está.
+MEUS = ("meta.json", "dim.json")
+MEUS_PREFIXO = ("c_",)
+MEUS_DIRS = ("ano", "geo")
+
+
+def limpa_o_que_e_meu():
+    for nome in os.listdir(WEB) if os.path.isdir(WEB) else []:
+        alvo = p(WEB, nome)
+        if os.path.isdir(alvo):
+            if nome in MEUS_DIRS:
+                shutil.rmtree(alvo)
+        elif nome in MEUS or nome.startswith(MEUS_PREFIXO):
+            os.remove(alvo)
+
+
 def main():
-    if os.path.isdir(WEB):
-        shutil.rmtree(WEB)
     os.makedirs(WEB, exist_ok=True)
+    limpa_o_que_e_meu()
 
     con = duckdb.connect()
     con.execute(f"CREATE VIEW dim_ies AS SELECT * FROM read_parquet('{p(PROC,'dim_ies.parquet')}');")

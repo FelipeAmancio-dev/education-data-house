@@ -919,6 +919,27 @@ registrarEN({
   'Grupos e competição': 'Groups and competition',
   'Curso e geografia': 'Programs and geography',
 
+  /* ------------------------------------- Regulatório: série do FIES (18/08) */
+  'Série histórica': 'Historical series',
+  'Matrículas com FIES — 2015 a 2024': 'Enrollments with FIES — 2015 to 2024',
+  'O que a regra fez com o mercado: o programa financiava um em cada cinco alunos da rede privada em 2015':
+    'What the rule did to the market: the programme funded one in five private-sector students in 2015',
+  'Matrículas com FIES': 'Enrollments with FIES',
+  '% da rede privada': '% of the private sector',
+  'Ingressantes com FIES': 'New entrants with FIES',
+  'FIES na rede privada': 'FIES in the private sector',
+  'ProUni integral': 'ProUni full',
+  'ProUni parcial': 'ProUni partial',
+  'Financiamento estudantil por ano': 'Student funding by year',
+  'Matrículas de graduação com financiamento pelo FIES, do Censo do INEP — a série mais longa que a base do projeto alcança. Caiu de <strong>{a}</strong> em {ai} para <strong>{b}</strong> em {bi}, <strong>{q}</strong>, enquanto o setor CRESCIA {c} no mesmo período. A linha usa a rede privada como numerador e denominador: o FIES existe para instituição privada, e medi-lo contra o total do país subestimaria a dependência. Para contraste, o ProUni integral saiu de {p1} para {p2} — o recuo é do FIES, não do financiamento público em geral.':
+    'Undergraduate enrollments funded by FIES, from the INEP Census — the longest series this ' +
+    'project reaches. It fell from <strong>{a}</strong> in {ai} to <strong>{b}</strong> in {bi}, ' +
+    '<strong>{q}</strong>, while the sector GREW {c} over the same period. The line uses the ' +
+    'private sector as both numerator and denominator: FIES exists for private institutions, and ' +
+    'measuring it against the national total would understate the dependence. For contrast, ' +
+    'ProUni full went from {p1} to {p2} — the retreat is FIES-specific, not public funding in ' +
+    'general.',
+
   'Com um único grupo selecionado não há sobreposição a medir — todos os {t} municípios dele aparecem como exclusivos por falta de comparação, não por domínio. Acrescente outro player nos chips lá em cima para a coluna "Divide" significar alguma coisa.':
     'With a single group selected there is no overlap to measure — all {t} of its cities show as ' +
     'exclusive for lack of comparison, not because it dominates them. Add another player in the ' +

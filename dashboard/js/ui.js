@@ -41,6 +41,24 @@ export function registrarCSV(bloco, nome, cols, linhas) {
   const i = lista.findIndex(c => c.nome === nome);
   const reg = { nome, cols, linhas };
   if (i >= 0) lista[i] = reg; else lista.push(reg);
+  avisarCSV(bloco);
+}
+
+/* ⚠️ O rótulo do botão de Excel ("4 abas · 1.200 linhas") era montado só no `render()` do
+ * app.js — e todo bloco com controle próprio se redesenha chamando a própria view, sem
+ * passar por lá. Resultado: trocar a aba do Regulatório, o período do Price Action ou o
+ * curso em Cursos deixava o rótulo contando o que estava na tela ANTES. O arquivo baixado
+ * saía certo (o registro é lido na hora do clique); o que mentia era a contagem.
+ *
+ * O evento resolve sem import circular: `app.js` importa `ui.js`, então `ui.js` não pode
+ * importar `app.js` de volta. Debounce porque uma view registra vários conjuntos seguidos
+ * e o botão só precisa ser remontado no fim. */
+let avisoCSV = null;
+function avisarCSV(bloco) {
+  clearTimeout(avisoCSV);
+  avisoCSV = setTimeout(() => {
+    window.dispatchEvent(new CustomEvent('csv-mudou', { detail: bloco }));
+  }, 60);
 }
 export function conjuntosCSV(bloco) { return csvPorBloco.get(bloco) || []; }
 

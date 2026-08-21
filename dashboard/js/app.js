@@ -195,6 +195,11 @@ function aplicarIdioma() {
     montarFiltros();
     montarIdioma();
     $$('#nav button').forEach(b => b.onclick = () => irPara(b.dataset.v));
+    // bloco que se redesenha sozinho avisa que o registro de CSV mudou; sem isto o
+    // rótulo do botão fica contando o que estava na tela antes da troca
+    window.addEventListener('csv-mudou', ev => {
+      if (ev.detail === viewAtual) montarBotaoExcel(viewAtual);
+    });
     // links da home e do "← Dashboards": preventDefault para nao depender do hash
     document.addEventListener('click', ev => {
       const a = ev.target.closest('a[href^="#/"]');

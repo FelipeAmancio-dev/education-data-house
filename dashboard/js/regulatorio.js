@@ -19,8 +19,9 @@
  * Fonte: `data/regulatorio.json`, gerado por `scripts/08_build_regulatorio.py` a partir de
  * `config/regulatorio.json`, que é o arquivo editado à mão.
  */
-import { carregarRegulatorio, carregarDouDiario, D } from './dados.js';
-import { $, $$, esc, registrarCSV } from './ui.js';
+import { carregarRegulatorio, carregarDouDiario, D, n, pct } from './dados.js';
+import { $, $$, esc, registrarCSV, chart, baseChart, fmtEixoMi,
+         AZUL, LARANJA } from './ui.js';
 import { TX, idioma } from './i18n.js';
 
 // 'diario' é a aba de entrada, a pedido do usuário: quem abre o bloco quer ver o que
@@ -221,6 +222,8 @@ function rgDesenhar(R) {
     ? temas.map(cartaoTema).join('')
     : `<div class="vazio">${TX('Sem resumo para este tema.')}</div>`;
 
+  rgFies();
+
   const ds = rgFiltradas(R);
   $('#rg-feed').innerHTML = ds.length
     ? ds.map((d, i) => linhaDecisao(R, d, i)).join('')
@@ -244,6 +247,101 @@ function rgDesenhar(R) {
     { k: 'fonte_url', t: TX('Fonte oficial') },
   ], ds.map(d => ({ ...d, tema: nomeTema(R, d.tema),
                     status: TX(ROT_STATUS[d.status]), relevancia: TX(ROT_RELEV[d.relevancia]) })));
+}
+
+/* ═══════════════════════════ a série do FIES ═══════════════════════════════
+ *
+ * ⚠️ Só na aba **Fies**, como todo o resto do bloco: a página inteira depende do tema
+ * escolhido, e uma série de financiamento estudantil pendurada na aba de EaD seria ruído.
+ *
+ * Por que ela merece estar num módulo REGULATÓRIO, e não no Overview: é a medida do efeito
+ * que uma decisão de regra tem sobre a receita do setor privado. O FIES financiava
+ * **um em cada cinco alunos da rede privada em 2015** e financia **um em cada cinquenta e
+ * três** hoje — queda de 88% em dez anos, sem que o setor encolhesse: o mercado cresceu 27%
+ * no mesmo período. Não é o programa acompanhando o mercado, é o programa saindo dele.
+ *
+ * Duas séries e dois eixos, de propósito. O número absoluto responde "quantos alunos"; a
+ * linha de % da rede privada responde "quanto o setor depende disso", que é a pergunta de
+ * investidor. Uma sozinha não conta a história: em 2023 o absoluto SOBE (169 mil → 178 mil)
+ * enquanto a dependência continua caindo, porque a base privada cresceu mais rápido.
+ *
+ * ⚠️ O denominador da linha é a rede PRIVADA, não o total do país — e o numerador é o FIES
+ * da rede privada, não o nacional. O FIES existe para instituição privada; medi-lo contra
+ * um denominador que inclui a rede pública subestimaria a dependência em cerca de um quinto.
+ */
+function rgFies() {
+  const card = $('#rg-fies-card');
+  if (!card) return;
+  const k = D.meta?.kpi;
+  const temSerie = k && k.mat_fies && k.mat_fies.some(v => v);
+  card.hidden = temaSel !== 'fies' || !temSerie;
+  if (card.hidden) return;
+
+  const anos = D.meta.anos;
+  const fies = k.mat_fies;
+  const dep = anos.map((_, i) => k.mat_privada[i]
+    ? 100 * k.mat_fies_privada[i] / k.mat_privada[i] : null);
+
+  chart($('#rg-fies'), {
+    ...baseChart(),
+    legend: { ...baseChart().legend,
+              data: [TX('Matrículas com FIES'), TX('% da rede privada')] },
+    grid: { left: 8, right: 20, top: 30, bottom: 6, containLabel: true },
+    xAxis: { ...baseChart().xAxis, data: anos },
+    yAxis: [
+      { type: 'value', splitLine: { lineStyle: { color: '#F2F3F5' } },
+        axisLine: { show: false }, axisTick: { show: false },
+        axisLabel: { fontSize: 11.5, color: '#8C8C8C', formatter: fmtEixoMi } },
+      { type: 'value', splitLine: { show: false }, axisLine: { show: false },
+        axisTick: { show: false }, min: 0,
+        axisLabel: { fontSize: 11.5, color: '#8C8C8C', formatter: v => v + '%' } },
+    ],
+    series: [
+      { name: TX('Matrículas com FIES'), type: 'bar', yAxisIndex: 0, barMaxWidth: 38,
+        itemStyle: { color: AZUL, borderRadius: [2, 2, 0, 0] }, data: fies },
+      { name: TX('% da rede privada'), type: 'line', yAxisIndex: 1, smooth: .2,
+        symbol: 'circle', symbolSize: 6, lineStyle: { width: 2.4, color: LARANJA },
+        itemStyle: { color: LARANJA },
+        data: dep.map(v => v == null ? null : +v.toFixed(2)) },
+    ],
+    tooltip: { ...baseChart().tooltip,
+               valueFormatter: null,
+               formatter: ps => {
+                 const i = ps[0].dataIndex;
+                 return `<strong>${anos[i]}</strong><br>` +
+                        `${TX('Matrículas com FIES')}: <strong>${n(fies[i])}</strong><br>` +
+                        `${TX('% da rede privada')}: <strong>${pct(dep[i], 2)}</strong><br>` +
+                        `<span style="color:#8C8C8C">${TX('Ingressantes com FIES')}: ` +
+                        `${n(k.ing_fies[i])}</span>`;
+               } },
+  });
+
+  const i0 = 0, iF = anos.length - 1;
+  $('#rg-fies-nota').innerHTML = TX(
+    'Matrículas de graduação com financiamento pelo FIES, do Censo do INEP — a série mais ' +
+    'longa que a base do projeto alcança. Caiu de <strong>{a}</strong> em {ai} para ' +
+    '<strong>{b}</strong> em {bi}, <strong>{q}</strong>, enquanto o setor CRESCIA {c} no ' +
+    'mesmo período. A linha usa a rede privada como numerador e denominador: o FIES existe ' +
+    'para instituição privada, e medi-lo contra o total do país subestimaria a dependência. ' +
+    'Para contraste, o ProUni integral saiu de {p1} para {p2} — o recuo é do FIES, não do ' +
+    'financiamento público em geral.',
+    { a: n(fies[i0]), ai: anos[i0], b: n(fies[iF]), bi: anos[iF],
+      q: pct(100 * (fies[iF] - fies[i0]) / fies[i0]),
+      c: pct(100 * (k.mat_total[iF] - k.mat_total[i0]) / k.mat_total[i0]),
+      p1: n(k.mat_prouni_integral[i0]), p2: n(k.mat_prouni_integral[iF]) });
+
+  registrarCSV('regulatorio', TX('Financiamento estudantil por ano'),
+    [{ k: 'ano', t: TX('Ano') },
+     { k: 'fies', t: TX('Matrículas com FIES') },
+     { k: 'fies_priv', t: TX('FIES na rede privada') },
+     { k: 'dep', t: TX('% da rede privada') },
+     { k: 'ing', t: TX('Ingressantes com FIES') },
+     { k: 'pi', t: TX('ProUni integral') },
+     { k: 'pp', t: TX('ProUni parcial') }],
+    anos.map((a, i) => ({ ano: a, fies: fies[i], fies_priv: k.mat_fies_privada[i],
+                          dep: dep[i] == null ? null : +dep[i].toFixed(2),
+                          ing: k.ing_fies[i], pi: k.mat_prouni_integral[i],
+                          pp: k.mat_prouni_parcial[i] })));
 }
 
 /* ═══════════════════════ aba "Últimas publicações" (DOU diário) ═══════════
